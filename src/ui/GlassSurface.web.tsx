@@ -29,8 +29,8 @@ export function GlassSurface({ children, style, material = 'chrome', radius = 0 
   if (material === 'chrome' && radius > 0) {
     return (
       <View onLayout={(e) => setSize({ w: Math.round(e.nativeEvent.layout.width), h: Math.round(e.nativeEvent.layout.height) })}
-        style={[shape, { boxShadow: dark ? '0 8px 22px rgba(0,0,0,0.4)' : '0 8px 22px rgba(1,30,41,0.14)' }, style]}>
-        <LiquidGlassFill width={size.w} height={size.h} radius={Math.min(radius, size.h / 2 || radius)} tint={0.55} displacement={40} />
+        style={[shape, style]}>
+        <LiquidGlassFill width={size.w} height={size.h} radius={Math.min(radius, size.h / 2 || radius)} displacement={40} />
         {children}
       </View>
     );
