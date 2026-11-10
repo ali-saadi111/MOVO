@@ -9,6 +9,9 @@ import { useTheme } from '@/theme';
 // Face ID iPhones (X and later) vs. home-button iPhones (SE): a short screen means no island and no home bar.
 const INSETS_ISLAND = { top: 54, bottom: 34, left: 0, right: 0 };
 const INSETS_SE = { top: 20, bottom: 0, left: 0, right: 0 };
+// Shared web app build: the browser draws its own status bar, so no fake one and only a little air.
+const WEBAPP = process.env.EXPO_PUBLIC_WEBAPP === '1';
+const INSETS_WEB = { top: 10, bottom: 6, left: 0, right: 0 };
 
 /**
  * Web preview only: iPhone safe areas, and a 9:41 status bar,
@@ -19,7 +22,7 @@ export function PreviewChrome({ children }: { children: ReactNode }) {
   const lang = useLang();
   const { height } = useWindowDimensions();
   const se = height < 700;
-  const insets = se ? INSETS_SE : INSETS_ISLAND;
+  const insets = WEBAPP ? INSETS_WEB : se ? INSETS_SE : INSETS_ISLAND;
   useEffect(() => {
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
@@ -37,6 +40,7 @@ export function PreviewChrome({ children }: { children: ReactNode }) {
     <SafeAreaInsetsContext.Provider value={insets}>
       <View style={{ flex: 1 }}>
         {children}
+        {WEBAPP ? null : (
         <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: insets.top, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: se ? 8 : 34, paddingTop: se ? 0 : 6, direction: 'ltr' }}>
           <Text variant="headline" style={{ color: fg, fontSize: se ? 12 : 17, width: 60 }}>9:41</Text>
           {se ? null : <View style={{ width: 124, height: 36, borderRadius: 20, backgroundColor: '#000' }} />}
@@ -50,6 +54,7 @@ export function PreviewChrome({ children }: { children: ReactNode }) {
             </View>
           </View>
         </View>
+        )}
       </View>
     </SafeAreaInsetsContext.Provider>
   );
