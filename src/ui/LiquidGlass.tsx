@@ -7,7 +7,7 @@ import { GlassSurface } from './GlassSurface';
  * expo-glass-effect (UIGlassEffect), with a material blur on older systems.
  * The web build swaps in liquid-glass-react (LiquidGlass.web.tsx).
  */
-export function LiquidGlassFill({ radius }: { width: number; height: number; radius: number }) {
+export function LiquidGlassFill({ radius }: { width: number; height: number; radius: number; tint?: number; displacement?: number; elasticity?: number }) {
   return (
     <View pointerEvents="none" style={StyleSheet.absoluteFill}>
       <GlassSurface radius={radius} interactive style={StyleSheet.absoluteFill} />

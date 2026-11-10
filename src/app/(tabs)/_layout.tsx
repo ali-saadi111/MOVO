@@ -44,7 +44,7 @@ export default function TabsLayout() {
       <TabSlot style={{ flex: 1 }} />
       <TabList onLayout={(e) => setW(Math.round(e.nativeEvent.layout.width))}
         style={{ position: 'absolute', zIndex: 50, bottom: TAB_BAR.offset(insets.bottom), left: 16, right: 16, height: TAB_BAR.height, padding: 5, borderRadius: radius, flexDirection: 'row', alignItems: 'center', boxShadow: '0 14px 36px rgba(1,30,41,0.18), 0 2px 8px rgba(1,30,41,0.08)' }}>
-        <LiquidGlassFill width={w} height={TAB_BAR.height} radius={radius} />
+        <LiquidGlassFill width={w} height={TAB_BAR.height} radius={radius} tint={0.7} />
         {tabs.map((tab) => (
           <TabTrigger key={tab.name} name={tab.name} href={tab.href as never} resetOnFocus={tab.name === '(map)'} asChild>
             <TabButton label={tab.label} glyph={tab.glyph} badge={tab.badge} />
