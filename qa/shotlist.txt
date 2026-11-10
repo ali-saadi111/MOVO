@@ -1,0 +1,53 @@
+01-language|/language|--fresh
+02-welcome|/welcome|--fresh
+03-how-you-move|/how-you-move|--fresh
+04-language-ar|/language|--fresh --ar
+05-who|/who|--fresh
+10-map|/|
+11-map-pin|/|--label "Café Rami"
+12-map-list|/|--click List
+13-map-dark|/|--dark
+14-map-ar|/|--ar
+15-place|/place/plc_cafe_rami|
+16-place-dark|/place/plc_cafe_rami|--dark
+17-place-scrolled|/place/plc_cafe_rami|--scroll
+20-shop|/shop|
+21-shop-dark|/shop|--dark
+22-products|/(tabs)/(shop)/products/mobility|
+23-product|/(tabs)/(shop)/product/prd_air-20-self-propelled|
+24-product-added|/(tabs)/(shop)/product/prd_air-20-self-propelled|--click "Add to cart"
+25-cart|/(tabs)/(shop)/cart|--cart
+26-checkout|/(tabs)/(shop)/checkout/delivery|--cart
+27-payment|/(tabs)/(shop)/checkout/payment|--cart
+28-order-success|/covers/success?flow=order&id=M-1038&method=cash&total=3400|--wait=1500
+29-order|/(tabs)/(shop)/order/M-1038|
+30-care|/care|
+31-care-dark|/care|--dark
+32-specialists|/(tabs)/(care)/specialists/physio|
+33-specialist|/(tabs)/(care)/specialist/sp_maya|
+34-book|/(tabs)/(care)/book/sp_maya|--click 14:00
+35-booking|/(tabs)/(care)/booking/bk_1001|
+36-session-complete|/covers/session-complete|
+40-community|/community|
+41-community-dark|/community|--dark
+42-event|/(tabs)/(community)/event/ev_marathon|
+43-join|/sheets/join?event=ev_basket|
+44-campaign|/(tabs)/(community)/campaign/cmp_chairs|
+45-donate|/sheets/donate?campaign=cmp_chairs|
+50-profile|/profile|
+51-profile-signedout|/profile|--signedout
+52-settings|/(tabs)/(profile)/settings|
+53-notifications|/(tabs)/(profile)/notifications|
+54-caregiver|/(tabs)/(profile)/caregiver|
+55-dev-menu|/dev/menu|
+56-sign-in|/auth/sign-in|--signedout
+60-profile-ar|/profile|--ar
+61-shop-ar|/shop|--ar
+62-product-ar|/(tabs)/(shop)/product/prd_air-20-self-propelled|--ar
+63-care-ar|/care|--ar
+64-community-ar|/community|--ar
+65-place-ar|/place/plc_cafe_rami|--ar
+37-booking-success|/covers/success?flow=booking&specialist=sp_maya&at=2026-11-17T10:00:00&where=home&method=cash|--wait=1500
+38-booking-banner|/covers/success?flow=booking&specialist=sp_maya&at=2026-11-17T10:00:00&where=home&method=cash|--wait=3200
+39-event-success|/covers/success?flow=event&event=ev_marathon&id=EV-2207|--wait=1500
+57-notifications-dark|/(tabs)/(profile)/notifications|--dark

@@ -1,0 +1,81 @@
+# Photo credits
+
+Place photos from Flickr and Wikimedia Commons via Openverse. Keep these credits wherever the photos are shown. Some are NC/ND licensed: fine for this preview, replace before commercial release.
+
+- `clinic-0.jpg`: A medical eye clinic waiting room in Exeter - geograph.org.uk - 7418653, by Roger A Smith, CC BY-SA 2.0. https://commons.wikimedia.org/w/index.php?curid=160866208
+- `clinic-3.jpg`: A waiting room at a medical healthcare clinic, doctor's office, hospital, by Harrison Keely, CC BY 4.0. https://commons.wikimedia.org/w/index.php?curid=149293632
+- `clinic-5.jpg`: National Problem Gambling Clinic waiting room.png, by NPGCsoho, CC BY-SA 3.0. https://commons.wikimedia.org/w/index.php?curid=22185226
+- `pharmacy-0.jpg`: Duane Reade Pharmacy Storefront (48206542307), by Ajay Suresh from New York, NY, USA, CC BY 2.0. https://commons.wikimedia.org/w/index.php?curid=80184485
+- `pharmacy-1.jpg`: 1266 S 13th St Little Bohemia (Omaha, Nebraska) Douglas Co NE, by SharonPapierdreams, CC BY-SA 4.0. https://commons.wikimedia.org/w/index.php?curid=152887233
+- `lb-bank-0.jpg`: Bank Audi's Novo, by AltCity, CC BY-NC-SA 2.0. https://www.flickr.com/photos/70266146@N08/7037839727
+- `lb-bank-18.jpg`: Beirut 2008 The old and new., by Colm PSYCHO Callanan, CC BY-ND 2.0. https://www.flickr.com/photos/28356268@N02/3148248237
+- `lb-bank-19.jpg`: banque du liban, by stevendamron, CC BY 2.0. https://www.flickr.com/photos/97719890@N00/4256203704
+- `lb-cafe-0.jpg`: Cafe Younes, by Omar Chatriwala, CC BY-NC-ND 2.0. https://www.flickr.com/photos/53285566@N00/5711795370
+- `lb-cafe-10.jpg`: Rawda Cafe, by firaswehbe, CC BY-NC-SA 2.0. https://www.flickr.com/photos/66461699@N00/5288736146
+- `lb-cafe-2.jpg`: Cafe Younes, Hamra, by masser, CC BY-NC 2.0. https://www.flickr.com/photos/58762000@N00/16810769418
+- `lb-cafe-5.jpg`: Espresso from Korea's 2012 Barista Champion Yu Youn Joo, by seafaringwoman, CC BY 2.0. https://www.flickr.com/photos/27284887@N03/7432029378
+- `lb-outdoor-1.jpg`: Zaitunay Bay, Beirut, by Lolinka, CC BY 2.0. https://www.flickr.com/photos/26474403@N00/8254781792
+- `lb-outdoor-16.jpg`: Sanayeh Gardens, Beirut, by tsweden, CC BY-NC 2.0. https://www.flickr.com/photos/10664293@N00/8590885042
+- `lb-outdoor-19.jpg`: Sidon Sea Castle, by rabiem22, CC BY 2.0. https://www.flickr.com/photos/28490141@N03/7235374856
+- `lb-outdoor-27.jpg`: Pigeon Rocks (Raouche) Beirut, Lebanon, by -Reji, CC BY-NC-SA 2.0. https://www.flickr.com/photos/27365066@N02/4139145834
+- `lb-outdoor-30.jpg`: Road in Raouche, Beirut, by objectivised, CC BY-NC-SA 2.0. https://www.flickr.com/photos/47997385@N00/10076472556
+- `lb-outdoor-5.jpg`: Zaitunay Bay in Beirut, by bilaly, CC BY-SA 2.0. https://www.flickr.com/photos/151657523@N08/37034450650
+- `lb-outdoor-9.jpg`: Beirut Corniche, by Francisco Anzola, CC BY 2.0. https://www.flickr.com/photos/10345599@N03/4694160929
+- `lb-pharmacy-7.jpg`: pharmacie rabih, by stevendamron, CC BY 2.0. https://www.flickr.com/photos/97719890@N00/4227699850
+- `lb-restaurant-0.jpg`: PA280568, by Ignacio Gallego, CC BY-NC-SA 2.0. https://www.flickr.com/photos/8734876@N07/6564524157
+- `lb-restaurant-1.jpg`: PA280566, by Ignacio Gallego, CC BY-NC-SA 2.0. https://www.flickr.com/photos/8734876@N07/6564523301
+- `lb-restaurant-10.jpg`: Aubergine moussaka and hummus, by Francisco Antunes, CC BY 2.0. https://www.flickr.com/photos/60721972@N00/6539308795
+- `lb-restaurant-12.jpg`: Restaurant Kitchen, by dreadpiratejeff, CC BY-NC-ND 2.0. https://www.flickr.com/photos/95591725@N00/4968169957
+- `lb-restaurant-15.jpg`: Sahyoun, best falafel in Beirut, by Charles Nouÿrit, CC BY-NC-SA 2.0. https://www.flickr.com/photos/61112464@N00/3237134818
+- `lb-restaurant-21.jpg`: brisk-coffeeshop-hamra-beirut-aug2010-13, by onoffbeirut, CC BY-NC 2.0. https://www.flickr.com/photos/34696848@N02/4940225425
+- `lb-restaurant-24.jpg`: brisk-coffeeshop-hamra-beirut-aug2010-01, by onoffbeirut, CC BY-NC 2.0. https://www.flickr.com/photos/34696848@N02/4940255481
+- `lb-saida-16.jpg`: shopping in Saïda, by Raini4, PDM. https://www.flickr.com/photos/53106173@N05/6578307355
+- `lb-saida-18.jpg`: Saida Corniche, by ya.zan, CC BY-ND 2.0. https://www.flickr.com/photos/15057570@N02/3217460984
+- `lb-shop-11.jpg`: Beirut Souks, by n.karim, CC BY 2.0. https://www.flickr.com/photos/50603647@N04/6095766852
+- `lb-shop-17.jpg`: Malek's Bookshop, by Hibr, CC BY-NC-SA 2.0. https://www.flickr.com/photos/44975173@N05/8247360162
+- `lb-shop-19.jpg`: Street Scene-Bourj Hammoud, by NAH9999, CC BY-NC-SA 2.0. https://www.flickr.com/photos/67547393@N06/6147129216
+- `lb-shop-21.jpg`: Storefront, Beirut, by craigfinlay, CC BY 2.0. https://www.flickr.com/photos/71284091@N00/3320241126
+- `lb-shop-23.jpg`: DSC04850.jpg, by robertinRI, CC BY-NC 2.0. https://www.flickr.com/photos/13968680@N07/1441147486
+- `lb-shop-24.jpg`: DSC04837.jpg, by robertinRI, CC BY-NC 2.0. https://www.flickr.com/photos/13968680@N07/1441145856
+- `lb-shop-26.jpg`: DSC05614.jpg, by robertinRI, CC BY-NC 2.0. https://www.flickr.com/photos/13968680@N07/1440290901
+- `lb-shop-27.jpg`: DSC05678.jpg, by robertinRI, CC BY-NC 2.0. https://www.flickr.com/photos/13968680@N07/1441160238
+- `lb-supermarket-12.jpg`: UNDP in Lebanon, by United Nations Development Programme, CC BY-NC-ND 2.0. https://www.flickr.com/photos/37913760@N03/12619183963
+- `lb-supermarket-20.jpg`: grocery, Beirut, by CharlesFred, CC BY-NC-SA 2.0. https://www.flickr.com/photos/40279823@N00/31716283
+- `lb-supermarket-21.jpg`: bou khalil hyper, by stevendamron, CC BY 2.0. https://www.flickr.com/photos/97719890@N00/4256203276
+- `lb-supermarket-8.jpg`: Providing food vouchers in Lebanon to Syrian refugees, by EU Civil Protection and Humanitarian Aid, CC BY-NC-ND 2.0. https://www.flickr.com/photos/69583224@N05/8713978464
+- `lb-bank-0.jpg`: Bank Audi's Novo, by AltCity, CC BY-NC-SA 2.0. https://www.flickr.com/photos/70266146@N08/7037839727
+- `lb-bank-18.jpg`: Beirut 2008 The old and new., by Colm PSYCHO Callanan, CC BY-ND 2.0. https://www.flickr.com/photos/28356268@N02/3148248237
+- `lb-bank-19.jpg`: banque du liban, by stevendamron, CC BY 2.0. https://www.flickr.com/photos/97719890@N00/4256203704
+- `lb-cafe-0.jpg`: Cafe Younes, by Omar Chatriwala, CC BY-NC-ND 2.0. https://www.flickr.com/photos/53285566@N00/5711795370
+- `lb-cafe-10.jpg`: Rawda Cafe, by firaswehbe, CC BY-NC-SA 2.0. https://www.flickr.com/photos/66461699@N00/5288736146
+- `lb-cafe-2.jpg`: Cafe Younes, Hamra, by masser, CC BY-NC 2.0. https://www.flickr.com/photos/58762000@N00/16810769418
+- `lb-cafe-5.jpg`: Espresso from Korea's 2012 Barista Champion Yu Youn Joo, by seafaringwoman, CC BY 2.0. https://www.flickr.com/photos/27284887@N03/7432029378
+- `lb-outdoor-1.jpg`: Zaitunay Bay, Beirut, by Lolinka, CC BY 2.0. https://www.flickr.com/photos/26474403@N00/8254781792
+- `lb-outdoor-16.jpg`: Sanayeh Gardens, Beirut, by tsweden, CC BY-NC 2.0. https://www.flickr.com/photos/10664293@N00/8590885042
+- `lb-outdoor-19.jpg`: Sidon Sea Castle, by rabiem22, CC BY 2.0. https://www.flickr.com/photos/28490141@N03/7235374856
+- `lb-outdoor-27.jpg`: Pigeon Rocks (Raouche) Beirut, Lebanon, by -Reji, CC BY-NC-SA 2.0. https://www.flickr.com/photos/27365066@N02/4139145834
+- `lb-outdoor-30.jpg`: Road in Raouche, Beirut, by objectivised, CC BY-NC-SA 2.0. https://www.flickr.com/photos/47997385@N00/10076472556
+- `lb-outdoor-5.jpg`: Zaitunay Bay in Beirut, by bilaly, CC BY-SA 2.0. https://www.flickr.com/photos/151657523@N08/37034450650
+- `lb-outdoor-9.jpg`: Beirut Corniche, by Francisco Anzola, CC BY 2.0. https://www.flickr.com/photos/10345599@N03/4694160929
+- `lb-pharmacy-7.jpg`: pharmacie rabih, by stevendamron, CC BY 2.0. https://www.flickr.com/photos/97719890@N00/4227699850
+- `lb-restaurant-0.jpg`: PA280568, by Ignacio Gallego, CC BY-NC-SA 2.0. https://www.flickr.com/photos/8734876@N07/6564524157
+- `lb-restaurant-1.jpg`: PA280566, by Ignacio Gallego, CC BY-NC-SA 2.0. https://www.flickr.com/photos/8734876@N07/6564523301
+- `lb-restaurant-10.jpg`: Aubergine moussaka and hummus, by Francisco Antunes, CC BY 2.0. https://www.flickr.com/photos/60721972@N00/6539308795
+- `lb-restaurant-12.jpg`: Restaurant Kitchen, by dreadpiratejeff, CC BY-NC-ND 2.0. https://www.flickr.com/photos/95591725@N00/4968169957
+- `lb-restaurant-15.jpg`: Sahyoun, best falafel in Beirut, by Charles Nouÿrit, CC BY-NC-SA 2.0. https://www.flickr.com/photos/61112464@N00/3237134818
+- `lb-restaurant-21.jpg`: brisk-coffeeshop-hamra-beirut-aug2010-13, by onoffbeirut, CC BY-NC 2.0. https://www.flickr.com/photos/34696848@N02/4940225425
+- `lb-restaurant-24.jpg`: brisk-coffeeshop-hamra-beirut-aug2010-01, by onoffbeirut, CC BY-NC 2.0. https://www.flickr.com/photos/34696848@N02/4940255481
+- `lb-saida-16.jpg`: shopping in Saïda, by Raini4, PDM. https://www.flickr.com/photos/53106173@N05/6578307355
+- `lb-saida-18.jpg`: Saida Corniche, by ya.zan, CC BY-ND 2.0. https://www.flickr.com/photos/15057570@N02/3217460984
+- `lb-shop-11.jpg`: Beirut Souks, by n.karim, CC BY 2.0. https://www.flickr.com/photos/50603647@N04/6095766852
+- `lb-shop-17.jpg`: Malek's Bookshop, by Hibr, CC BY-NC-SA 2.0. https://www.flickr.com/photos/44975173@N05/8247360162
+- `lb-shop-19.jpg`: Street Scene-Bourj Hammoud, by NAH9999, CC BY-NC-SA 2.0. https://www.flickr.com/photos/67547393@N06/6147129216
+- `lb-shop-21.jpg`: Storefront, Beirut, by craigfinlay, CC BY 2.0. https://www.flickr.com/photos/71284091@N00/3320241126
+- `lb-shop-23.jpg`: DSC04850.jpg, by robertinRI, CC BY-NC 2.0. https://www.flickr.com/photos/13968680@N07/1441147486
+- `lb-shop-24.jpg`: DSC04837.jpg, by robertinRI, CC BY-NC 2.0. https://www.flickr.com/photos/13968680@N07/1441145856
+- `lb-shop-26.jpg`: DSC05614.jpg, by robertinRI, CC BY-NC 2.0. https://www.flickr.com/photos/13968680@N07/1440290901
+- `lb-shop-27.jpg`: DSC05678.jpg, by robertinRI, CC BY-NC 2.0. https://www.flickr.com/photos/13968680@N07/1441160238
+- `lb-supermarket-12.jpg`: UNDP in Lebanon, by United Nations Development Programme, CC BY-NC-ND 2.0. https://www.flickr.com/photos/37913760@N03/12619183963
+- `lb-supermarket-20.jpg`: grocery, Beirut, by CharlesFred, CC BY-NC-SA 2.0. https://www.flickr.com/photos/40279823@N00/31716283
+- `lb-supermarket-21.jpg`: bou khalil hyper, by stevendamron, CC BY 2.0. https://www.flickr.com/photos/97719890@N00/4256203276
+- `lb-supermarket-8.jpg`: Providing food vouchers in Lebanon to Syrian refugees, by EU Civil Protection and Humanitarian Aid, CC BY-NC-ND 2.0. https://www.flickr.com/photos/69583224@N05/8713978464
