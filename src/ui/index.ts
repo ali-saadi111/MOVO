@@ -22,3 +22,4 @@ export type { IconName } from './symbols';
 export * from './ticket';
 export * from './brandBanner';
 export * from './promo';
+export * from './size';

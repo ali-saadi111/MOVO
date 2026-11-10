@@ -10,7 +10,7 @@ import { cartCount, useCart } from '@/stores/cart';
 import { useDev } from '@/stores/dev';
 import { useSettings, useSettingsHydrated } from '@/stores/settings';
 import { springs, useTheme } from '@/theme';
-import { Pressable, Text } from '@/ui';
+import { Pressable, Text, useScreen } from '@/ui';
 import { LiquidGlassFill } from '@/ui/LiquidGlass';
 import { TabIcon, type TabGlyph } from '@/ui/TabIcon';
 import { TAB_BAR } from '@/ui/nav';
@@ -24,6 +24,7 @@ import { TAB_BAR } from '@/ui/nav';
 export default function TabsLayout() {
   const tr = useT();
   const insets = useSafeAreaInsets();
+  const scr = useScreen();
   const onboarded = useSettings((s) => s.onboarded);
   const hydrated = useSettingsHydrated();
   const home = useDev((s) => s.homeTab);
@@ -43,7 +44,7 @@ export default function TabsLayout() {
     <Tabs>
       <TabSlot style={{ flex: 1 }} />
       <TabList onLayout={(e) => setW(Math.round(e.nativeEvent.layout.width))}
-        style={{ position: 'absolute', zIndex: 50, bottom: TAB_BAR.offset(insets.bottom), left: 16, right: 16, height: TAB_BAR.height, padding: 5, borderRadius: radius, flexDirection: 'row', alignItems: 'center' }}>
+        style={{ position: 'absolute', zIndex: 50, bottom: TAB_BAR.offset(insets.bottom), left: scr.narrow ? 12 : 16, right: scr.narrow ? 12 : 16, height: TAB_BAR.height, padding: 5, borderRadius: radius, flexDirection: 'row', alignItems: 'center' }}>
         <LiquidGlassFill width={w} height={TAB_BAR.height} radius={radius} />
         {tabs.map((tab) => (
           <TabTrigger key={tab.name} name={tab.name} href={tab.href as never} resetOnFocus={tab.name === '(map)'} asChild>
@@ -57,6 +58,7 @@ export default function TabsLayout() {
 
 const TabButton = forwardRef<View, TabTriggerSlotProps & { label: string; glyph: TabGlyph; badge?: number }>(function TabButton({ isFocused, label, glyph, badge, ...props }, ref) {
   const t = useTheme();
+  const { narrow } = useScreen();
   const dark = t.scheme === 'dark';
   const on = useSharedValue(isFocused ? 1 : 0);
   const bump = useSharedValue(1);
@@ -75,8 +77,8 @@ const TabButton = forwardRef<View, TabTriggerSlotProps & { label: string; glyph:
     <Pressable ref={ref as never} {...props} feedback="scale" accessibilityRole="tab" accessibilityLabel={badge ? `${label}, ${badge}` : label} accessibilityState={{ selected: isFocused }} style={{ flex: 1, height: '100%', alignItems: 'center', justifyContent: 'center' }}>
       <Animated.View style={[{ position: 'absolute', top: 0, bottom: 0, left: 1, right: 1, borderRadius: 999, backgroundColor: dark ? 'rgba(255,255,255,0.13)' : 'rgba(255,255,255,0.78)', boxShadow: dark ? 'inset 0 1px 0 rgba(255,255,255,0.18)' : '0 2px 10px rgba(1,52,71,0.10), inset 0 1px 0 #FFFFFF' }, pill]} />
       <Animated.View style={[{ alignItems: 'center', gap: 2 }, lift]}>
-        <TabIcon name={glyph} on={!!isFocused} ink={ink} fill={fill} size={24} />
-        <Text variant="caption2" weight={isFocused ? '700' : '500'} numberOfLines={1} maxFontSizeMultiplier={1.2} style={{ color: ink, fontSize: 10.5, letterSpacing: 0.1 }}>{label}</Text>
+        <TabIcon name={glyph} on={!!isFocused} ink={ink} fill={fill} size={narrow ? 22 : 24} />
+        <Text variant="caption2" weight={isFocused ? '700' : '500'} numberOfLines={1} maxFontSizeMultiplier={1.2} style={{ color: ink, fontSize: narrow ? 9.5 : 10.5, letterSpacing: narrow ? -0.1 : 0.1 }}>{label}</Text>
       </Animated.View>
       {badge ? (
         <Animated.View style={[{ position: 'absolute', top: 5, right: '20%', minWidth: 18, height: 18, borderRadius: 9, backgroundColor: '#E5484D', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 4, borderWidth: 2, borderColor: dark ? '#1C2B31' : '#FFFFFF' }, badgeStyle]}>

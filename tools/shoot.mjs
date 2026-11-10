@@ -7,7 +7,7 @@ const has = (f) => flags.includes(f);
 const clicks = flags.flatMap((f, i) => (f === '--click' || f === '--label' ? [[f, flags[i + 1]]] : []));
 const waitMs = Number(flags.find((f) => f.startsWith('--wait='))?.slice(7) ?? 1600);
 const browser = await chromium.launch();
-const page = await browser.newPage({ viewport: { width: 393, height: 852 }, deviceScaleFactor: Number(process.env.DPR ?? 2), colorScheme: has('--dark') ? 'dark' : 'light' });
+const page = await browser.newPage({ viewport: { width: Number(process.env.VW ?? 393), height: Number(process.env.VH ?? 852) }, deviceScaleFactor: Number(process.env.DPR ?? 2), colorScheme: has('--dark') ? 'dark' : 'light' });
 const errors = [];
 page.on('pageerror', (e) => errors.push(String(e)));
 page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });

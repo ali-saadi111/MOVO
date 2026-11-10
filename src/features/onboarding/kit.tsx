@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import { useT } from '@/i18n';
 import { brand } from '@/theme/colors';
 import { continuous, layout, space, useTheme } from '@/theme';
-import { BannerBackdrop, BannerHeadline, go, Icon, Pressable, Text, type IconName } from '@/ui';
+import { BannerBackdrop, BannerHeadline, go, Icon, Pressable, Text, useScreen, type IconName } from '@/ui';
 
 /** The navy campaign night behind the first screens, full bleed. */
 export function NavyStage({ children }: { children: ReactNode }) {
@@ -68,11 +68,13 @@ export function StepBanner({ step, total, top, bottom, sub, back = true }: { ste
   const tr = useT();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
-  const h = insets.top + 224;
+  const scr = useScreen();
+  // Shorter band on SE-size screens so the choices and the button stay on screen.
+  const h = insets.top + (scr.short ? 172 : 224);
   const band = (
     <View style={{ height: h, overflow: 'hidden', borderBottomLeftRadius: 32, borderBottomRightRadius: 32, ...continuous }}>
       <BannerBackdrop tone="cream" width={width} height={h} />
-      <View style={{ paddingTop: insets.top + 4, paddingHorizontal: layout.margin, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+      <View style={{ paddingTop: insets.top + 4, paddingHorizontal: scr.gutter, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         {back ? (
           <Pressable onPress={go.back} accessibilityRole="button" accessibilityLabel={tr('nav.back', 'Back')} style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(1,52,71,0.12)' }}>
             <Icon name="chevron.left" size={17} weight="semibold" color={{ raw: brand.navy }} mirrorInRTL />
@@ -82,36 +84,37 @@ export function StepBanner({ step, total, top, bottom, sub, back = true }: { ste
           {Array.from({ length: total }, (_, i) => <View key={i} style={{ width: i < step ? 22 : 10, height: 6, borderRadius: 3, backgroundColor: i < step ? '#1FCB8E' : 'rgba(11,42,56,0.15)' }} />)}
         </View>
       </View>
-      <Animated.View entering={FadeInDown.springify().damping(24).stiffness(170)} style={{ paddingHorizontal: layout.margin, marginTop: space.lg }}>
-        <BannerHeadline tone="cream" top={top} bottom={bottom} size={38} />
+      <Animated.View entering={FadeInDown.springify().damping(24).stiffness(170)} style={{ paddingHorizontal: scr.gutter, marginTop: scr.short ? space.sm : space.lg }}>
+        <BannerHeadline tone="cream" top={top} bottom={bottom} size={scr.short ? 31 : scr.fit(38)} />
       </Animated.View>
     </View>
   );
   return sub ? (
     <View>
       {band}
-      <Text variant="body" color="textSecondary" style={{ paddingHorizontal: layout.margin, marginTop: space.md }}>{sub}</Text>
+      <Text variant="body" color="textSecondary" style={{ paddingHorizontal: scr.gutter, marginTop: scr.short ? space.sm : space.md }}>{sub}</Text>
     </View>
   ) : band;
 }
 
 /** Bordered tile with a label, like a category tile. Selected: mint fill, mint border, check. */
-export function PickTile({ icon, image, title, sub, selected, onPress, multi, index = 0, height = 128 }: { icon?: IconName; image?: ImageSource | number; title: string; sub?: string; selected: boolean; onPress: () => void; multi?: boolean; index?: number; height?: number }) {
+export function PickTile({ icon, image, title, sub, selected, onPress, multi, index = 0, height = 128, compact, inline }: { icon?: IconName; image?: ImageSource | number; title: string; sub?: string; selected: boolean; onPress: () => void; multi?: boolean; index?: number; height?: number; compact?: boolean; inline?: boolean }) {
   const t = useTheme();
   const dark = t.scheme === 'dark';
   return (
     <Animated.View entering={FadeInDown.delay(80 + index * 50).springify().damping(24).stiffness(170)} style={{ flex: 1 }}>
       <Pressable onPress={onPress} accessibilityRole={multi ? 'checkbox' : 'radio'} accessibilityState={multi ? { checked: selected } : { selected }} accessibilityLabel={sub ? `${title}, ${sub}` : title}
-        style={{ minHeight: height, borderRadius: 22, ...continuous, borderWidth: selected ? 2 : 1, borderColor: selected ? '#1FCB8E' : t.colors.separator, backgroundColor: selected ? (dark ? 'rgba(34,211,156,0.14)' : '#EAFBF4') : t.colors.bgElevated, overflow: 'hidden', padding: image ? 0 : space.md, justifyContent: 'space-between' }}>
-        {image ? <Image source={image} style={{ height: height - 64 }} contentFit="cover" transition={200} /> : null}
+        style={{ minHeight: image ? undefined : height, height: image ? height : undefined, borderRadius: 22, ...continuous, borderWidth: selected ? 2 : 1, borderColor: selected ? '#1FCB8E' : t.colors.separator, backgroundColor: selected ? (dark ? 'rgba(34,211,156,0.14)' : '#EAFBF4') : t.colors.bgElevated, overflow: 'hidden', padding: image ? 0 : compact || inline ? space.sm + 4 : space.md, flexDirection: inline ? 'row' : 'column', alignItems: inline ? 'center' : 'stretch', justifyContent: inline ? 'flex-start' : 'space-between', gap: inline ? space.sm : 0 }}>
+        {image ? <Image source={image} style={{ flex: 1 }} contentFit="cover" transition={200} /> : null}
         {icon ? (
-          <View style={{ width: 46, height: 46, borderRadius: 23, backgroundColor: selected ? '#1FCB8E' : dark ? 'rgba(255,255,255,0.08)' : '#F1F5F6', alignItems: 'center', justifyContent: 'center' }}>
-            <Icon name={icon} size={22} color={{ raw: selected ? '#FFFFFF' : dark ? '#E6EEF0' : brand.navy }} />
+          <View style={{ width: compact || inline ? 36 : 46, height: compact || inline ? 36 : 46, borderRadius: 23, backgroundColor: selected ? '#1FCB8E' : dark ? 'rgba(255,255,255,0.08)' : '#F1F5F6', alignItems: 'center', justifyContent: 'center' }}>
+            <Icon name={icon} size={compact || inline ? 18 : 22} color={{ raw: selected ? '#FFFFFF' : dark ? '#E6EEF0' : brand.navy }} />
           </View>
         ) : null}
-        <View style={{ gap: 2, padding: image ? space.md : 0, paddingTop: image ? space.sm : space.sm }}>
-          <Text variant="headline" weight="700">{title}</Text>
-          {sub ? <Text variant="footnote" color="textSecondary">{sub}</Text> : null}
+        {/* Fixed text block on photo tiles, so tiles side by side keep the same photo height. */}
+        <View style={{ gap: 2, padding: image ? space.md : 0, paddingTop: image ? space.sm : inline ? 0 : compact ? 6 : space.sm, height: image ? 92 : undefined, flexShrink: 1, paddingEnd: inline ? 22 : undefined }}>
+          <Text variant="headline" weight="700" numberOfLines={2} style={compact || inline ? { fontSize: 15, lineHeight: 19 } : undefined}>{title}</Text>
+          {sub ? <Text variant="footnote" color="textSecondary" numberOfLines={image ? 1 : 2}>{sub}</Text> : null}
         </View>
         <View style={{ position: 'absolute', top: 10, end: 10, width: 24, height: 24, borderRadius: 12, borderWidth: selected ? 0 : 1.5, borderColor: image ? '#FFFFFF' : t.colors.separator, backgroundColor: selected ? '#1FCB8E' : image ? 'rgba(0,0,0,0.18)' : 'transparent', alignItems: 'center', justifyContent: 'center' }}>
           {selected ? <Icon name="checkmark" size={12} weight="bold" color={{ raw: '#FFFFFF' }} /> : null}

@@ -38,8 +38,8 @@ function CareHome() {
       )}
       <View style={{ flexDirection: 'row', gap: space.sm, paddingHorizontal: layout.margin, marginBottom: space.xxl }}>
         <StatTile value={5} label={tr('care.statDone', 'Sessions done')} icon="checkmark.seal.fill" tone="mint" index={0} onPress={next ? () => push(`/booking/${next.id}`) : undefined} />
-        <StatTile value={3} label={tr('care.statLeft', 'To go in your plan')} icon="flame" tone="sand" index={1} />
-        <StatTile value={3} label={tr('care.statSpecialists', 'Specialists you’ve seen')} icon="person.2" tone="mist" index={2} />
+        <StatTile value={3} label={tr('care.statLeft', 'Left in your plan')} icon="flame" tone="sand" index={1} />
+        <StatTile value={3} label={tr('care.statSpecialists', 'Specialists seen')} icon="person.2" tone="mist" index={2} />
       </View>
       <SectionHeader title={tr('care.services', 'Book a specialist')} />
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.sm, paddingHorizontal: layout.margin, marginBottom: space.xxl }}>

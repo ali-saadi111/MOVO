@@ -39,7 +39,7 @@ function Profile() {
                 <Text variant="subheadline" style={{ color: 'rgba(255,255,255,0.7)' }} numberOfLines={1}>{user.email}</Text>
               </View>
             </View>
-            <Pressable onPress={() => go.push('/how-you-move')} accessibilityRole="button" accessibilityLabel={`${tr('profile.howIMove', 'How I move')}: ${moves}. ${tr('common.edit', 'Edit')}`} style={{ alignSelf: 'flex-start', maxWidth: '70%', flexDirection: 'row', alignItems: 'center', gap: space.sm, minHeight: 52, borderRadius: 26, backgroundColor: t.colors.accent, paddingStart: 8, paddingEnd: space.md }}>
+            <Pressable onPress={() => go.push('/how-you-move')} accessibilityRole="button" accessibilityLabel={`${tr('profile.howIMove', 'How I move')}: ${moves}. ${tr('common.edit', 'Edit')}`} style={{ alignSelf: 'flex-start', maxWidth: '86%', flexDirection: 'row', alignItems: 'center', gap: space.sm, minHeight: 52, borderRadius: 26, backgroundColor: t.colors.accent, paddingStart: 8, paddingEnd: space.md }}>
               <View style={{ width: 38, height: 38, borderRadius: 19, backgroundColor: '#013447', alignItems: 'center', justifyContent: 'center' }}><Icon name="figure.roll" size={18} color={{ raw: '#22D39C' }} /></View>
               <View style={{ flexShrink: 1 }}>
                 <Text variant="caption1" weight="600" style={{ color: '#013447', opacity: 0.75 }}>{tr('profile.howIMove', 'How I move')}</Text>

@@ -14,6 +14,7 @@ import { Icon } from './Icon';
 import { Pressable } from './Pressable';
 import type { IconName } from './symbols';
 import { Text } from './Text';
+import { useScreen } from './size';
 import { edges } from '@/lib/rtl';
 import type { ImageRef } from '@/data/models';
 
@@ -80,14 +81,16 @@ export function CanvasHeader({ title, actions, below }: { title: string; actions
 export function StatTile({ value, label, icon, tone = 'mist', format = String, index = 0, onPress, style }: { value: number; label: string; icon: IconName; tone?: Tone; format?: (n: number) => string; index?: number; onPress?: () => void; style?: StyleProp<ViewStyle> }) {
   const t = useTheme();
   const c = toneColors(t.colors, tone);
+  const { narrow, fit } = useScreen();
+  // Same height for every tile in a row, so a row of stats reads as one even band.
   const body = (
-    <View style={{ flex: 1, minHeight: 124, borderRadius: radii.tile, ...continuous, backgroundColor: t.colors.bgElevated, borderWidth: 1, borderColor: t.colors.separator, padding: space.md, justifyContent: 'space-between', gap: space.sm }}>
+    <View style={{ flex: 1, height: fit(132), overflow: 'hidden', borderRadius: radii.tile, ...continuous, backgroundColor: t.colors.bgElevated, borderWidth: 1, borderColor: t.colors.separator, padding: narrow ? space.sm + 4 : space.md, justifyContent: 'space-between', gap: space.sm }}>
       <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: c.bg, alignItems: 'center', justifyContent: 'center' }}>
         <Icon name={icon} size={16} weight="semibold" color={{ raw: c.ink }} />
       </View>
       <View>
-        <CountUp to={value} format={format} variant="largeTitle" style={{ color: t.colors.textPrimary, fontSize: 32, lineHeight: 36, fontWeight: '800', letterSpacing: -0.5 }} />
-        <Text variant="footnote" weight="500" color="textSecondary" numberOfLines={2}>{label}</Text>
+        <CountUp to={value} format={format} variant="largeTitle" style={{ color: t.colors.textPrimary, fontSize: narrow ? 26 : 30, lineHeight: narrow ? 30 : 34, fontWeight: '800', letterSpacing: -0.5 }} />
+        <Text variant="footnote" weight="500" color="textSecondary" numberOfLines={2} style={{ fontSize: narrow ? 12 : 13, lineHeight: narrow ? 15 : 17, height: narrow ? 30 : 34 }}>{label}</Text>
       </View>
     </View>
   );
@@ -148,18 +151,19 @@ export function BlockCard({ tone, eyebrow, title, body, art, onPress, footer, in
 export function BlockTile({ tone, icon, label, sub, onPress, index = 0 }: { tone: Tone; icon: IconName; label: string; sub?: string; onPress: () => void; index?: number }) {
   const t = useTheme();
   const c = toneColors(t.colors, tone);
+  const { narrow, fit } = useScreen();
   return (
     <Animated.View entering={FadeInDown.delay(120 + index * 50).springify().damping(18).stiffness(180)} style={{ width: '48%', flexGrow: 1 }}>
-      <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={label} style={{ minHeight: 128, borderRadius: radii.tile, ...continuous, backgroundColor: t.colors.bgElevated, borderWidth: 1, borderColor: t.colors.separator, padding: space.md, justifyContent: 'space-between', gap: space.sm }}>
+      <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={label} style={{ height: fit(140), overflow: 'hidden', borderRadius: radii.tile, ...continuous, backgroundColor: t.colors.bgElevated, borderWidth: 1, borderColor: t.colors.separator, padding: narrow ? space.sm + 4 : space.md, justifyContent: 'space-between', gap: space.xs }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: c.bg, alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.bg, alignItems: 'center', justifyContent: 'center' }}>
             <Icon name={icon} size={21} weight="semibold" color={{ raw: c.ink }} />
           </View>
           <Icon name="arrow.up.right" size={15} weight="semibold" color="textSecondary" mirrorInRTL />
         </View>
         <View>
-          <Text variant="headline" weight="700" numberOfLines={2}>{label}</Text>
-          {sub ? <Text variant="footnote" color="textSecondary" numberOfLines={1}>{sub}</Text> : null}
+          <Text variant="headline" weight="700" numberOfLines={2} style={{ fontSize: narrow ? 15 : 16, lineHeight: narrow ? 19 : 20 }}>{label}</Text>
+          {sub ? <Text variant="footnote" color="textSecondary" numberOfLines={1} style={{ marginTop: 2 }}>{sub}</Text> : null}
         </View>
       </Pressable>
     </Animated.View>

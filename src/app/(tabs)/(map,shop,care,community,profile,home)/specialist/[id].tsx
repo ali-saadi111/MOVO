@@ -12,7 +12,7 @@ import { mobilityLabel } from '@/features/labels';
 import { useLang, useLocalized, useT } from '@/i18n';
 import { formatMoney } from '@/lib/money';
 import { ltr } from '@/lib/rtl';
-import { layout, radii, space, useTheme } from '@/theme';
+import { continuous, layout, radii, space, useTheme } from '@/theme';
 import { ArtImage, Avatar, BannerBackdrop, BannerHeadline, Button, ErrorState, Icon, Pressable, RatingBadge, Screen, Skeleton, StarRating, StickyCTA, STICKY_CTA_SPACE, Text, useTabNav } from '@/ui';
 import type { IconName } from '@/ui/symbols';
 
@@ -70,12 +70,12 @@ function HeroCarousel({ slides, label }: { slides: Slide[]; label: string }) {
 
 function StatTile({ icon, value, label, bg, ink }: { icon: IconName; value: string; label: string; bg: string; ink: string }) {
   return (
-    <View style={{ flex: 1, backgroundColor: bg, borderRadius: 22, padding: space.sm, paddingVertical: space.md, gap: 6 }}>
+    <View style={{ flex: 1, height: 128, backgroundColor: bg, borderRadius: 22, ...continuous, paddingHorizontal: space.sm + 4, paddingVertical: space.sm + 4, justifyContent: 'space-between' }}>
       <View style={{ width: 30, height: 30, borderRadius: 15, backgroundColor: 'rgba(255,255,255,0.55)', alignItems: 'center', justifyContent: 'center' }}>
         <Icon name={icon} size={16} color={{ raw: ink }} />
       </View>
       <Text variant="title2" weight="800" style={{ color: ink }} tabular numberOfLines={1} adjustsFontSizeToFit>{value}</Text>
-      <Text variant="caption1" style={{ color: ink, opacity: 0.8 }} numberOfLines={2}>{label}</Text>
+      <Text variant="caption1" weight="600" style={{ color: ink, opacity: 0.85, height: 30, lineHeight: 15 }} numberOfLines={2}>{label}</Text>
     </View>
   );
 }
@@ -157,7 +157,7 @@ export default function SpecialistProfile() {
         </View>
 
         {/* Big numbers */}
-        <View style={{ flexDirection: 'row', gap: space.xs, paddingHorizontal: layout.margin }}>
+        <View style={{ flexDirection: 'row', gap: space.sm, paddingHorizontal: layout.margin }}>
           <StatTile icon="star.fill" value={s.stars.toFixed(1)} label={tr('care.reviewsShort', '{{n}} reviews', { n: s.reviewCount })} bg={t.colors.blockMint} ink={t.colors.blockMintInk} />
           <StatTile icon="rosette" value={String(s.years)} label={tr('care.yearsExp', 'Years of practice')} bg={t.colors.blockSand} ink={t.colors.blockSandInk} />
           <StatTile icon="person.2.fill" value={`${Math.round(x.patients / 10) * 10}+`} label={tr('care.helped', 'People helped')} bg={t.colors.blockMist} ink={t.colors.blockMistInk} />

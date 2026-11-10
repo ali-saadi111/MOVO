@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useT } from '@/i18n';
 import { layout, space } from '@/theme';
-import { BannerHeadline, Button, go, Pressable, Text, type IconName } from '@/ui';
+import { BannerHeadline, Button, go, Pressable, Text, useScreen, type IconName } from '@/ui';
 import { MintDots, NavyStage, PhotoCard, WordmarkOnDark } from '@/features/onboarding/kit';
 
 const PICS = {
@@ -29,7 +29,9 @@ export default function Welcome() {
   ];
   const onView = useCallback(({ viewableItems }: { viewableItems: { index?: number | null }[] }) => { if (viewableItems[0]?.index != null) setI(viewableItems[0].index); }, []);
   const next = () => (i < pages.length - 1 ? (list.current?.scrollToIndex({ index: i + 1 }), setI(i + 1)) : go.push('/how-you-move'));
-  const photoH = Math.min(height * 0.42, 380);
+  const scr = useScreen();
+  // Leave room for the headline, body and the Next row on every iPhone, SE included.
+  const photoH = scr.short ? Math.round(height * 0.32) : Math.min(Math.round(height * 0.42), 400);
   return (
     <NavyStage>
       <View style={{ flex: 1, paddingTop: insets.top, paddingBottom: Math.max(insets.bottom, space.md) }}>
@@ -45,22 +47,23 @@ export default function Welcome() {
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
+          style={{ flex: 1 }}
           onViewableItemsChanged={onView}
           getItemLayout={(_, n) => ({ length: width, offset: width * n, index: n })}
           keyExtractor={(p) => p.key}
           renderItem={({ item, index }) => (
-            <View style={{ width, paddingHorizontal: layout.margin, paddingTop: space.md, gap: space.xl }} accessible accessibilityLabel={`${item.top} ${item.bottom}. ${item.body}. ${tr('onb.slide', 'Slide {{n}} of 3', { n: index + 1 })}`}>
+            <View style={{ width, paddingHorizontal: scr.gutter, paddingTop: scr.short ? space.xs : space.md, gap: scr.short ? space.lg : space.xl }} accessible accessibilityLabel={`${item.top} ${item.bottom}. ${item.body}. ${tr('onb.slide', 'Slide {{n}} of 3', { n: index + 1 })}`}>
               <Animated.View entering={FadeIn.duration(400)}>
                 <PhotoCard source={PICS[item.key]} chip={item.chip} chipIcon={item.chipIcon} height={photoH} />
               </Animated.View>
-              <Animated.View entering={FadeInDown.delay(120).springify().damping(26).stiffness(170)} style={{ gap: space.md }}>
-                <BannerHeadline tone="navy" top={item.top} bottom={item.bottom} size={42} />
+              <Animated.View entering={FadeInDown.delay(120).springify().damping(26).stiffness(170)} style={{ gap: scr.short ? space.sm : space.md }}>
+                <BannerHeadline tone="navy" top={item.top} bottom={item.bottom} size={scr.short ? 34 : scr.fit(42)} />
                 <Text variant="body" style={{ color: 'rgba(255,255,255,0.78)' }}>{item.body}</Text>
               </Animated.View>
             </View>
           )}
         />
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.lg, paddingHorizontal: layout.margin }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.lg, paddingHorizontal: scr.gutter, paddingTop: space.sm }}>
           <MintDots count={3} index={i} />
           <View style={{ flex: 1 }}>
             <Button variant="onBrand" label={i < 2 ? tr('common.next', 'Next') : tr('onb.getStarted', 'Get started')} icon={i < 2 ? undefined : 'arrow.right'} onPress={next} />

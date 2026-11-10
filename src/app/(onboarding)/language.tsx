@@ -7,21 +7,22 @@ import { deviceLang, useT } from '@/i18n';
 import { applyDirection } from '@/lib/rtl';
 import { useSettings, type Lang } from '@/stores/settings';
 import { continuous, layout, space } from '@/theme';
-import { BannerHeadline, Button, go, Icon, Pressable, Text } from '@/ui';
+import { BannerHeadline, Button, go, Icon, Pressable, Text, useScreen } from '@/ui';
 import { NavyStage, WordmarkOnDark } from '@/features/onboarding/kit';
 
 export default function LanguageScreen() {
   const insets = useSafeAreaInsets();
   const tr = useT();
+  const scr = useScreen();
   const set = useSettings((s) => s.set);
   const [lang, setLang] = useState<Lang>(useSettings.getState().lang ?? deviceLang());
   const choose = (l: Lang) => { setLang(l); set({ lang: l }); };
   return (
     <NavyStage>
-      <View style={{ flex: 1, paddingTop: insets.top + space.lg, paddingBottom: Math.max(insets.bottom, space.md), paddingHorizontal: layout.margin }}>
+      <View style={{ flex: 1, paddingTop: insets.top + (scr.short ? space.md : Math.round(scr.height * 0.06)), paddingBottom: Math.max(insets.bottom, space.md), paddingHorizontal: layout.margin }}>
         <Animated.View entering={FadeInDown.springify().damping(26).stiffness(170)}><WordmarkOnDark /></Animated.View>
         <Animated.View entering={FadeInDown.delay(80).springify().damping(26).stiffness(170)} style={{ marginTop: space.xxl * 1.6 }}>
-          <BannerHeadline tone="navy" top={tr('onb.lang.top', 'MOVE')} bottom={tr('onb.lang.bottom', 'YOUR WAY')} caption={tr('onb.lang.caption', 'ACCESSIBLE LEBANON, CHECKED BY MOVO')} size={56} />
+          <BannerHeadline tone="navy" top={tr('onb.lang.top', 'MOVE')} bottom={tr('onb.lang.bottom', 'YOUR WAY')} caption={tr('onb.lang.caption', 'ACCESSIBLE LEBANON, CHECKED BY MOVO')} size={scr.short ? 48 : scr.fit(58)} />
         </Animated.View>
         <View style={{ flex: 1 }} />
         <Animated.View entering={FadeInDown.delay(160).springify().damping(26).stiffness(170)} style={{ gap: space.sm, marginBottom: space.lg }}>
