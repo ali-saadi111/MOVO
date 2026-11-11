@@ -35,6 +35,8 @@ export function PreviewChrome({ children }: { children: ReactNode }) {
       document.head.appendChild(el);
     }
   }, [lang, t.colors.bgPrimary]);
+  // The desktop page only hosts the app in a phone-width frame (see +html.tsx); render nothing here.
+  if ((globalThis as { __MOVO_FRAMED_OUTER?: boolean }).__MOVO_FRAMED_OUTER) return null;
   const fg = t.scheme === 'dark' ? '#FFFFFF' : '#000000';
   return (
     <SafeAreaInsetsContext.Provider value={insets}>

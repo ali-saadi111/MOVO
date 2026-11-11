@@ -116,3 +116,15 @@ All of this respects Reduce Motion, whether it is set on the phone or in Setting
 npx tsc --noEmit      # clean
 npx eslint src        # 0 errors (22 style warnings)
 ```
+
+## Deploy the web app on Vercel (free Hobby plan)
+
+The repo has a `vercel.json`, so Vercel builds it with no extra setup.
+
+1. Sign in at vercel.com with GitHub, choose **Add New → Project**, and import `ali-saadi111/MOVO`.
+2. Leave Framework Preset as **Other**; the build command and output folder come from `vercel.json`.
+3. Under **Environment Variables**, add `EXPO_PUBLIC_MAPBOX_TOKEN` and `EXPO_PUBLIC_MAPBOX_STYLE` (the same values as your `.env`).
+4. Click **Deploy**. Every push to `main` redeploys.
+
+In the Mapbox account, add the Vercel domain (for example `https://movo.vercel.app/*`) to the token's allowed URLs if the token is URL-restricted.
+On a phone the app fills the screen; on a computer it shows at phone width in the middle of the window.
