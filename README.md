@@ -127,4 +127,4 @@ The repo has a `vercel.json`, so Vercel builds it with no extra setup.
 4. Click **Deploy**. Every push to `main` redeploys.
 
 In the Mapbox account, add the Vercel domain (for example `https://movo.vercel.app/*`) to the token's allowed URLs if the token is URL-restricted.
-On a phone the app fills the screen; on a computer it shows at phone width in the middle of the window.
+The site is the app itself, full screen, with no phone frame. On an iPhone, open it in Safari and use Share → Add to Home Screen to launch it like an app.

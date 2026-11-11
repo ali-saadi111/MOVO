@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from 'react';
+import { useContext, useEffect, type ReactNode } from 'react';
 import { View, useWindowDimensions } from 'react-native';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 
@@ -9,9 +9,9 @@ import { useTheme } from '@/theme';
 // Face ID iPhones (X and later) vs. home-button iPhones (SE): a short screen means no island and no home bar.
 const INSETS_ISLAND = { top: 54, bottom: 34, left: 0, right: 0 };
 const INSETS_SE = { top: 20, bottom: 0, left: 0, right: 0 };
-// Shared web app build: the browser draws its own status bar, so no fake one and only a little air.
+// Web app build (the shared website): real browser safe areas, no fake status bar.
 const WEBAPP = process.env.EXPO_PUBLIC_WEBAPP === '1';
-const INSETS_WEB = { top: 10, bottom: 6, left: 0, right: 0 };
+
 
 /**
  * Web preview only: iPhone safe areas, and a 9:41 status bar,
@@ -22,11 +22,19 @@ export function PreviewChrome({ children }: { children: ReactNode }) {
   const lang = useLang();
   const { height } = useWindowDimensions();
   const se = height < 700;
-  const insets = WEBAPP ? INSETS_WEB : se ? INSETS_SE : INSETS_ISLAND;
+  const real = useContext(SafeAreaInsetsContext);
+  // Real insets from env(safe-area-inset-*): non-zero when added to the Home Screen; a little air otherwise.
+  const insets = WEBAPP
+    ? { top: Math.max(real?.top ?? 0, 10), bottom: Math.max(real?.bottom ?? 0, 6), left: real?.left ?? 0, right: real?.right ?? 0 }
+    : se ? INSETS_SE : INSETS_ISLAND;
   useEffect(() => {
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
     document.body.style.backgroundColor = t.colors.bgPrimary;
+    // Tint Safari's bars to match the app.
+    let meta = document.querySelector('meta[name="theme-color"]');
+    if (!meta) { meta = document.createElement('meta'); meta.setAttribute('name', 'theme-color'); document.head.appendChild(meta); }
+    meta.setAttribute('content', t.colors.bgPrimary);
     // A phone shows no scroll bars; desktop browsers would draw one on every scrolling screen.
     if (!document.getElementById('movo-no-scrollbars')) {
       const el = document.createElement('style');
@@ -35,8 +43,6 @@ export function PreviewChrome({ children }: { children: ReactNode }) {
       document.head.appendChild(el);
     }
   }, [lang, t.colors.bgPrimary]);
-  // The desktop page only hosts the app in a phone-width frame (see +html.tsx); render nothing here.
-  if ((globalThis as { __MOVO_FRAMED_OUTER?: boolean }).__MOVO_FRAMED_OUTER) return null;
   const fg = t.scheme === 'dark' ? '#FFFFFF' : '#000000';
   return (
     <SafeAreaInsetsContext.Provider value={insets}>

@@ -2,32 +2,20 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#FFFFFF" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Movo" />
     <meta name="description" content="Movo: accessible places, mobility gear and home care in Lebanon." />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>Movo</title>
     <style id="expo-reset">
-      html, body { height: 100%; }
-      body { overflow: hidden; margin: 0; }
-      #root { display: flex; height: 100%; flex: 1; }
+      html, body { height: 100%; height: 100dvh; margin: 0; overscroll-behavior: none; -webkit-text-size-adjust: 100%; }
+      body { overflow: hidden; }
+      #root { display: flex; height: 100%; height: 100dvh; flex: 1; }
     </style>
-    <script>
-      // On a computer, show the app at phone width in the middle of the window.
-      // This outer page only hosts the frame; the app inside it renders normally.
-      (function () {
-        if (window.self !== window.top || window.innerWidth < 640) return;
-        window.__MOVO_FRAMED_OUTER = true;
-        var src = location.pathname + location.search + location.hash;
-        document.write('<style>html,body{background:#EAF2F0}#root{display:none!important}iframe.movo{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:430px;height:min(932px,calc(100vh - 32px));border:0;border-radius:36px;background:#fff;box-shadow:0 30px 70px rgba(1,52,71,.22),0 0 0 1px rgba(1,52,71,.08)}</style>');
-        document.addEventListener('DOMContentLoaded', function () {
-          var f = document.createElement('iframe');
-          f.className = 'movo'; f.title = 'Movo'; f.src = src; f.allow = 'geolocation';
-          document.body.appendChild(f);
-        });
-      })();
-    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
