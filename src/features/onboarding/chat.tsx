@@ -122,14 +122,14 @@ export function AnswerCard({ image, title, sub, selected, onPress, index = 0 }: 
 }
 
 /** Back button and one connected progress bar that fills from the last step to this one, with "1 of 2" beside it. */
-export function ChatTop({ step, total, back = true }: { step: number; total: number; back?: boolean }) {
+export function ChatTop({ step, total, back = true, bar = true }: { step: number; total: number; back?: boolean; bar?: boolean }) {
   const tr = useT();
   const t = useTheme();
   const insets = useSafeAreaInsets();
   const scr = useScreen();
   const fill = useSharedValue((step - 1) / total);
   useEffect(() => { fill.value = withTiming(step / total, { duration: 450 }); }, [step, total, fill]);
-  const bar = useAnimatedStyle(() => ({ width: `${fill.value * 100}%` }));
+  const fillStyle = useAnimatedStyle(() => ({ width: `${fill.value * 100}%` }));
   return (
     <View style={{ paddingTop: insets.top + 6, paddingHorizontal: scr.gutter, flexDirection: 'row', alignItems: 'center', gap: space.sm, minHeight: 44 }}>
       {back ? (
@@ -137,13 +137,17 @@ export function ChatTop({ step, total, back = true }: { step: number; total: num
           <Icon name="chevron.left" size={17} weight="semibold" color="textPrimary" mirrorInRTL />
         </Pressable>
       ) : null}
+      {bar ? (
+        <>
       <View style={{ flex: 1, height: 8, borderRadius: 4, overflow: 'hidden', backgroundColor: t.scheme === 'dark' ? 'rgba(255,255,255,0.12)' : '#E7EEF0' }}
         accessibilityRole="progressbar" accessibilityLabel={tr('onb.step', 'Step {{n}} of {{total}}', { n: step, total })} accessibilityValue={{ min: 0, max: total, now: step }}>
-        <Animated.View style={[{ height: '100%', borderRadius: 4, backgroundColor: MINT }, bar]} />
+        <Animated.View style={[{ height: '100%', borderRadius: 4, backgroundColor: MINT }, fillStyle]} />
       </View>
       <Text variant="footnote" weight="700" color="textSecondary" style={{ fontVariant: ['tabular-nums'], minWidth: 34 }} accessibilityElementsHidden importantForAccessibility="no">
         {tr('onb.stepShort', '{{n}} of {{total}}', { n: step, total })}
       </Text>
+        </>
+      ) : <View style={{ flex: 1 }} />}
     </View>
   );
 }

@@ -24,7 +24,7 @@ export default function Welcome() {
     <View style={{ flex: 1, paddingBottom: Math.max(insets.bottom, space.md) }}>
       <Animated.View entering={FadeInUp} style={{ paddingTop: insets.top + 6, paddingStart: scr.gutter, paddingEnd: space.xs, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <Wordmark size={26} />
-        <Pressable onPress={() => go.push('/how-you-move')} accessibilityRole="button" style={{ minHeight: 44, justifyContent: 'center', paddingHorizontal: space.md }}>
+        <Pressable onPress={() => go.push('/who')} accessibilityRole="button" style={{ minHeight: 44, justifyContent: 'center', paddingHorizontal: space.md }}>
           <Text variant="subheadline" weight="700" color="textSecondary">{tr('onb.skip', 'Skip')}</Text>
         </Pressable>
       </Animated.View>
@@ -37,7 +37,7 @@ export default function Welcome() {
         <MovoSays delay={1500} lines={[tr('onb.chat.w.next', 'Two quick questions, so I can show you what fits first.')]} style={{ marginTop: space.xs }} />
       </ScrollView>
       <View style={{ paddingHorizontal: scr.gutter }}>
-        <Button label={tr('onb.chat.w.go', "Let's go")} icon="arrow.right" onPress={() => go.push('/how-you-move')} />
+        <Button label={tr('onb.chat.w.go', "Let's go")} icon="arrow.right" onPress={() => go.push('/who')} />
       </View>
     </View>
   );
