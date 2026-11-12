@@ -52,7 +52,7 @@ export function MovoSays({ lines, delay = 0, step = 260, onDark, style }: { line
   return (
     <View style={[{ flexDirection: 'row', alignItems: 'flex-end', gap: space.xs }, style]}>
       <Animated.View entering={FadeIn.delay(delay)}><MovoAvatar size={28} /></Animated.View>
-      <View style={{ flex: 1, gap: 6 }} accessible accessibilityLabel={lines.map((l) => (typeof l === 'string' ? l : l.text)).join(' ')}>
+      <View style={{ flex: 1, gap: 4 }} accessible accessibilityLabel={lines.map((l) => (typeof l === 'string' ? l : l.text)).join(' ')}>
         {lines.map((l, i) => {
           const text = typeof l === 'string' ? l : l.text;
           const lang = typeof l === 'string' ? undefined : l.lang;
@@ -90,8 +90,8 @@ export function AnswerChip({ icon, label, selected, onPress, multi, index = 0 }:
   return (
     <Animated.View entering={enter(80 + index * 50)}>
       <Pressable onPress={onPress} accessibilityRole={multi ? 'checkbox' : 'radio'} accessibilityState={multi ? { checked: selected } : { selected }} accessibilityLabel={label}
-        style={{ minHeight: 48, flexDirection: 'row', alignItems: 'center', gap: 8, paddingStart: 8, paddingEnd: space.md, borderRadius: 24, borderWidth: 1.5, borderColor: selected ? MINT : t.colors.separator, backgroundColor: selected ? MINT : dark ? 'rgba(255,255,255,0.05)' : '#FFFFFF' }}>
-        <View style={{ width: 32, height: 32, borderRadius: 16, alignItems: 'center', justifyContent: 'center', backgroundColor: selected ? 'rgba(255,255,255,0.22)' : dark ? 'rgba(255,255,255,0.08)' : '#F1F5F6' }}>
+        style={{ minHeight: 44, flexDirection: 'row', alignItems: 'center', gap: 6, paddingStart: 6, paddingEnd: space.md, borderRadius: 24, borderWidth: 1.5, borderColor: selected ? MINT : t.colors.separator, backgroundColor: selected ? MINT : dark ? 'rgba(255,255,255,0.05)' : '#FFFFFF' }}>
+        <View style={{ width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', backgroundColor: selected ? 'rgba(255,255,255,0.22)' : dark ? 'rgba(255,255,255,0.08)' : '#F1F5F6' }}>
           <Icon name={selected ? 'checkmark' : icon} size={16} weight={selected ? 'bold' : 'regular'} color={{ raw: selected ? '#FFFFFF' : dark ? '#E6EEF0' : brand.navy }} />
         </View>
         <Text variant="subheadline" weight="700" style={{ color: selected ? '#FFFFFF' : t.colors.textPrimary }}>{label}</Text>
