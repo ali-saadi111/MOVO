@@ -35,9 +35,10 @@ export default function LanguageScreen() {
       <View style={{ paddingHorizontal: scr.gutter, marginTop: scr.short ? -110 : -150, gap: scr.short ? space.md : space.lg, paddingBottom: Math.max(insets.bottom, space.md) }}>
         <MovoSays onDark delay={200} lines={["Hi, I'm Movo. Which language should we talk in?", { text: 'مرحبا، أنا موڤو. بأي لغة نتكلم؟', lang: 'ar' }]} />
         <Animated.View entering={FadeInDown.delay(1000).springify().damping(26).stiffness(170)} style={{ gap: space.sm }} accessibilityRole="radiogroup">
-          <LangButton label="English" primary={current !== 'ar'} onPress={() => choose('en')} />
-          <LangButton label="العربية" primary={current === 'ar'} onPress={() => choose('ar')} />
-          <Text variant="footnote" style={{ color: 'rgba(255,255,255,0.55)', textAlign: 'center', marginTop: 2 }}>{tr('onb.lang.sub', 'You can change this any time in Settings.')}</Text>
+          <Text variant="footnote" style={{ color: 'rgba(255,255,255,0.55)', textAlign: 'center', marginBottom: 2 }}>{tr('onb.lang.sub', 'You can change this any time in Settings.')}</Text>
+          {/* The suggested language sits in the bottom slot, where Continue is on every other page. */}
+          {current === 'ar' ? <LangButton label="English" primary={false} onPress={() => choose('en')} /> : <LangButton label="العربية" primary={false} onPress={() => choose('ar')} />}
+          {current === 'ar' ? <LangButton label="العربية" primary onPress={() => choose('ar')} /> : <LangButton label="English" primary onPress={() => choose('en')} />}
         </Animated.View>
       </View>
     </View>
@@ -48,7 +49,7 @@ export default function LanguageScreen() {
 function LangButton({ label, primary, onPress }: { label: string; primary: boolean; onPress: () => void }) {
   return (
     <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={label} feedback="scale"
-      style={{ height: 54, borderRadius: 27, ...continuous, alignItems: 'center', justifyContent: 'center', backgroundColor: primary ? '#3CF2B8' : 'transparent', borderWidth: primary ? 0 : 1.5, borderColor: 'rgba(255,255,255,0.35)' }}>
+      style={{ height: 52, borderRadius: 26, ...continuous, alignItems: 'center', justifyContent: 'center', backgroundColor: primary ? '#3CF2B8' : 'transparent', borderWidth: primary ? 0 : 1.5, borderColor: 'rgba(255,255,255,0.35)' }}>
       <Text variant="headline" weight="700" style={{ color: primary ? '#013447' : '#FFFFFF' }}>{label}</Text>
     </Pressable>
   );

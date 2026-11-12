@@ -749,5 +749,6 @@
   "onb.chat.who.q": "آخر سؤال. من سيستخدم موڤو؟",
   "onb.chat.who.rMe": "ممتاز. هيا نبدأ الحركة.",
   "onb.chat.who.rSomeone": "جميل. الآن أخبرني قليلًا عنه. يمكنك التبديل بين الأشخاص في أي وقت.",
-  "onb.chat.who.someoneSub": "أحد الوالدين أو طفل أو شريك"
+  "onb.chat.who.someoneSub": "أحد الوالدين أو طفل أو شريك",
+  "onb.stepShort": "{{n}} من {{total}}"
 }

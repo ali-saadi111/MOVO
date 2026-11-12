@@ -1,7 +1,7 @@
 import { Image, type ImageSource } from 'expo-image';
-import type { ReactNode } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
-import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
+import Animated, { FadeIn, FadeInDown, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
 
@@ -121,22 +121,29 @@ export function AnswerCard({ image, title, sub, selected, onPress, index = 0 }: 
   );
 }
 
-/** Back button and the thin progress bar, with no headline: the question is in the chat. */
+/** Back button and one connected progress bar that fills from the last step to this one, with "1 of 2" beside it. */
 export function ChatTop({ step, total, back = true }: { step: number; total: number; back?: boolean }) {
   const tr = useT();
   const t = useTheme();
   const insets = useSafeAreaInsets();
   const scr = useScreen();
+  const fill = useSharedValue((step - 1) / total);
+  useEffect(() => { fill.value = withTiming(step / total, { duration: 450 }); }, [step, total, fill]);
+  const bar = useAnimatedStyle(() => ({ width: `${fill.value * 100}%` }));
   return (
-    <View style={{ paddingTop: insets.top + 6, paddingHorizontal: scr.gutter, flexDirection: 'row', alignItems: 'center', gap: space.md, minHeight: 44 }}>
+    <View style={{ paddingTop: insets.top + 6, paddingHorizontal: scr.gutter, flexDirection: 'row', alignItems: 'center', gap: space.sm, minHeight: 44 }}>
       {back ? (
         <Pressable onPress={go.back} accessibilityRole="button" accessibilityLabel={tr('nav.back', 'Back')} style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: t.scheme === 'dark' ? 'rgba(255,255,255,0.08)' : '#F1F5F6', alignItems: 'center', justifyContent: 'center' }}>
           <Icon name="chevron.left" size={17} weight="semibold" color="textPrimary" mirrorInRTL />
         </Pressable>
       ) : null}
-      <View style={{ flex: 1, flexDirection: 'row', gap: 6 }} accessibilityLabel={tr('onb.step', 'Step {{n}} of {{total}}', { n: step, total })}>
-        {Array.from({ length: total }, (_, i) => <View key={i} style={{ flex: 1, height: 5, borderRadius: 3, backgroundColor: i < step ? MINT : t.colors.separator }} />)}
+      <View style={{ flex: 1, height: 8, borderRadius: 4, overflow: 'hidden', backgroundColor: t.scheme === 'dark' ? 'rgba(255,255,255,0.12)' : '#E7EEF0' }}
+        accessibilityRole="progressbar" accessibilityLabel={tr('onb.step', 'Step {{n}} of {{total}}', { n: step, total })} accessibilityValue={{ min: 0, max: total, now: step }}>
+        <Animated.View style={[{ height: '100%', borderRadius: 4, backgroundColor: MINT }, bar]} />
       </View>
+      <Text variant="footnote" weight="700" color="textSecondary" style={{ fontVariant: ['tabular-nums'], minWidth: 34 }} accessibilityElementsHidden importantForAccessibility="no">
+        {tr('onb.stepShort', '{{n}} of {{total}}', { n: step, total })}
+      </Text>
     </View>
   );
 }

@@ -17,7 +17,7 @@ export default function CaregiverPerson() {
     <View style={{ flex: 1, paddingBottom: Math.max(insets.bottom, space.md) }}>
       <ChatTop step={3} total={3} />
       <MovoSays delay={100} lines={[tr('onb.chat.person.q', 'Tell me about the person you care for.'), tr('onb.chat.person.q2', 'Their first name and how they get around is enough.')]} style={{ paddingHorizontal: scr.gutter, paddingTop: space.lg, paddingBottom: space.lg }} />
-      <PersonForm onSaved={() => { set({ onboarded: true }); go.replace('/'); }} ctaLabel={tr('onb.finish', 'Start exploring')} />
+      <PersonForm onSaved={() => { set({ onboarded: true }); go.replace('/'); }} ctaLabel={tr('onb.finish', 'Start exploring')} gutter={scr.gutter} />
     </View>
   );
 }

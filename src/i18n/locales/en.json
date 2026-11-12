@@ -393,6 +393,7 @@
   "onb.move.otherLabel": "Tell us more (optional)",
   "onb.skip": "Skip",
   "onb.step": "Step {{n}} of {{total}}",
+  "onb.stepShort": "{{n}} of {{total}}",
   "onb.who.choose": "Choose one",
   "onb.who.someone": "Someone I care for",
   "order.buyAgain": "Buy again",
