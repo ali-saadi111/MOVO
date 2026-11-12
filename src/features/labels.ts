@@ -25,7 +25,7 @@ export const checklistIcon: Record<ChecklistKey, IconName> = { entrance: 'door.l
 export type MobilityKey = 'manual' | 'power' | 'walker-crutches' | 'other';
 export const mobilityLabel = (tr: Tr, m: MobilityKey | 'none') =>
   ({ manual: tr('mob.manual', 'Manual wheelchair'), power: tr('mob.power', 'Power wheelchair'), 'walker-crutches': tr('mob.walker', 'Walker or crutches'), other: tr('mob.other', 'Something else'), none: tr('mob.none', 'Prefer not to say') })[m];
-export const mobilityIcon: Record<MobilityKey | 'none', IconName> = { manual: 'figure.roll', power: 'bolt', 'walker-crutches': 'figure.walk', other: 'ellipsis', none: 'hand.raised' };
+export const mobilityIcon: Record<MobilityKey | 'none', IconName> = { manual: 'figure.roll', power: 'figure.roll.runningpace', 'walker-crutches': 'figure.walk.motion', other: 'face.smiling', none: 'eye.slash' };
 
 export const productCategoryLabel = (tr: Tr, c: ProductCategory) =>
   ({ mobility: tr('shop.cat.mobility', 'Mobility'), 'bathroom-safety': tr('shop.cat.bathroom', 'Bathroom safety'), 'daily-living': tr('shop.cat.daily', 'Daily living'), 'medical-supplies': tr('shop.cat.medical', 'Medical supplies'), 'home-adaptations': tr('shop.cat.home', 'Home adaptations'), 'parts-accessories': tr('shop.cat.parts', 'Parts and accessories') })[c];
