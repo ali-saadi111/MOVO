@@ -1,7 +1,7 @@
 import { Image, type ImageSource } from 'expo-image';
-import type { ReactNode } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
-import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
+import Animated, { FadeIn, FadeInDown, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
 
@@ -52,7 +52,7 @@ export function MovoSays({ lines, delay = 0, step = 260, onDark, style }: { line
   return (
     <View style={[{ flexDirection: 'row', alignItems: 'flex-end', gap: space.xs }, style]}>
       <Animated.View entering={FadeIn.delay(delay)}><MovoAvatar size={28} /></Animated.View>
-      <View style={{ flex: 1, gap: 6 }} accessible accessibilityLabel={lines.map((l) => (typeof l === 'string' ? l : l.text)).join(' ')}>
+      <View style={{ flex: 1, gap: 4 }} accessible accessibilityLabel={lines.map((l) => (typeof l === 'string' ? l : l.text)).join(' ')}>
         {lines.map((l, i) => {
           const text = typeof l === 'string' ? l : l.text;
           const lang = typeof l === 'string' ? undefined : l.lang;
@@ -90,8 +90,8 @@ export function AnswerChip({ icon, label, selected, onPress, multi, index = 0 }:
   return (
     <Animated.View entering={enter(80 + index * 50)}>
       <Pressable onPress={onPress} accessibilityRole={multi ? 'checkbox' : 'radio'} accessibilityState={multi ? { checked: selected } : { selected }} accessibilityLabel={label}
-        style={{ minHeight: 48, flexDirection: 'row', alignItems: 'center', gap: 8, paddingStart: 8, paddingEnd: space.md, borderRadius: 24, borderWidth: 1.5, borderColor: selected ? MINT : t.colors.separator, backgroundColor: selected ? MINT : dark ? 'rgba(255,255,255,0.05)' : '#FFFFFF' }}>
-        <View style={{ width: 32, height: 32, borderRadius: 16, alignItems: 'center', justifyContent: 'center', backgroundColor: selected ? 'rgba(255,255,255,0.22)' : dark ? 'rgba(255,255,255,0.08)' : '#F1F5F6' }}>
+        style={{ minHeight: 44, flexDirection: 'row', alignItems: 'center', gap: 6, paddingStart: 6, paddingEnd: space.md, borderRadius: 24, borderWidth: 1.5, borderColor: selected ? MINT : t.colors.separator, backgroundColor: selected ? MINT : dark ? 'rgba(255,255,255,0.05)' : '#FFFFFF' }}>
+        <View style={{ width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center', backgroundColor: selected ? 'rgba(255,255,255,0.22)' : dark ? 'rgba(255,255,255,0.08)' : '#F1F5F6' }}>
           <Icon name={selected ? 'checkmark' : icon} size={16} weight={selected ? 'bold' : 'regular'} color={{ raw: selected ? '#FFFFFF' : dark ? '#E6EEF0' : brand.navy }} />
         </View>
         <Text variant="subheadline" weight="700" style={{ color: selected ? '#FFFFFF' : t.colors.textPrimary }}>{label}</Text>
@@ -121,22 +121,33 @@ export function AnswerCard({ image, title, sub, selected, onPress, index = 0 }: 
   );
 }
 
-/** Back button and the thin progress bar, with no headline: the question is in the chat. */
-export function ChatTop({ step, total, back = true }: { step: number; total: number; back?: boolean }) {
+/** Back button and one connected progress bar that fills from the last step to this one, with "1 of 2" beside it. */
+export function ChatTop({ step, total, back = true, bar = true }: { step: number; total: number; back?: boolean; bar?: boolean }) {
   const tr = useT();
   const t = useTheme();
   const insets = useSafeAreaInsets();
   const scr = useScreen();
+  const fill = useSharedValue((step - 1) / total);
+  useEffect(() => { fill.value = withTiming(step / total, { duration: 450 }); }, [step, total, fill]);
+  const fillStyle = useAnimatedStyle(() => ({ width: `${fill.value * 100}%` }));
   return (
-    <View style={{ paddingTop: insets.top + 6, paddingHorizontal: scr.gutter, flexDirection: 'row', alignItems: 'center', gap: space.md, minHeight: 44 }}>
+    <View style={{ paddingTop: insets.top + 6, paddingHorizontal: scr.gutter, flexDirection: 'row', alignItems: 'center', gap: space.sm, minHeight: 44 }}>
       {back ? (
         <Pressable onPress={go.back} accessibilityRole="button" accessibilityLabel={tr('nav.back', 'Back')} style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: t.scheme === 'dark' ? 'rgba(255,255,255,0.08)' : '#F1F5F6', alignItems: 'center', justifyContent: 'center' }}>
           <Icon name="chevron.left" size={17} weight="semibold" color="textPrimary" mirrorInRTL />
         </Pressable>
       ) : null}
-      <View style={{ flex: 1, flexDirection: 'row', gap: 6 }} accessibilityLabel={tr('onb.step', 'Step {{n}} of {{total}}', { n: step, total })}>
-        {Array.from({ length: total }, (_, i) => <View key={i} style={{ flex: 1, height: 5, borderRadius: 3, backgroundColor: i < step ? MINT : t.colors.separator }} />)}
+      {bar ? (
+        <>
+      <View style={{ flex: 1, height: 8, borderRadius: 4, overflow: 'hidden', backgroundColor: t.scheme === 'dark' ? 'rgba(255,255,255,0.12)' : '#E7EEF0' }}
+        accessibilityRole="progressbar" accessibilityLabel={tr('onb.step', 'Step {{n}} of {{total}}', { n: step, total })} accessibilityValue={{ min: 0, max: total, now: step }}>
+        <Animated.View style={[{ height: '100%', borderRadius: 4, backgroundColor: MINT }, fillStyle]} />
       </View>
+      <Text variant="footnote" weight="700" color="textSecondary" style={{ fontVariant: ['tabular-nums'], minWidth: 34 }} accessibilityElementsHidden importantForAccessibility="no">
+        {tr('onb.stepShort', '{{n}} of {{total}}', { n: step, total })}
+      </Text>
+        </>
+      ) : <View style={{ flex: 1 }} />}
     </View>
   );
 }

@@ -9,7 +9,7 @@ import { layout, space } from '@/theme';
 import { Button, ChipWrap, Text, TextField } from '@/ui';
 
 /** Same form in onboarding step 3 and Caregiver › Add a person. */
-export function PersonForm({ onSaved, ctaLabel }: { onSaved: () => void; ctaLabel: string }) {
+export function PersonForm({ onSaved, ctaLabel, gutter = layout.margin }: { onSaved: () => void; ctaLabel: string; gutter?: number }) {
   const tr = useT();
   const add = useCaregiver((s) => s.add);
   const [name, setName] = useState('');
@@ -19,7 +19,7 @@ export function PersonForm({ onSaved, ctaLabel }: { onSaved: () => void; ctaLabe
   const mobs: Mobility[] = ['manual', 'power', 'walker-crutches', 'other'];
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={{ paddingHorizontal: layout.margin, gap: space.xl, paddingBottom: space.xl }}>
+      <ScrollView contentContainerStyle={{ paddingHorizontal: gutter, gap: space.xl, paddingBottom: space.xl }}>
         <TextField label={tr('person.name', 'First name')} value={name} onChangeText={setName} autoComplete="name" textContentType="name" />
         <View style={{ gap: space.sm }}>
           <Text variant="subheadline" weight="600">{tr('person.move', 'How they move')}</Text>
@@ -30,7 +30,7 @@ export function PersonForm({ onSaved, ctaLabel }: { onSaved: () => void; ctaLabe
           <ChipWrap options={rels} value={rel} onChange={setRel} />
         </View>
       </ScrollView>
-      <View style={{ paddingHorizontal: layout.margin }}>
+      <View style={{ paddingHorizontal: gutter }}>
         <Button
           label={ctaLabel}
           disabledReason={name.trim() ? null : tr('person.needName', 'Add their first name')}

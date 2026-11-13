@@ -28,27 +28,24 @@ export default function HowYouMove() {
   const [sel, setSel] = useState<Mobility[]>(s.mobility);
   const [other, setOther] = useState(s.mobilityOther);
   const toggle = (m: Mobility) => setSel((cur) => (m === 'none' ? (cur.includes('none') ? [] : ['none']) : cur.includes(m) ? cur.filter((x) => x !== m) : [...cur.filter((x) => x !== 'none'), m]));
-  const answer = OPTS.filter((m) => sel.includes(m)).map((m) => mobilityLabel(tr, m)).join(', ');
   return (
     <View style={{ flex: 1, paddingBottom: Math.max(insets.bottom, space.md) }}>
-      <ChatTop step={1} total={s.forWhom === 'someone' ? 3 : 2} />
-      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingHorizontal: scr.gutter, paddingTop: space.lg, gap: space.xs }} showsVerticalScrollIndicator={false}>
-        <MovoSays delay={100} lines={[tr('onb.chat.m.q', 'How do you get around?'), tr('onb.chat.m.q2', 'Pick all that apply.')]} />
-        {sel.length ? (
-          <>
-            <Bubble key={answer} from="me" delay={0}>{answer}</Bubble>
-            <MovoSays key={`r-${answer}`} delay={350} lines={[reply(tr, sel)]} />
-          </>
-        ) : null}
-        {sel.includes('other') ? <Animated.View entering={FadeInDown} style={{ marginTop: space.xs }}><TextField label={tr('onb.move.otherLabel', 'Tell us more (optional)')} value={other} onChangeText={setOther} /></Animated.View> : null}
-      </ScrollView>
-      <View style={{ paddingHorizontal: scr.gutter, paddingTop: space.sm, gap: space.md }}>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.xs }} accessibilityRole="list">
+      {/* Step 2 of 2 during setup; opened later from Profile it just edits the answer. */}
+      <ChatTop step={2} total={2} bar={!s.onboarded} />
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingHorizontal: scr.gutter, paddingTop: space.lg, paddingBottom: space.md, gap: space.xs }} showsVerticalScrollIndicator={false}>
+        {!s.onboarded && s.forWhom === 'me' ? <Bubble from="me" faded>{tr('onb.chat.who.me', 'Just me')}</Bubble> : null}
+        <MovoSays delay={100} lines={[tr('onb.chat.m.q', 'How do you get around?'), tr('onb.chat.m.q2', 'Pick all that apply.')]} style={!s.onboarded && s.forWhom === 'me' ? { marginTop: space.xs } : undefined} />
+        {/* Quick replies sit right under the question, on the person's side, like a chat. */}
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-end', gap: 6, marginStart: 36, marginTop: 2 }} accessibilityRole="list">
           {OPTS.map((m, k) => (
             <AnswerChip key={m} multi index={k} icon={mobilityIcon[m]} label={mobilityLabel(tr, m)} selected={sel.includes(m)} onPress={() => toggle(m)} />
           ))}
         </View>
-        <Button label={tr('common.done', 'Done')} disabledReason={sel.length ? null : tr('onb.move.choose', 'Choose at least one')} onPress={() => { s.set({ mobility: sel, mobilityOther: other }); go.push('/who'); }} />
+        {sel.length ? <MovoSays key={reply(tr, sel)} delay={250} lines={[reply(tr, sel)]} style={{ marginTop: space.xs }} /> : null}
+        {sel.includes('other') ? <Animated.View entering={FadeInDown} style={{ marginTop: space.xs }}><TextField label={tr('onb.move.otherLabel', 'Tell us more (optional)')} value={other} onChangeText={setOther} /></Animated.View> : null}
+      </ScrollView>
+      <View style={{ paddingHorizontal: scr.gutter, paddingTop: space.sm }}>
+        <Button label={s.onboarded ? tr('common.done', 'Done') : tr('onb.finish', 'Start exploring')} disabledReason={sel.length ? null : tr('onb.move.choose', 'Choose at least one')} onPress={() => { if (s.onboarded) { s.set({ mobility: sel, mobilityOther: other }); go.back(); } else { s.set({ mobility: sel, mobilityOther: other, onboarded: true }); go.replace('/'); } }} />
       </View>
     </View>
   );
