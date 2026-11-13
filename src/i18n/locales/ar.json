@@ -753,5 +753,13 @@
   "onb.stepShort": "{{n}} من {{total}}",
   "onb.chat.who.q1": "أولًا، من سيستخدم موڤو؟",
   "onb.chat.who.rMe1": "فهمت. سؤال واحد آخر عنك.",
-  "onb.chat.who.rSomeone1": "جميل. الآن أخبرني قليلًا عنه. يمكنك إضافة أشخاص آخرين لاحقًا."
+  "onb.chat.who.rSomeone1": "جميل. الآن أخبرني قليلًا عنه. يمكنك إضافة أشخاص آخرين لاحقًا.",
+  "onb.chat.stepOf": "الخطوة {{n}} من {{total}} · دقيقة تقريبًا",
+  "onb.chat.online": "دليلك لسهولة الوصول",
+  "onb.chat.today": "اليوم",
+  "onb.chat.sent": "أُرسلت",
+  "onb.chat.reply": "ردّك",
+  "onb.chat.replyMany": "ردّك · اختر ما يناسبك",
+  "onb.chat.lang.hi": "مرحبا، أنا موڤو 👋",
+  "onb.chat.lang.q": "بأي لغة نتكلم؟"
 }

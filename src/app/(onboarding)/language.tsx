@@ -1,23 +1,16 @@
 import { View } from 'react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { deviceLang, useT } from '@/i18n';
 import { applyDirection } from '@/lib/rtl';
 import { useSettings, type Lang } from '@/stores/settings';
-import { continuous, space } from '@/theme';
-import { go, Pressable, Text, useScreen } from '@/ui';
-import { HeroPhoto, WordmarkOnDark } from '@/features/onboarding/kit';
-import { MovoSays } from '@/features/onboarding/chat';
+import { continuous, useTheme } from '@/theme';
+import { go, Pressable, Text } from '@/ui';
+import { ChatBody, ChatHeader, MovoSays, ReplyTray, useChatColors } from '@/features/onboarding/chat';
 
-const HERO = require('../../../assets/onboarding/hero-race.jpg');
-const NAVY = '#01212E';
-
-/** Movo says hello in both languages, and one tap on a language answers and moves on. */
+/** The first message: Movo says hello in both languages, and one tap on a language answers and moves on. */
 export default function LanguageScreen() {
   const tr = useT();
-  const insets = useSafeAreaInsets();
-  const scr = useScreen();
+  const c = useChatColors();
   const set = useSettings((s) => s.set);
   const current = useSettings.getState().lang ?? deviceLang();
   const choose = async (l: Lang) => {
@@ -25,32 +18,36 @@ export default function LanguageScreen() {
     go.push('/welcome');
     await applyDirection(l === 'ar');
   };
+  const first: Lang = current === 'ar' ? 'ar' : 'en';
+  const other: Lang = first === 'ar' ? 'en' : 'ar';
   return (
-    <View style={{ flex: 1, backgroundColor: NAVY }}>
-      <HeroPhoto source={HERO} fade={NAVY}>
-        <View style={{ position: 'absolute', top: insets.top + 12, start: scr.gutter }}>
-          <WordmarkOnDark size={28} />
+    <View style={{ flex: 1, backgroundColor: c.screen }}>
+      <ChatHeader back={false} />
+      <ChatBody>
+        <MovoSays delay={250} lines={["Hi, I'm Movo 👋", 'I help you find places, gear and care that work for the way you move.', 'Which language should we talk in?']} />
+        <MovoSays delay={1700} typing={450} lines={[{ text: 'مرحبا، أنا موڤو. بأي لغة نتكلم؟', lang: 'ar' }]} />
+      </ChatBody>
+      <ReplyTray delay={2300} label={tr('onb.chat.reply', 'Your reply')} footer={
+        <View style={{ gap: 8 }} accessibilityRole="radiogroup">
+          {/* The device language is the main button, in the same slot as Continue on every other page. */}
+          <LangButton label={LABEL[other]} primary={false} onPress={() => choose(other)} />
+          <LangButton label={LABEL[first]} primary onPress={() => choose(first)} />
+          <Text variant="caption1" style={{ color: c.muted, textAlign: 'center', marginTop: 2 }}>{tr('onb.lang.sub', 'You can change this any time in Settings.')}</Text>
         </View>
-      </HeroPhoto>
-      <View style={{ paddingHorizontal: scr.gutter, marginTop: scr.short ? -110 : -150, gap: scr.short ? space.md : space.lg, paddingBottom: Math.max(insets.bottom, space.md) }}>
-        <MovoSays onDark delay={200} lines={["Hi, I'm Movo. Which language should we talk in?", { text: 'مرحبا، أنا موڤو. بأي لغة نتكلم؟', lang: 'ar' }]} />
-        <Animated.View entering={FadeInDown.delay(1000).springify().damping(26).stiffness(170)} style={{ gap: space.sm }} accessibilityRole="radiogroup">
-          <Text variant="footnote" style={{ color: 'rgba(255,255,255,0.55)', textAlign: 'center', marginBottom: 2 }}>{tr('onb.lang.sub', 'You can change this any time in Settings.')}</Text>
-          {/* The suggested language sits in the bottom slot, where Continue is on every other page. */}
-          {current === 'ar' ? <LangButton label="English" primary={false} onPress={() => choose('en')} /> : <LangButton label="العربية" primary={false} onPress={() => choose('ar')} />}
-          {current === 'ar' ? <LangButton label="العربية" primary onPress={() => choose('ar')} /> : <LangButton label="English" primary onPress={() => choose('en')} />}
-        </Animated.View>
-      </View>
+      } />
     </View>
   );
 }
 
-/** The device language gets the mint button; the other is outlined. Both answer in one tap. */
+const LABEL: Record<Lang, string> = { en: 'English', ar: 'العربية' };
+
 function LangButton({ label, primary, onPress }: { label: string; primary: boolean; onPress: () => void }) {
+  const t = useTheme();
+  const c = useChatColors();
   return (
     <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={label} feedback="scale"
-      style={{ height: 52, borderRadius: 26, ...continuous, alignItems: 'center', justifyContent: 'center', backgroundColor: primary ? '#3CF2B8' : 'transparent', borderWidth: primary ? 0 : 1.5, borderColor: 'rgba(255,255,255,0.35)' }}>
-      <Text variant="headline" weight="700" style={{ color: primary ? '#013447' : '#FFFFFF' }}>{label}</Text>
+      style={{ height: 54, borderRadius: 27, ...continuous, alignItems: 'center', justifyContent: 'center', backgroundColor: primary ? t.colors.buttonPrimaryBg : c.option, borderWidth: primary ? 0 : 1.5, borderColor: c.optionLine }}>
+      <Text variant="headline" weight="700" color={primary ? 'buttonPrimaryFg' : 'textPrimary'}>{label}</Text>
     </Pressable>
   );
 }
