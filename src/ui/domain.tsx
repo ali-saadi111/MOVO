@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { specialistPhoto } from '@/art/people';
 import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import Animated, { FadeInDown, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
@@ -11,7 +11,11 @@ import { fmtDay, fmtDayTime, fmtTime, useNow } from '@/lib/dates';
 import { HERE, distanceKm, formatDistance } from '@/lib/geo';
 import { formatMoney } from '@/lib/money';
 import { ltr, edges } from '@/lib/rtl';
+import { announce } from '@/lib/a11y';
+import { haptic } from '@/lib/haptics';
 import { useActingPerson } from '@/stores/caregiver';
+import { useCart } from '@/stores/cart';
+import { useSession } from '@/stores/session';
 import { primaryMobility, useSettings } from '@/stores/settings';
 import { continuous, isLargeText, layout, radii, space, springs, useTheme } from '@/theme';
 import { pinColors } from '@/theme/colors';
@@ -20,7 +24,7 @@ import { Divider, Tag } from './basics';
 import { ProgressBar } from './feedback';
 import { GlassSurface } from './GlassSurface';
 import { Icon } from './Icon';
-import { useFooterInset } from './nav';
+import { go, useFooterInset } from './nav';
 import { Pressable } from './Pressable';
 import { ArrowDot } from './canvas';
 import { HeroArt } from '@/art/HeroArt';
@@ -175,12 +179,13 @@ export function PriceText({ cents, compareAt, variant = 'headline' }: { cents: n
   );
 }
 
-export function StockLabel({ stock, always }: { stock: Product['stock']; always?: boolean }) {
+export function StockLabel({ stock, always, small }: { stock: Product['stock']; always?: boolean; small?: boolean }) {
   const tr = useT();
+  const v = small ? 'caption1' : 'subheadline';
   if (stock.status === 'in' && !always) return null;
-  if (stock.status === 'in') return <Text variant="subheadline" weight="600" color="accentText">{tr('stock.in', 'In stock')}</Text>;
-  if (stock.status === 'low') return <Text variant="subheadline" weight="600" color="ratingPartly">{tr('stock.low', '{{n}} left', { n: stock.quantity })}</Text>;
-  return <Text variant="subheadline" weight="600" color="textSecondary">{tr('stock.out', 'Out of stock')}</Text>;
+  if (stock.status === 'in') return <Text variant={v} weight="600" color="accentText">{tr('stock.in', 'In stock')}</Text>;
+  if (stock.status === 'low') return <Text variant={v} weight="600" color="ratingPartly">{tr('stock.low', '{{n}} left', { n: stock.quantity })}</Text>;
+  return <Text variant={v} weight="600" color="textSecondary">{tr('stock.out', 'Out of stock')}</Text>;
 }
 
 export function specValue(s: Product['keySpecs'][number], tr: (k: string, e: string) => string) {
@@ -190,21 +195,52 @@ export function specValue(s: Product['keySpecs'][number], tr: (k: string, e: str
 
 export function ProductCard({ product, layout: lay = 'grid', onPress, index = 0 }: { product: Product; layout?: 'grid' | 'rail'; onPress: () => void; index?: number }) {
   const loc = useLocalized();
-  const tr = useT();
   const t = useTheme();
-  const specs = product.keySpecs.slice(0, 2).map((s) => specValue(s, tr)).join(' · ');
+  const rail = lay === 'rail';
   return (
-    <Animated.View entering={t.reduceMotion ? undefined : FadeInDown.delay(Math.min(index, 6) * 40).springify().damping(26).stiffness(170)} style={lay === 'rail' ? { width: 156 } : { flex: 1 }}>
-      <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={`${loc(product.name)}, ${formatMoney(product.priceCents)}`} style={{ gap: space.xs }}>
-        <ArtImage image={product.images[0]} aspect={1} tile radius={radii.tile} />
-        <View style={{ gap: 2, paddingHorizontal: 2 }}>
-          <Text variant="subheadline" numberOfLines={2}>{loc(product.name)}</Text>
-          <Text variant="footnote" color="textSecondary" numberOfLines={1}>{specs}</Text>
-          <View style={{ marginTop: 2 }}><PriceText cents={product.priceCents} compareAt={product.compareAtCents} /></View>
-          <StockLabel stock={product.stock} />
+    <Animated.View entering={t.reduceMotion ? undefined : FadeInDown.delay(Math.min(index, 6) * 40).springify().damping(26).stiffness(170)} style={rail ? { width: 140 } : { flex: 1 }}>
+      <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={`${loc(product.name)}, ${formatMoney(product.priceCents)}`} style={{ gap: 6 }}>
+        <ArtImage image={product.images[0]} aspect={rail ? 140 / 124 : 1} tile radius={radii.tile} />
+        <View style={{ gap: 1, paddingHorizontal: 2 }}>
+          <Text variant={rail ? 'footnote' : 'subheadline'} numberOfLines={rail ? 1 : 2}>{loc(product.name)}</Text>
+          <PriceText cents={product.priceCents} compareAt={product.compareAtCents} />
+          <StockLabel stock={product.stock} small />
         </View>
       </Pressable>
+      {product.stock.status !== 'out' ? (
+        <View pointerEvents="box-none" style={{ position: 'absolute', top: 0, start: 0, end: 0, aspectRatio: rail ? 140 / 124 : 1 }}>
+          <QuickAdd product={product} />
+        </View>
+      ) : null}
     </Animated.View>
+  );
+}
+
+/** Round + on a product photo: adds one to the cart without opening the product. */
+export function QuickAdd({ product }: { product: Product }) {
+  const t = useTheme();
+  const tr = useT();
+  const loc = useLocalized();
+  const add = useCart((s) => s.add);
+  const user = useSession((s) => s.user);
+  const [done, setDone] = useState(false);
+  useEffect(() => {
+    if (!done) return;
+    const id = setTimeout(() => setDone(false), 1400);
+    return () => clearTimeout(id);
+  }, [done]);
+  const onPress = () => {
+    if (!user) { go.push(`/auth/gate?action=cart&resume=${encodeURIComponent(`/product/${product.id}`)}`); return; }
+    haptic.light();
+    add(product.id);
+    announce(tr('product.addedA11y', 'Added to cart'));
+    setDone(true);
+  };
+  return (
+    <Pressable onPress={onPress} hitSlop={6} feedback="scale" accessibilityRole="button" accessibilityLabel={tr('product.quickAdd', 'Add {{name}} to cart', { name: loc(product.name) })}
+      style={{ position: 'absolute', bottom: 8, end: 8, width: 34, height: 34, borderRadius: 17, alignItems: 'center', justifyContent: 'center', backgroundColor: done ? t.colors.accent : '#013447', boxShadow: '0 3px 8px rgba(1,52,71,0.22)' }}>
+      <Icon name={done ? 'checkmark' : 'plus'} size={16} weight="bold" color={{ raw: done ? '#013447' : '#FFFFFF' }} />
+    </Pressable>
   );
 }
 

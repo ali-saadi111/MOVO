@@ -17,8 +17,8 @@
 23-product|/(tabs)/(shop)/product/prd_air-20-self-propelled|
 24-product-added|/(tabs)/(shop)/product/prd_air-20-self-propelled|--click "Add to cart"
 25-cart|/(tabs)/(shop)/cart|--cart
-26-checkout|/(tabs)/(shop)/checkout/delivery|--cart
-27-payment|/(tabs)/(shop)/checkout/payment|--cart
+26-checkout|/(tabs)/(shop)/checkout|--cart
+27-payment|/(tabs)/(shop)/checkout|--cart --click "Cash on delivery"
 28-order-success|/covers/success?flow=order&id=M-1038&method=cash&total=3400|--wait=1500
 29-order|/(tabs)/(shop)/order/M-1038|
 30-care|/care|

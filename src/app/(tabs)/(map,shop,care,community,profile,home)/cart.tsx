@@ -25,7 +25,7 @@ export default function Cart() {
       contentBottom={items.length ? STICKY_CTA_SPACE : 0}
       footer={items.length ? (
         <StickyCTA>
-          <Button label={tr('cart.checkout', 'Checkout · {{total}}', { total: ltr(formatMoney(total)) })} onPress={() => (user ? push('/checkout/delivery') : go.push('/auth/gate?action=checkout&resume=/checkout/delivery'))} />
+          <Button label={tr('cart.checkout', 'Checkout · {{total}}', { total: ltr(formatMoney(total)) })} onPress={() => (user ? push('/checkout') : go.push('/auth/gate?action=checkout&resume=/checkout'))} />
         </StickyCTA>
       ) : null}
     >

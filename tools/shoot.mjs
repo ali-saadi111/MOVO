@@ -24,7 +24,7 @@ await page.goto('http://localhost:8081' + path, { waitUntil: 'networkidle' });
 await page.waitForTimeout(waitMs);
 await page.addStyleTag({ content: '#error-toast{display:none!important}' }); // dev-only warning toast
 for (const [kind, c] of clicks) {
-  await (kind === '--label' ? page.getByLabel(c, { exact: true }) : page.getByText(c, { exact: false })).first().click();
+  await (kind === '--label' ? page.getByLabel(c, { exact: true }) : page.getByText(c, { exact: false })).locator('visible=true').first().click();
   await page.waitForTimeout(1200);
 }
 if (has('--scroll')) { await page.mouse.move(196, 500); await page.mouse.wheel(0, 600); await page.waitForTimeout(800); }
