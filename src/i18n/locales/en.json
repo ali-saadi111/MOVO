@@ -699,5 +699,8 @@
   "onb.chat.reply": "Your reply",
   "onb.chat.replyMany": "Your reply · pick any",
   "onb.chat.lang.hi": "Hi, I'm Movo 👋",
-  "onb.chat.lang.q": "Which language should we talk in?"
+  "onb.chat.lang.q": "Which language should we talk in?",
+  "onb.chat.send": "Send",
+  "onb.chat.person.done": "Thanks. I'll keep them in mind.",
+  "onb.chat.done": "You're all set. Let's explore!"
 }

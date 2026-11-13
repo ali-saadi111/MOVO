@@ -60,7 +60,7 @@ export function MovoAvatar({ size = 30, online }: { size?: number; online?: bool
  * The chat header: back, Movo's avatar and name, and what step this is. A thin progress line
  * runs along the bottom edge, like a page loading.
  */
-export function ChatHeader({ step, total, back = true, right }: { step?: number; total?: number; back?: boolean; right?: ReactNode }) {
+export function ChatHeader({ step, total, back = true, right, onBack }: { step?: number; total?: number; back?: boolean; right?: ReactNode; onBack?: () => void }) {
   const tr = useT();
   const t = useTheme();
   const c = useChatColors();
@@ -74,7 +74,7 @@ export function ChatHeader({ step, total, back = true, right }: { step?: number;
     <View style={{ paddingTop: insets.top + 4, backgroundColor: c.screen }}>
       <View style={{ minHeight: 56, flexDirection: 'row', alignItems: 'center', gap: space.xs, paddingStart: back ? space.xxs : scr.gutter, paddingEnd: space.xxs }}>
         {back ? (
-          <Pressable onPress={go.back} accessibilityRole="button" accessibilityLabel={tr('nav.back', 'Back')} style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
+          <Pressable onPress={onBack ?? go.back} accessibilityRole="button" accessibilityLabel={tr('nav.back', 'Back')} style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
             <Icon name="chevron.left" size={20} weight="semibold" color={{ raw: c.accent }} mirrorInRTL />
           </Pressable>
         ) : null}

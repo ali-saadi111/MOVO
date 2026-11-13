@@ -33,6 +33,7 @@ export const SYMBOLS = {
   'chevron.right': 'chevron_right',
   'chevron.left': 'chevron_left',
   'chevron.down': 'expand_more',
+  'arrow.up': 'arrow_upward',
   'arrow.right': 'arrow_forward',
   'arrow.left': 'arrow_back',
   heart: 'favorite_border',
