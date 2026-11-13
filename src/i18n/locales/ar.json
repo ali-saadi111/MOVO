@@ -761,5 +761,8 @@
   "onb.chat.reply": "ردّك",
   "onb.chat.replyMany": "ردّك · اختر ما يناسبك",
   "onb.chat.lang.hi": "مرحبا، أنا موڤو 👋",
-  "onb.chat.lang.q": "بأي لغة نتكلم؟"
+  "onb.chat.lang.q": "بأي لغة نتكلم؟",
+  "onb.chat.send": "إرسال",
+  "onb.chat.person.done": "شكرًا. سأضعهم في بالي.",
+  "onb.chat.done": "كل شيء جاهز. لنبدأ الاستكشاف!"
 }
