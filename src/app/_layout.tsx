@@ -7,6 +7,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import '@/i18n';
+import { LaunchOverlay } from '@/features/loading/LaunchOverlay';
 import { PreviewChrome } from '@/features/preview/PreviewChrome';
 import { useSettingsHydrated } from '@/stores/settings';
 import { useTheme } from '@/theme';
@@ -68,6 +69,8 @@ export default function RootLayout() {
                 <BannerHost />
                 {/* The navigator renders from the first frame so deep links survive; this covers it until saved settings load. */}
                 {!hydrated ? <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: t.colors.bgPrimary }} /> : null}
+                {/* The MOVO drawing at launch, over the app until it is ready and the logo is drawn. */}
+                <LaunchOverlay appReady={hydrated} />
               </View>
             </PreviewChrome>
           </ThemeProvider>
