@@ -691,5 +691,13 @@
   "why.r2": "People who move like you rated these highly",
   "why.reasons": "Because",
   "why.short": "Why these?",
-  "why.title": "Why you’re seeing this"
+  "why.title": "Why you’re seeing this",
+  "onb.chat.stepOf": "Step {{n}} of {{total}} · about a minute",
+  "onb.chat.online": "Your accessibility guide",
+  "onb.chat.today": "Today",
+  "onb.chat.sent": "Sent",
+  "onb.chat.reply": "Your reply",
+  "onb.chat.replyMany": "Your reply · pick any",
+  "onb.chat.lang.hi": "Hi, I'm Movo 👋",
+  "onb.chat.lang.q": "Which language should we talk in?"
 }
