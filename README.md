@@ -41,7 +41,29 @@ npx expo run:ios        # a native dev build (needed for Liquid Glass and native
 npx expo start --web    # the browser preview used for the screenshots in qa/shots
 ```
 
-All dependencies are on Expo Go's bundled list. Settings are kept with AsyncStorage instead of MMKV so the app runs in Expo Go.
+Settings are kept with AsyncStorage instead of MMKV. Mapbox and the launch animation's WebView are native, so on iPhone the app runs in a **development build**, not Expo Go.
+
+### Put it on your iPhone from Windows (EAS Build)
+
+Xcode only runs on a Mac, so the iPhone build happens in Expo's cloud. You need a free Expo account and a paid Apple Developer account. Run these in the `movo` folder, one time each:
+
+```bash
+npm install -g eas-cli
+eas login                       # your Expo account
+eas init                        # links this folder to an Expo project (adds the id to app.json)
+eas env:create --environment development --name EXPO_PUBLIC_MAPBOX_TOKEN --value pk.xxx --visibility plaintext
+eas env:create --environment development --name EXPO_PUBLIC_MAPBOX_STYLE --value mapbox://styles/... --visibility plaintext
+eas device:create               # open the link on your iPhone to register it
+eas build -p ios --profile development   # sign in to Apple when asked; EAS makes the certificates
+```
+
+When the build finishes (about 15 to 25 minutes), open its link on the iPhone and install it. Then start the code on your computer and open it in that app:
+
+```bash
+npx expo start --dev-client     # scan the QR code with the iPhone camera
+```
+
+Rebuild with `eas build -p ios --profile development` only when a native package is added (like `react-native-webview` for the launch animation). Code and design changes reload without a rebuild. `preview` makes a standalone build to share with testers; `production` is for the App Store.
 
 ### Developer menu
 
