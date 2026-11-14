@@ -114,13 +114,11 @@ const F = {
 } as const;
 
 const BY_ART: Record<string, (keyof typeof F)[]> = {
-  // Sports events: Movo's own marathon key visuals.
-  'event-sports': ['ev:marathon-light', 'ev:marathon-dark'],
-  // Donation campaigns: Movo's own campaign key visuals.
+  // The marathon and the two campaigns Movo made key visuals for. Other events and
+  // campaigns use their own drawings, so a poster never names the wrong thing.
+  'event-marathon': ['ev:marathon-light', 'ev:marathon-dark'],
   'campaign-chairs': ['cmp:independence'],
-  'campaign-physio': ['cmp:independence'],
   'campaign-ramps': ['cmp:ramp'],
-  'campaign-repair': ['cmp:ramp'],
   'cafe': ['lb-restaurant-24.jpg', 'lb-cafe-5.jpg', 'lb-restaurant-21.jpg'],
   'restaurant': ['lb-restaurant-0.jpg', 'lb-restaurant-10.jpg', 'lb-restaurant-12.jpg'],
   'shop': ['lb-shop-21.jpg', 'lb-shop-23.jpg', 'lb-shop-24.jpg', 'lb-shop-26.jpg', 'lb-shop-19.jpg', 'lb-shop-27.jpg'],

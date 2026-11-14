@@ -56,8 +56,9 @@ export default function RootLayout() {
                   <Stack.Screen name="sheets/request-place" options={sheet([1])} />
                   <Stack.Screen name="sheets/why-this" options={sheet([0.55, 1])} />
                   <Stack.Screen name="sheets/support" options={sheet([1])} />
-                  <Stack.Screen name="sheets/join" options={sheet([0.7, 1])} />
-                  <Stack.Screen name="sheets/donate" options={sheet([0.85, 1])} />
+                  <Stack.Screen name="sheets/join" options={sheet([0.45, 0.7])} />
+                  <Stack.Screen name="sheets/donate" options={sheet([0.62, 1])} />
+                  <Stack.Screen name="sheets/community-info" options={sheet([0.55, 1])} />
                   <Stack.Screen name="sheets/confirm" options={sheet([0.35, 0.5])} />
                   <Stack.Screen name="sheets/return-request" options={sheet([1])} />
                   <Stack.Screen name="sheets/add-person" options={sheet([1])} />

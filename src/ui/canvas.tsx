@@ -51,7 +51,7 @@ export function RoundButton({ icon, label, onPress, dot, count, shake }: { icon:
 }
 
 /** Tab-root header: avatar and greeting, round actions, then a big display title. */
-export function CanvasHeader({ title, actions, below, compact }: { title: string; actions?: ReactNode; below?: ReactNode; /** Title and actions on one row, no greeting (busy screens like the shop). */ compact?: boolean }) {
+export function CanvasHeader({ title, actions, below, compact, titleAside }: { title: string; actions?: ReactNode; below?: ReactNode; /** Title and actions on one row, no greeting (busy screens like the shop). */ compact?: boolean; /** Small control on the title's row, e.g. a segmented switch. */ titleAside?: ReactNode }) {
   const t = useTheme();
   const tr = useT();
   const lang = useLang();
@@ -82,7 +82,12 @@ export function CanvasHeader({ title, actions, below, compact }: { title: string
         </View>
         <View style={{ flexDirection: 'row', gap: space.xs }}>{actions}</View>
       </View>
-      <Text variant="largeTitle" display accessibilityRole="header" style={{ fontSize: 38, lineHeight: 44, letterSpacing: -0.6, fontWeight: '800' }}>{title}</Text>
+      {titleAside ? (
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm, marginTop: -space.xs }}>
+          <Text variant="largeTitle" display accessibilityRole="header" numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.75} style={{ flex: 1, fontSize: 27, lineHeight: 34, letterSpacing: -0.5, fontWeight: '800' }}>{title}</Text>
+          {titleAside}
+        </View>
+      ) : <Text variant="largeTitle" display accessibilityRole="header" style={{ fontSize: 38, lineHeight: 44, letterSpacing: -0.6, fontWeight: '800' }}>{title}</Text>}
       {below}
     </View>
   );
