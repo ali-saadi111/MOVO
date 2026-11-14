@@ -291,7 +291,7 @@ export const SceneArt = memo(function SceneArt({ art, seed = 0, width, height }:
   const p: P = { c: colors, seed };
   let body: ReactNode;
   if (art.startsWith('entrance-')) body = entrance(p, art.slice(9) as 'accessible');
-  else if (art === 'event-sports') body = court(p);
+  else if (art === 'event-sports' || art === 'event-marathon') body = court(p);
   else if (art === 'event-workshop') body = workshop(p);
   else if (art === 'event-meetup') body = meetup(p);
   else if (art === 'campaign-chairs') body = chairsRow(p);
