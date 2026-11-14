@@ -81,7 +81,7 @@ export default function PlacePage() {
       <Section title={tr('place.checklist', 'Accessibility checklist')}>
         {p.rating.checklist.map((c, i) => (
           <View key={c.key}>
-            {i > 0 ? <Divider inset={32} /> : null}
+            {i > 0 ? <Divider inset={48} /> : null}
             <ChecklistRow item={c} />
           </View>
         ))}

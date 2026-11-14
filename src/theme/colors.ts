@@ -78,9 +78,9 @@ export const light: ColorTokens = {
   bgSelected: brand.mintMist,
   fill: 'rgba(1,52,71,0.06)',
   fillStrong: 'rgba(1,52,71,0.10)',
-  textPrimary: brand.navy,
-  textSecondary: '#5E6E75',
-  textTertiary: '#7C8B91',
+  textPrimary: '#15191B', // near-black, like the Toters reference; navy stays on buttons
+  textSecondary: '#686F73',
+  textTertiary: '#868D91',
   textOnBrand: '#FFFFFF',
   tint: brand.navy,
   accent: brand.mint,
@@ -89,7 +89,7 @@ export const light: ColorTokens = {
   buttonPrimaryFg: '#FFFFFF',
   buttonSecondaryBg: brand.mintMist,
   buttonSecondaryFg: brand.navy,
-  separator: 'rgba(1,52,71,0.12)',
+  separator: 'rgba(0,0,0,0.08)',
   ratingAccessible: brand.mint,
   ratingAccessibleGlyph: brand.navy,
   ratingPartly: brand.amber,
@@ -200,3 +200,35 @@ export function withHighContrast(c: ColorTokens, scheme: 'light' | 'dark'): Colo
     separator: scheme === 'light' ? 'rgba(1,52,71,0.35)' : 'rgba(255,255,255,0.35)',
   };
 }
+
+
+/**
+ * Content palette (the colour pass). Soft tints for tiles and pictures, each with an ink of
+ * the same hue for the drawing on it. Brand navy/mint stay for buttons and the tab bar; the
+ * map never uses these, so the accessibility rating colours stay unambiguous. In dark mode
+ * the warm tints sit on deep navy instead of brown.
+ */
+export type TintName = 'sky' | 'peach' | 'lilac' | 'butter' | 'rose' | 'mint';
+export type Tint = { bg: string; ink: string; /** light pastel used behind photos and avatars, both modes */ soft: string };
+export type Tints = Record<TintName, Tint>;
+
+export const lightTints: Tints = {
+  sky: { bg: '#DDEBFF', ink: '#1E4FB8', soft: '#DDEBFF' },
+  peach: { bg: '#FFE6D5', ink: '#A3401B', soft: '#FFE6D5' },
+  lilac: { bg: '#ECE5FF', ink: '#5534C0', soft: '#ECE5FF' },
+  butter: { bg: '#FFF0BF', ink: '#7A5200', soft: '#FFF0BF' },
+  rose: { bg: '#FFE1EB', ink: '#A3204E', soft: '#FFE1EB' },
+  mint: { bg: '#DDF7EC', ink: '#0E7A58', soft: '#DDF7EC' },
+};
+
+export const darkTints: Tints = {
+  sky: { bg: '#14254A', ink: '#9CC2FF', soft: '#BFD5F7' },
+  peach: { bg: '#0F2C3B', ink: '#FFB48A', soft: '#F6CDB2' },
+  lilac: { bg: '#261C4A', ink: '#C3B1FF', soft: '#D3C7F7' },
+  butter: { bg: '#132A44', ink: '#FFD666', soft: '#F3DC92' },
+  rose: { bg: '#3A1424', ink: '#FF9DBE', soft: '#F4C3D3' },
+  mint: { bg: '#0D2D24', ink: '#5BE3B5', soft: '#B9EBD6' },
+};
+
+/** The one mint part every Movo drawing carries, and the highlight on it. */
+export const drawingAccent = brand.mint;

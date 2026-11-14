@@ -1,19 +1,19 @@
-import { Lexend_300Light, Lexend_400Regular, Lexend_500Medium, Lexend_600SemiBold, Lexend_700Bold, Lexend_800ExtraBold } from '@expo-google-fonts/lexend';
-import { IBMPlexSansArabic_400Regular, IBMPlexSansArabic_500Medium, IBMPlexSansArabic_600SemiBold, IBMPlexSansArabic_700Bold } from '@expo-google-fonts/ibm-plex-sans-arabic';
+import { NotoSans_400Regular, NotoSans_500Medium, NotoSans_600SemiBold, NotoSans_700Bold, NotoSans_800ExtraBold } from '@expo-google-fonts/noto-sans';
+import { NotoSansArabic_400Regular, NotoSansArabic_500Medium, NotoSansArabic_600SemiBold, NotoSansArabic_700Bold, NotoSansArabic_800ExtraBold } from '@expo-google-fonts/noto-sans-arabic';
 import type { TextStyle } from 'react-native';
 
 /**
- * Movo's type: Lexend (the brand font, built for reading ease) for Latin text and
- * IBM Plex Sans Arabic for Arabic. Each weight is its own family on iOS, so the
- * weight a style asks for is mapped to a family here.
+ * Movo's type: Noto Sans for Latin text and its twin Noto Sans Arabic for Arabic, so both
+ * scripts read as one family. Each weight is its own family on iOS, so the weight a
+ * style asks for is mapped to a family here. Light (300) maps to Regular.
  */
 export const fontFiles = {
-  Lexend_300Light, Lexend_400Regular, Lexend_500Medium, Lexend_600SemiBold, Lexend_700Bold, Lexend_800ExtraBold,
-  IBMPlexSansArabic_400Regular, IBMPlexSansArabic_500Medium, IBMPlexSansArabic_600SemiBold, IBMPlexSansArabic_700Bold,
+  NotoSans_400Regular, NotoSans_500Medium, NotoSans_600SemiBold, NotoSans_700Bold, NotoSans_800ExtraBold,
+  NotoSansArabic_400Regular, NotoSansArabic_500Medium, NotoSansArabic_600SemiBold, NotoSansArabic_700Bold, NotoSansArabic_800ExtraBold,
 };
 
-const LATIN: Record<number, string> = { 300: 'Lexend_300Light', 400: 'Lexend_400Regular', 500: 'Lexend_500Medium', 600: 'Lexend_600SemiBold', 700: 'Lexend_700Bold', 800: 'Lexend_800ExtraBold' };
-const ARABIC: Record<number, string> = { 300: 'IBMPlexSansArabic_400Regular', 400: 'IBMPlexSansArabic_400Regular', 500: 'IBMPlexSansArabic_500Medium', 600: 'IBMPlexSansArabic_600SemiBold', 700: 'IBMPlexSansArabic_700Bold', 800: 'IBMPlexSansArabic_700Bold' };
+const LATIN: Record<number, string> = { 300: 'NotoSans_400Regular', 400: 'NotoSans_400Regular', 500: 'NotoSans_500Medium', 600: 'NotoSans_600SemiBold', 700: 'NotoSans_700Bold', 800: 'NotoSans_800ExtraBold' };
+const ARABIC: Record<number, string> = { 300: 'NotoSansArabic_400Regular', 400: 'NotoSansArabic_400Regular', 500: 'NotoSansArabic_500Medium', 600: 'NotoSansArabic_600SemiBold', 700: 'NotoSansArabic_700Bold', 800: 'NotoSansArabic_800ExtraBold' };
 
 export function fontFor(weight: TextStyle['fontWeight'], rtl: boolean) {
   const n = weight === 'bold' ? 700 : weight === 'normal' || weight == null ? 400 : Number(weight) || 400;

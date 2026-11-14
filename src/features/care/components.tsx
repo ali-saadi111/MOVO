@@ -1,6 +1,8 @@
 import { ScrollView, View, type StyleProp, type ViewStyle } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
+import { HopObject, MovoObject } from '@/art/objects';
+import { serviceObject, serviceTint, TINT_ROTATION } from '@/art/colorPass';
 import { specialistPhoto } from '@/art/people';
 import { sync, type ServiceKind, type Specialist } from '@/data';
 import { requireAccount } from '@/features/shell/auth';
@@ -10,7 +12,7 @@ import { fmtDay, fmtTime, fmtWeekday, useNow } from '@/lib/dates';
 import { formatMoney } from '@/lib/money';
 import { ltr } from '@/lib/rtl';
 import { continuous, layout, radii, space, useTheme } from '@/theme';
-import { Avatar, Icon, Pressable, Skeleton, Tag, Text, toneColors, TONES, useTabNav } from '@/ui';
+import { Avatar, Icon, Pressable, Skeleton, Tag, Text, useTabNav } from '@/ui';
 
 import { PLAN, sameDay, serviceFor, useNextFree, type Where } from './booking';
 
@@ -25,18 +27,18 @@ export function useOpenBooking() {
 }
 
 /** Thin segmented bar: one segment per session in the plan. */
-export function PlanBars({ done, total, onDark }: { done: number; total: number; onDark?: boolean }) {
+export function PlanBars({ done, total, onDark, on, off }: { done: number; total: number; onDark?: boolean; on?: string; off?: string }) {
   const t = useTheme();
   return (
     <View style={{ flex: 1, flexDirection: 'row', gap: 4 }}>
       {Array.from({ length: total }, (_, i) => (
-        <View key={i} style={{ flex: 1, height: 5, borderRadius: 3, backgroundColor: i < done ? t.colors.accent : onDark ? 'rgba(255,255,255,0.22)' : t.colors.fill }} />
+        <View key={i} style={{ flex: 1, height: 5, borderRadius: 3, backgroundColor: i < done ? (on ?? t.colors.accent) : (off ?? (onDark ? 'rgba(255,255,255,0.22)' : t.colors.fill)) }} />
       ))}
     </View>
   );
 }
 
-/** Compact navy ticket for the next session, with the plan progress inside it. */
+/** Compact lilac (Care's colour) card for the next session, with the plan progress inside it. */
 export function NextSessionCard({ startsAt, specialistId, where, onPress }: { startsAt: string; specialistId: string; where: Where; onPress: () => void }) {
   const t = useTheme();
   const tr = useT();
@@ -49,23 +51,25 @@ export function NextSessionCard({ startsAt, specialistId, where, onPress }: { st
   const date = `${fmtDay(startsAt, lang)} · ${fmtTime(startsAt, lang)}`;
   const place = where === 'home' ? tr('care.atHome', 'At your home') : tr('care.atClinic', 'At the clinic');
   const session = tr('care.sessionOf', 'Session {{n}} of {{total}}', { n: PLAN.done + 1, total: PLAN.total });
+  const c = t.tints.lilac;
   return (
     <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={`${tr('care.next', 'Your next session')}, ${date}, ${name}, ${place}. ${session}`}
-      style={{ marginHorizontal: layout.margin, borderRadius: radii.hero, ...continuous, backgroundColor: t.colors.blockNavy, padding: space.md, gap: space.sm }}>
-      <Text variant="caption1" weight="700" style={{ color: t.colors.accent, letterSpacing: 0.6 }}>{`${tr('care.nextShort', 'Next session')} · ${when}`.toUpperCase()}</Text>
+      style={{ marginHorizontal: layout.margin, borderRadius: radii.hero, ...continuous, backgroundColor: c.bg, padding: space.md, gap: space.sm, overflow: 'hidden' }}>
+      <View pointerEvents="none" style={{ position: 'absolute', top: -14, ...(t.rtl ? { left: -14 } : { right: -14 }), opacity: 0.16, transform: [{ rotate: '14deg' }] }}><MovoObject name="heart" size={76} ink={c.ink} /></View>
+      <Text variant="caption1" weight="700" style={{ color: c.ink, letterSpacing: 0.6 }}>{`${tr('care.nextShort', 'Next session')} · ${when}`.toUpperCase()}</Text>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm }}>
-        <Avatar name={sp?.name ?? ''} size={46} photo={specialistPhoto(specialistId)} />
+        <View style={{ borderRadius: 26, borderWidth: 3, borderColor: t.colors.bgElevated }}><Avatar name={sp?.name ?? ''} size={42} photo={specialistPhoto(specialistId)} /></View>
         <View style={{ flex: 1, gap: 2 }}>
-          <Text variant="title3" weight="800" tabular style={{ color: '#FFFFFF' }} numberOfLines={1} adjustsFontSizeToFit>{date}</Text>
-          <Text variant="footnote" style={{ color: 'rgba(255,255,255,0.75)' }} numberOfLines={1}>{name} · {place}</Text>
+          <Text variant="title3" weight="700" tabular numberOfLines={1} adjustsFontSizeToFit>{date}</Text>
+          <Text variant="footnote" color="textSecondary" numberOfLines={1}>{name} · {place}</Text>
         </View>
-        <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: t.colors.accent, alignItems: 'center', justifyContent: 'center' }}>
-          <Icon name="chevron.right" size={16} weight="bold" color={{ raw: '#013447' }} mirrorInRTL />
+        <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: t.colors.buttonPrimaryBg, alignItems: 'center', justifyContent: 'center' }}>
+          <Icon name="chevron.right" size={16} weight="bold" color={{ raw: t.colors.buttonPrimaryFg }} mirrorInRTL />
         </View>
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm }}>
-        <Text variant="caption1" style={{ color: 'rgba(255,255,255,0.85)' }} tabular>{session}</Text>
-        <PlanBars done={PLAN.done} total={PLAN.total} onDark />
+        <Text variant="caption1" color="textSecondary" tabular>{session}</Text>
+        <PlanBars done={PLAN.done} total={PLAN.total} on={c.ink} off={t.scheme === 'dark' ? 'rgba(255,255,255,0.14)' : 'rgba(85,52,192,0.16)'} />
       </View>
     </Pressable>
   );
@@ -86,14 +90,12 @@ export function ServiceGrid({ kinds, onPress, style }: { kinds: ServiceKind[]; o
         <View key={r} style={{ flex: 1, flexDirection: 'row', gap: space.xs, minHeight: 76, maxHeight: 128 }}>
           {row.map((k, j) => {
             const i = r * 3 + j;
-            const c = toneColors(t.colors, TONES[i % 4]);
+            const c = t.tints[serviceTint[k]];
             return (
               <Animated.View key={k} entering={t.reduceMotion ? undefined : FadeInDown.delay(i * 30).springify().damping(22).stiffness(200)} style={{ flex: 1 }}>
                 <Pressable feedback="scale" onPress={() => onPress(k)} accessibilityRole="button" accessibilityLabel={serviceLabel(tr, k)}
-                  style={{ flex: 1, borderRadius: 18, ...continuous, backgroundColor: t.colors.bgElevated, borderWidth: 1, borderColor: t.colors.separator, padding: 8, justifyContent: 'space-between', gap: 6 }}>
-                  <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: c.bg, alignItems: 'center', justifyContent: 'center' }}>
-                    <Icon name={serviceIcon[k]} size={16} color={{ raw: c.ink }} fill />
-                  </View>
+                  style={{ flex: 1, borderRadius: 20, ...continuous, backgroundColor: c.bg, padding: 10, justifyContent: 'space-between', gap: 6 }}>
+                  <HopObject name={serviceObject[k]} size={42} ink={c.ink} cut={c.bg} delay={i * 60} />
                   <Text variant="caption1" weight="700" numberOfLines={2} style={{ lineHeight: 15 }}>{shortServiceLabel(tr, k)}</Text>
                 </Pressable>
               </Animated.View>
@@ -115,13 +117,13 @@ export function FacesRail({ people, loading }: { people: Specialist[]; loading?:
   if (loading) return <View style={{ flexDirection: 'row', gap: space.md, paddingHorizontal: layout.margin }}>{[0, 1, 2, 3].map((i) => <Skeleton key={i} shape="circle" width={56} height={56} />)}</View>;
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: layout.margin, gap: space.sm }}>
-      {people.map((s) => {
+      {people.map((s, i) => {
         const name = lang === 'ar' ? s.nameAr : s.name;
         const short = name.replace(/^(Dr\.|د\.)\s*/, '').split(' ')[0];
         return (
           <View key={s.id} style={{ width: 88, alignItems: 'center', gap: 6 }}>
             <Pressable feedback="scale" onPress={() => push(`/specialist/${s.id}`)} accessibilityRole="button" accessibilityLabel={name} style={{ alignItems: 'center', gap: 4 }}>
-              <Avatar name={s.name} hue={s.avatarHue} size={56} photo={specialistPhoto(s.id)} />
+              <View style={{ padding: 3, borderRadius: 34, borderWidth: 3, borderColor: t.tints[TINT_ROTATION[i % TINT_ROTATION.length]].soft }}><Avatar name={s.name} hue={s.avatarHue} size={52} photo={specialistPhoto(s.id)} /></View>
               <Text variant="footnote" weight="600" numberOfLines={1}>{short}</Text>
             </Pressable>
             <Pressable feedback="scale" onPress={() => book(s.id)} accessibilityRole="button" accessibilityLabel={tr('care.bookAgainA11y', 'Book {{name}} again', { name })}

@@ -2,8 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
 import Animated, { FadeInDown, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 
-import { useLang, useT } from '@/i18n';
-import { fmtLongDay } from '@/lib/dates';
+import { useT } from '@/i18n';
 import { haptic } from '@/lib/haptics';
 import { useSession } from '@/stores/session';
 import { continuous, layout, radii, space, springs, useTheme, type ColorTokens } from '@/theme';
@@ -54,14 +53,12 @@ export function RoundButton({ icon, label, onPress, dot, count, shake }: { icon:
 export function CanvasHeader({ title, actions, below, compact, titleAside }: { title: string; actions?: ReactNode; below?: ReactNode; /** Title and actions on one row, no greeting (busy screens like the shop). */ compact?: boolean; /** Small control on the title's row, e.g. a segmented switch. */ titleAside?: ReactNode }) {
   const t = useTheme();
   const tr = useT();
-  const lang = useLang();
   const user = useSession((s) => s.user);
-  const today = new Date().toISOString();
   if (compact) {
     return (
       <View style={{ paddingHorizontal: layout.margin, gap: space.sm, marginBottom: space.sm }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm, minHeight: 48 }}>
-          <Text variant="largeTitle" display accessibilityRole="header" numberOfLines={1} style={{ flex: 1, fontSize: 34, lineHeight: 41, letterSpacing: -0.6, fontWeight: '800' }}>{title}</Text>
+          <Text variant="largeTitle" display accessibilityRole="header" numberOfLines={1} style={{ flex: 1, fontSize: 28, lineHeight: 34, letterSpacing: -0.4, fontWeight: '700' }}>{title}</Text>
           <View style={{ flexDirection: 'row', gap: space.xs }}>{actions}</View>
         </View>
         {below}
@@ -77,17 +74,16 @@ export function CanvasHeader({ title, actions, below, compact, titleAside }: { t
           </View>
         )}
         <View style={{ flex: 1 }}>
-          <Text variant="headline" numberOfLines={1}>{user ? tr('canvas.hi', 'Hi, {{name}}', { name: user.firstName }) : tr('canvas.hiGuest', 'Hi there')}</Text>
-          <Text variant="footnote" color="textSecondary" numberOfLines={1}>{fmtLongDay(today, lang)}</Text>
+          <Text variant="headline" weight="700" numberOfLines={1}>{user ? tr('canvas.hi', 'Hi, {{name}}', { name: user.firstName }) : tr('canvas.hiGuest', 'Hi there')}</Text>
         </View>
         <View style={{ flexDirection: 'row', gap: space.xs }}>{actions}</View>
       </View>
       {titleAside ? (
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm, marginTop: -space.xs }}>
-          <Text variant="largeTitle" display accessibilityRole="header" numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.75} style={{ flex: 1, fontSize: 27, lineHeight: 34, letterSpacing: -0.5, fontWeight: '800' }}>{title}</Text>
+          <Text variant="largeTitle" display accessibilityRole="header" numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.75} style={{ flex: 1, fontSize: 26, lineHeight: 32, letterSpacing: -0.4, fontWeight: '700' }}>{title}</Text>
           {titleAside}
         </View>
-      ) : <Text variant="largeTitle" display accessibilityRole="header" style={{ fontSize: 38, lineHeight: 44, letterSpacing: -0.6, fontWeight: '800' }}>{title}</Text>}
+      ) : <Text variant="largeTitle" display accessibilityRole="header" style={{ fontSize: 28, lineHeight: 34, letterSpacing: -0.4, fontWeight: '700' }}>{title}</Text>}
       {below}
     </View>
   );

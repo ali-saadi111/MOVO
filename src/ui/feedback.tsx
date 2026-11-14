@@ -43,7 +43,7 @@ export function SuccessTick({ size = 96, onDone, haptics = true }: { size?: numb
 }
 
 /** 8 pt capsule progress bar, accent on fill. Fills once with `smooth`. */
-export function ProgressBar({ value, from = 0, height = 12, style, label }: { value: number; from?: number; height?: number; style?: StyleProp<ViewStyle>; label?: string }) {
+export function ProgressBar({ value, from = 0, height = 12, style, label, color }: { value: number; from?: number; height?: number; style?: StyleProp<ViewStyle>; label?: string; /** Fill colour; defaults to the accent. */ color?: string }) {
   const t = useTheme();
   const p = useSharedValue(t.reduceMotion ? value : from);
   useEffect(() => {
@@ -52,7 +52,7 @@ export function ProgressBar({ value, from = 0, height = 12, style, label }: { va
   const fill = useAnimatedStyle(() => ({ width: `${Math.max(0, Math.min(1, p.value)) * 100}%` }));
   return (
     <View accessibilityRole="progressbar" accessibilityLabel={label} accessibilityValue={{ min: 0, max: 100, now: Math.round(value * 100) }} style={[{ height, borderRadius: radii.capsule, backgroundColor: t.colors.fill, overflow: 'hidden' }, style]}>
-      <Animated.View style={[{ height, borderRadius: radii.capsule, backgroundColor: t.colors.accent }, fill]} />
+      <Animated.View style={[{ height, borderRadius: radii.capsule, backgroundColor: color ?? t.colors.accent }, fill]} />
     </View>
   );
 }

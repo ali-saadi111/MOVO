@@ -106,14 +106,18 @@ export function useMobilityFor(): MobilityKey | null {
 }
 
 export function ChecklistRow({ item }: { item: Place['rating']['checklist'][number] }) {
+  const t = useTheme();
   const tr = useT();
   const loc = useLocalized();
   const big = isLargeText();
   return (
     <View accessible accessibilityLabel={`${checklistLabel(tr, item.key)}: ${loc(item.value)}, ${ratingLabel(tr, item.level)}`} style={{ flexDirection: big ? 'column' : 'row', alignItems: big ? 'flex-start' : 'center', gap: space.sm, minHeight: layout.rowWithSubtitle, paddingVertical: space.sm }}>
-      <Icon name={checklistIcon[item.key]} size={20} color="textSecondary" rendering="hierarchical" />
+      {/* Soft sky tile (Map's colour); the badge on the right keeps the rating colour. */}
+      <View style={{ width: 36, height: 36, borderRadius: 11, backgroundColor: t.tints.sky.bg, alignItems: 'center', justifyContent: 'center' }}>
+        <Icon name={checklistIcon[item.key]} size={18} color={{ raw: t.tints.sky.ink }} rendering="hierarchical" />
+      </View>
       <View style={{ flex: 1, gap: 2 }}>
-        <Text variant="body">{checklistLabel(tr, item.key)}</Text>
+        <Text variant="body" weight="600">{checklistLabel(tr, item.key)}</Text>
         <Text variant="subheadline" color="textSecondary">{loc(item.value)}</Text>
       </View>
       <RatingBadge level={item.level} size="mini" />
@@ -212,7 +216,15 @@ export function ProductCard({ product, layout: lay = 'grid', onPress, index = 0 
   return (
     <Animated.View entering={t.reduceMotion ? undefined : FadeInDown.delay(Math.min(index, 6) * 40).springify().damping(26).stiffness(170)} style={rail ? { width: 140 } : { flex: 1 }}>
       <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={`${loc(product.name)}, ${formatMoney(product.priceCents)}`} style={{ gap: 6 }}>
-        <ArtImage image={product.images[0]} aspect={rail ? 140 / 124 : 1} tile radius={radii.tile} />
+        <View>
+          <ArtImage image={product.images[0]} aspect={rail ? 140 / 124 : 1} tile radius={radii.tile} />
+          {product.compareAtCents && product.compareAtCents > product.priceCents ? (
+            // Deals are peach (Shop's colour); the photo itself stays on white.
+            <View style={{ position: 'absolute', top: 8, start: 8, paddingHorizontal: 8, height: 22, borderRadius: 11, justifyContent: 'center', backgroundColor: '#FFE6D5' }}>
+              <Text variant="caption2" weight="800" tabular style={{ color: '#A3401B' }} maxFontSizeMultiplier={1.2}>{`-${Math.round((1 - product.priceCents / product.compareAtCents) * 100)}%`}</Text>
+            </View>
+          ) : null}
+        </View>
         <View style={{ gap: 1, paddingHorizontal: 2 }}>
           <Text variant={rail ? 'footnote' : 'subheadline'} numberOfLines={rail ? 1 : 2}>{loc(product.name)}</Text>
           <PriceText cents={product.priceCents} compareAt={product.compareAtCents} />

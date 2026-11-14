@@ -1,3 +1,5 @@
+import { MovoObject, type ObjectName } from '@/art/objects';
+import type { TintName } from '@/theme/colors';
 import { tabRoot } from '@/ui/TabRoot';
 import { View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
@@ -47,14 +49,14 @@ function Profile() {
   const joined = a.events.length + a.donations.length;
 
   const hero = (children: React.ReactNode) => {
-    const box = { marginHorizontal: layout.margin, marginBottom: space.md, borderRadius: radii.hero, ...continuous, backgroundColor: t.colors.blockNavy, padding: space.md, gap: space.md, overflow: 'hidden' as const };
+    const box = { marginHorizontal: layout.margin, marginBottom: space.md, borderRadius: radii.hero, ...continuous, backgroundColor: t.tints.mint.bg, padding: space.md, gap: space.md, overflow: 'hidden' as const };
     return (
       <Animated.View entering={t.reduceMotion ? undefined : FadeInDown.springify().damping(18).stiffness(160)}>
 <View style={box}>{children}</View>
       </Animated.View>
     );
   };
-  const art = <View pointerEvents="none" style={{ position: 'absolute', ...edges(t.rtl, { end: -36 }), bottom: -44, opacity: 0.9 }}><HeroArt name="chair" size={128} /></View>;
+  const art = <View pointerEvents="none" style={{ position: 'absolute', ...edges(t.rtl, { end: -36 }), bottom: -44, opacity: 0.35 }}><HeroArt name="chair" size={128} /></View>;
 
   return (
     <Screen title={tr('tab.profile', 'Profile')} variant="canvas" header={<CanvasHeader title={tr('profile.title', 'Your Movo')} actions={<CanvasActions />} />}>
@@ -65,37 +67,37 @@ function Profile() {
             <>
               {art}
               <Pressable feedback="highlight" onPress={() => push('/account')} accessibilityRole="button" accessibilityLabel={`${user.fullName}, ${user.email}. ${tr('account.title', 'Your account')}`} style={{ flexDirection: 'row', gap: space.md, alignItems: 'center' }}>
-                <View style={{ borderRadius: 30, borderWidth: 3, borderColor: t.colors.accent }}><Avatar name={user.fullName} size={52} /></View>
+                <View style={{ borderRadius: 30, borderWidth: 3, borderColor: t.colors.accent, backgroundColor: t.colors.bgElevated }}><Avatar name={user.fullName} size={52} /></View>
                 <View style={{ flex: 1, gap: 2 }}>
-                  <Text variant="title3" style={{ color: '#FFFFFF', fontWeight: '800' }}>{user.fullName}</Text>
-                  <Text variant="subheadline" style={{ color: 'rgba(255,255,255,0.7)' }} numberOfLines={1}>{user.email}</Text>
+                  <Text variant="title3" weight="700">{user.fullName}</Text>
+                  <Text variant="subheadline" color="textSecondary" numberOfLines={1}>{user.email}</Text>
                 </View>
-                <Icon name="chevron.right" size={14} weight="semibold" color={{ raw: 'rgba(255,255,255,0.6)' }} mirrorInRTL />
+                <Icon name="chevron.right" size={14} weight="semibold" color="textSecondary" mirrorInRTL />
               </Pressable>
-              <Pressable onPress={() => go.push('/how-you-move')} accessibilityRole="button" accessibilityLabel={`${tr('profile.howIMove', 'How I move')}: ${moves}. ${tr('common.edit', 'Edit')}`} style={{ alignSelf: 'flex-start', maxWidth: '86%', flexDirection: 'row', alignItems: 'center', gap: space.sm, minHeight: 44, borderRadius: 22, backgroundColor: t.colors.accent, paddingStart: 6, paddingEnd: space.md }}>
-                <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: '#013447', alignItems: 'center', justifyContent: 'center' }}><Icon name="figure.roll" size={16} color={{ raw: '#22D39C' }} /></View>
+              <Pressable onPress={() => go.push('/how-you-move')} accessibilityRole="button" accessibilityLabel={`${tr('profile.howIMove', 'How I move')}: ${moves}. ${tr('common.edit', 'Edit')}`} style={{ alignSelf: 'flex-start', maxWidth: '86%', flexDirection: 'row', alignItems: 'center', gap: space.sm, minHeight: 48, borderRadius: 18, backgroundColor: t.colors.bgElevated, paddingStart: 6, paddingEnd: space.md }}>
+                <View style={{ width: 34, height: 34, borderRadius: 17, backgroundColor: t.colors.accent, alignItems: 'center', justifyContent: 'center' }}><MovoObject name="wheel" size={24} ink="#013447" /></View>
                 <View style={{ flexShrink: 1 }}>
-                  <Text variant="caption2" weight="600" style={{ color: '#013447', opacity: 0.75 }}>{tr('profile.howIMove', 'How I move')}</Text>
-                  <Text variant="subheadline" weight="700" style={{ color: '#013447' }} numberOfLines={1}>{moves}</Text>
+                  <Text variant="caption2" weight="600" color="textSecondary">{tr('profile.howIMove', 'How I move')}</Text>
+                  <Text variant="subheadline" weight="700" numberOfLines={1}>{moves}</Text>
                 </View>
-                <Icon name="pencil" size={13} weight="semibold" color={{ raw: '#013447' }} />
+                <Icon name="pencil" size={13} weight="semibold" color="accentText" />
               </Pressable>
             </>,
           )}
           <Section header={tr('profile.activity', 'Your activity')} style={{ marginBottom: space.lg }}>
-            <ListRow icon="calendar" title={tr('profile.bookings', 'My bookings')}
+            <ListRow leading={<ObjTile name="heart" tint="lilac" />} title={tr('profile.bookings', 'My bookings')}
               subtitle={next ? `${(lang === 'ar' ? nextSp?.nameAr : nextSp?.name) ?? ''}${nextSvc ? ' · ' + loc(nextSvc.name) : ''}` : tr('profile.noBookings', 'No sessions booked')} subtitleLines={1}
               trailing={next ? { type: 'value', text: `${fmtWeekday(next.startsAt, lang)} ${fmtTime(next.startsAt, lang)}` } : undefined}
               onPress={() => push('/bookings')} />
-            <ListRow icon="shippingbox" title={tr('profile.orders', 'My orders')}
+            <ListRow leading={<ObjTile name="bag" tint="peach" />} title={tr('profile.orders', 'My orders')}
               subtitle={order ? `${order.id}${orderItem ? ' · ' + loc(orderItem.name) : ''}` : tr('profile.none', 'None yet')} subtitleLines={1}
               trailing={order ? { type: 'value', text: orderStatus } : undefined}
               onPress={() => push('/orders')} />
-            <ListRow icon="bookmark" title={tr('profile.saved', 'Saved places')}
+            <ListRow leading={<ObjTile name="pin" tint="sky" />} title={tr('profile.saved', 'Saved places')}
               subtitle={savedNames || tr('profile.none', 'None yet')} subtitleLines={1}
               trailing={a.saved.length ? { type: 'value', text: tr('profile.changed', '1 changed') } : undefined}
               onPress={() => push('/saved')} />
-            <ListRow icon="person.3" title={tr('profile.eventsGifts', 'Events and donations')}
+            <ListRow leading={<ObjTile name="people" tint="butter" />} title={tr('profile.eventsGifts', 'Events and donations')}
               subtitle={joined ? tr('profile.eventsGiftsSub', '{{e}} joined · {{d}} gifts', { e: a.events.length, d: a.donations.length }) : undefined}
               trailing={joined ? undefined : { type: 'value', text: tr('profile.findOne', 'Find one') }}
               onPress={() => push('/my-events')} />
@@ -121,14 +123,14 @@ function Profile() {
         hero(
           <>
             {art}
-            <Text variant="title3" style={{ color: '#FFFFFF', fontWeight: '800', maxWidth: '78%' }}>{tr('profile.signInPitch', 'Sign in to book, order and save places')}</Text>
-            <Text variant="subheadline" style={{ color: 'rgba(255,255,255,0.75)', maxWidth: '78%', marginTop: -space.xs }}>{tr('profile.browseFree', 'You can browse everything without an account.')}</Text>
+            <Text variant="title3" weight="700" style={{ maxWidth: '78%' }}>{tr('profile.signInPitch', 'Sign in to book, order and save places')}</Text>
+            <Text variant="subheadline" color="textSecondary" style={{ maxWidth: '78%', marginTop: -space.xs }}>{tr('profile.browseFree', 'You can browse everything without an account.')}</Text>
             <View style={{ flexDirection: 'row', gap: space.xs, flexWrap: 'wrap' }}>
-              <Pressable feedback="scale" onPress={() => go.push('/auth/sign-up')} accessibilityRole="button" style={{ height: 44, paddingHorizontal: space.md, borderRadius: 22, backgroundColor: t.colors.accent, justifyContent: 'center' }}>
-                <Text variant="subheadline" weight="700" style={{ color: '#013447' }}>{tr('auth.create', 'Create an account')}</Text>
+              <Pressable feedback="scale" onPress={() => go.push('/auth/sign-up')} accessibilityRole="button" style={{ height: 44, paddingHorizontal: space.md, borderRadius: 22, backgroundColor: t.colors.buttonPrimaryBg, justifyContent: 'center' }}>
+                <Text variant="subheadline" weight="700" style={{ color: t.colors.buttonPrimaryFg }}>{tr('auth.create', 'Create an account')}</Text>
               </Pressable>
-              <Pressable feedback="scale" onPress={() => go.push('/auth/sign-in')} accessibilityRole="button" style={{ height: 44, paddingHorizontal: space.md, borderRadius: 22, backgroundColor: 'rgba(255,255,255,0.14)', justifyContent: 'center' }}>
-                <Text variant="subheadline" weight="700" style={{ color: '#FFFFFF' }}>{tr('auth.login', 'Log in')}</Text>
+              <Pressable feedback="scale" onPress={() => go.push('/auth/sign-in')} accessibilityRole="button" style={{ height: 44, paddingHorizontal: space.md, borderRadius: 22, backgroundColor: t.colors.bgElevated, justifyContent: 'center' }}>
+                <Text variant="subheadline" weight="700">{tr('auth.login', 'Log in')}</Text>
               </Pressable>
             </View>
           </>,
@@ -146,3 +148,14 @@ function Profile() {
 }
 
 export default tabRoot('(profile)', '/(tabs)/(profile)/profile', Profile);
+
+/** Small tinted tile with a Movo drawing, for list rows (each row takes its source tab's colour). */
+function ObjTile({ name, tint }: { name: ObjectName; tint: TintName }) {
+  const t = useTheme();
+  const c = t.tints[tint];
+  return (
+    <View style={{ width: 36, height: 36, borderRadius: 11, backgroundColor: c.bg, alignItems: 'center', justifyContent: 'center' }}>
+      <MovoObject name={name} size={24} ink={c.ink} cut={c.bg} />
+    </View>
+  );
+}

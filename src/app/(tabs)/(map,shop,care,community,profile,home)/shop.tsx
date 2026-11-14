@@ -1,3 +1,5 @@
+import { productCategoryTint } from '@/art/colorPass';
+import type { TintName } from '@/theme/colors';
 import { tabRoot } from '@/ui/TabRoot';
 import { Image } from 'expo-image';
 import { useMemo, useRef, useState } from 'react';
@@ -98,17 +100,17 @@ function ShopHome() {
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: layout.margin, gap: space.xs, paddingTop: space.xs, paddingBottom: space.md }} accessibilityRole="tablist">
         <CatPill label={tr('map.cat.all', 'All')} selected={!cat} onPress={() => pickCat(null)} />
-        {CATS.map(([c, img]) => <CatPill key={c} label={productCategoryLabel(tr, c)} image={photoByKey(img)} selected={cat === c} onPress={() => pickCat(c)} />)}
+        {CATS.map(([c, img]) => <CatPill key={c} label={productCategoryLabel(tr, c)} image={photoByKey(img)} tint={productCategoryTint[c]} selected={cat === c} onPress={() => pickCat(c)} />)}
       </ScrollView>
 
       {q.isError && !q.data ? <ErrorState offline={offline} onRetry={() => q.refetch()} /> : null}
 
       <PromoCarousel compact slides={[
         { key: 'ask', tone: 'navy' as const, top: tr('shop.promo.askTop', 'NOT SURE'), bottom: tr('shop.promo.askBottom', 'WHAT FITS?'), caption: tr('shop.promo.askCaption', 'ASK US ON WHATSAPP'), image: photoByKey('p:rollator-0'), label: tr('shop.ask', 'Not sure what fits? Ask us on WhatsApp'), onPress: ask },
-        ...(fresh[0] ? [{ key: 'new', tone: 'cream' as const, top: tr('shop.promo.newTop', 'JUST'), bottom: tr('shop.promo.newBottom', 'ARRIVED'), caption: tr('shop.promo.newCaption', 'NEW IN THE MOVO SHOP'), image: fresh[0].images[0] ? photoFor(fresh[0].images[0]) : undefined, label: tr('shop.new', 'New arrivals'), onPress: () => pickSort(1) }] : []),
+        ...(fresh[0] ? [{ key: 'new', tone: 'peach' as const, top: tr('shop.promo.newTop', 'JUST'), bottom: tr('shop.promo.newBottom', 'ARRIVED'), caption: tr('shop.promo.newCaption', 'NEW IN THE MOVO SHOP'), image: fresh[0].images[0] ? photoFor(fresh[0].images[0]) : undefined, label: tr('shop.new', 'New arrivals'), onPress: () => pickSort(1) }] : []),
       ]} />
       {mob && forYou.length ? (
-        <View style={{ marginBottom: space.lg }}>
+        <View style={{ marginBottom: space.lg, paddingTop: space.md, paddingBottom: space.lg, backgroundColor: t.tints.peach.bg }}>
           <SectionHeader title={tr('shop.forYouShort', 'Picked for you')} actionLabel={tr('why.short', 'Why these?')} onAction={() => go.push('/sheets/why-this')} />
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: layout.margin, gap: space.sm }} accessibilityLabel={tr('shop.forYouTitle', 'Picked for {{m}} users', { m: mobilityLabel(tr, mob).toLowerCase() })}>
             {forYou.map((p, i) => <ProductCard key={p.id} product={p} layout="rail" index={i} onPress={() => push(`/product/${p.id}`)} />)}
@@ -117,11 +119,8 @@ function ShopHome() {
       ) : null}
 
 
-      <SectionHeader
-        title={cat ? productCategoryLabel(tr, cat) : tr('shop.all', 'Shop all')}
-        actionLabel={cat ? tr('shop.filtersSort', 'Filter and sort') : undefined}
-        onAction={cat ? () => push(`/products/${cat}`) : undefined}
-      />
+      {/* No "Shop all" title: the Popular / New / Deals switch leads straight into the grid. */}
+      {cat ? <SectionHeader title={productCategoryLabel(tr, cat)} actionLabel={tr('shop.filtersSort', 'Filter and sort')} onAction={() => push(`/products/${cat}`)} /> : null}
       <Segmented values={[tr('shop.popular', 'Popular'), tr('shop.newShort', 'New'), tr('shop.deals', 'Deals')]} index={sort} onChange={pickSort} style={{ marginHorizontal: layout.margin, marginBottom: space.md }} />
 
       {q.isLoading ? (
@@ -151,12 +150,12 @@ function ShopHome() {
   );
 }
 
-function CatPill({ label, image, selected, onPress }: { label: string; image?: number | { uri: string }; selected: boolean; onPress: () => void }) {
+function CatPill({ label, image, tint, selected, onPress }: { label: string; image?: number | { uri: string }; tint?: TintName; selected: boolean; onPress: () => void }) {
   const t = useTheme();
   return (
     <Pressable onPress={onPress} feedback="scale" accessibilityRole="tab" accessibilityState={{ selected }} accessibilityLabel={label}
-      style={{ height: 40, borderRadius: 20, flexDirection: 'row', alignItems: 'center', gap: 7, paddingStart: image && !selected ? 5 : 15, paddingEnd: 15, backgroundColor: selected ? t.colors.buttonPrimaryBg : t.colors.bgElevated, borderWidth: selected ? 0 : 1, borderColor: t.colors.separator }}>
-      {image && !selected ? <Image source={image} style={{ width: 30, height: 30, borderRadius: 15, backgroundColor: '#FFFFFF' }} contentFit="contain" /> : null}
+      style={{ height: 40, borderRadius: 20, flexDirection: 'row', alignItems: 'center', gap: 7, paddingStart: image && !selected ? 5 : 15, paddingEnd: 15, backgroundColor: selected ? t.colors.buttonPrimaryBg : t.colors.fill }}>
+      {image && !selected ? <View style={{ width: 30, height: 30, borderRadius: 15, backgroundColor: tint ? t.tints[tint].soft : '#FFFFFF', overflow: 'hidden', padding: 3 }}><Image source={image} style={{ flex: 1, mixBlendMode: 'multiply' } as never} contentFit="contain" /></View> : null}
       <Text variant="subheadline" weight="600" style={{ color: selected ? t.colors.buttonPrimaryFg : t.colors.textPrimary }}>{label}</Text>
     </Pressable>
   );
