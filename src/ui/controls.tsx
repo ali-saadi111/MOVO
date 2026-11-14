@@ -13,7 +13,7 @@ import { Text } from './Text';
  
 
 /** Chip. Selected shows a ✓, never colour alone. */
-export function Chip({ label, selected, onPress, icon }: { label: string; selected?: boolean; onPress?: () => void; icon?: ReactNode }) {
+export function Chip({ label, selected, onPress, icon, plain }: { label: string; selected?: boolean; onPress?: () => void; icon?: ReactNode; plain?: boolean }) {
   const t = useTheme();
   return (
     <Pressable
@@ -35,7 +35,7 @@ export function Chip({ label, selected, onPress, icon }: { label: string; select
         gap: 6,
       }}
     >
-      {selected ? (
+      {plain ? null : selected ? (
         <Animated.View entering={t.reduceMotion ? undefined : ZoomIn.springify().damping(15).stiffness(200)}>
           <Icon name="checkmark" size={14} weight="bold" color={{ raw: t.colors.buttonPrimaryFg }} />
         </Animated.View>
@@ -45,11 +45,12 @@ export function Chip({ label, selected, onPress, icon }: { label: string; select
   );
 }
 
-export function ChipRow<T extends string>({ options, value, onChange, multi, style, inset = layout.margin }: { options: { value: T; label: string }[]; value: T | T[]; onChange: (v: T) => void; multi?: boolean; style?: StyleProp<ViewStyle>; inset?: number }) {
+export function ChipRow<T extends string>({ options, value, onChange, multi, style, inset = layout.margin, leading, plain }: { options: { value: T; label: string }[]; value: T | T[]; onChange: (v: T) => void; multi?: boolean; style?: StyleProp<ViewStyle>; inset?: number; leading?: ReactNode; plain?: boolean }) {
   const isSel = (v: T) => (Array.isArray(value) ? value.includes(v) : value === v);
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: inset, gap: space.xs }} style={style} accessibilityRole={multi ? undefined : 'radiogroup'}>
-      {options.map((o) => <Chip key={o.value} label={o.label} selected={isSel(o.value)} onPress={() => onChange(o.value)} />)}
+      {leading}
+      {options.map((o) => <Chip key={o.value} label={o.label} selected={isSel(o.value)} plain={plain} onPress={() => onChange(o.value)} />)}
     </ScrollView>
   );
 }

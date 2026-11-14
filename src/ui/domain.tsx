@@ -33,11 +33,23 @@ import { Text } from './Text';
 /* ---------------------------------------------------------------- ratings */
 
 /** Colour + icon + word, in that order. Never colour alone. */
-export function RatingBadge({ level, size = 'small' }: { level: RatingLevel; size?: 'small' | 'large' | 'mini' }) {
+export function RatingBadge({ level, size = 'small' }: { level: RatingLevel; size?: 'small' | 'large' | 'mini' | 'pill' | 'pillLarge' }) {
   const t = useTheme();
   const tr = useT();
   const color = { accessible: t.colors.ratingAccessible, partly: t.colors.ratingPartly, not: t.colors.ratingNot }[level];
   const label = ratingLabel(tr, level);
+  if (size === 'pill' || size === 'pillLarge') {
+    // Compact capsule for rows and cards: same colours and glyphs as the pins, tinted ground.
+    const big = size === 'pillLarge';
+    const short = level === 'partly' && !big ? tr('rating.partlyShort', 'Partly') : label;
+    const ink = level === 'accessible' ? t.colors.accentText : color;
+    return (
+      <View accessible accessibilityRole="text" accessibilityLabel={label} style={{ flexDirection: 'row', alignItems: 'center', gap: 5, alignSelf: 'flex-start', height: big ? 32 : 26, borderRadius: 16, paddingStart: 4, paddingEnd: big ? 12 : 9, backgroundColor: `${color}${t.scheme === 'dark' ? '33' : '24'}` }}>
+        <Glyph level={level} size={big ? 22 : 18} />
+        <Text variant={big ? 'subheadline' : 'caption1'} weight="600" style={{ color: ink }} numberOfLines={1}>{short}</Text>
+      </View>
+    );
+  }
   if (size === 'mini') {
     return (
       <View accessible accessibilityLabel={label} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
@@ -151,18 +163,18 @@ export function PlaceRow({ place, onPress, onLongPress, tag, index = 0 }: { plac
   const loc = useLocalized();
   const t = useTheme();
   const d = formatDistance(distanceKm(HERE, place));
+  // Compact list row: 52pt photo, name, type and distance, rating pill trailing (about 68pt tall).
   return (
     <Animated.View entering={t.reduceMotion ? undefined : FadeInDown.delay(Math.min(index, 8) * 40).springify().damping(26).stiffness(170)}>
-      <Pressable feedback="highlight" onPress={onPress} onLongPress={onLongPress} accessibilityRole="button" accessibilityLabel={`${loc(place.name)}, ${ratingLabel(tr, place.rating.level)}, ${d}`} style={{ flexDirection: 'row', gap: space.sm, paddingVertical: space.sm, paddingHorizontal: layout.margin, alignItems: 'center', backgroundColor: t.colors.bgPrimary }}>
-        <View style={{ width: 64, borderRadius: radii.thumb, overflow: 'hidden' }}>
+      <Pressable feedback="highlight" onPress={onPress} onLongPress={onLongPress} accessibilityRole="button" accessibilityLabel={`${loc(place.name)}, ${ratingLabel(tr, place.rating.level)}, ${d}`} style={{ flexDirection: 'row', gap: space.sm, paddingVertical: space.xs, paddingHorizontal: layout.margin, alignItems: 'center', minHeight: 68 }}>
+        <View style={{ width: 52, borderRadius: radii.thumb, overflow: 'hidden' }}>
           <ArtImage image={place.hero} aspect={1} radius={radii.thumb} />
         </View>
-        <View style={{ flex: 1, gap: 4 }}>
-          {tag ? <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.xs, flexWrap: 'wrap' }}><Text variant="headline" numberOfLines={2}>{loc(place.name)}</Text>{tag}</View> : <Text variant="headline" numberOfLines={2}>{loc(place.name)}</Text>}
+        <View style={{ flex: 1, gap: 2 }}>
+          {tag ? <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.xs, flexWrap: 'wrap' }}><Text variant="headline" numberOfLines={1}>{loc(place.name)}</Text>{tag}</View> : <Text variant="headline" numberOfLines={1}>{loc(place.name)}</Text>}
           <Text variant="footnote" color="textSecondary" numberOfLines={1}>{placeTypeLabel(tr, place.category)} · {ltr(d)}</Text>
-          <RatingBadge level={place.rating.level} />
         </View>
-        <Icon name="chevron.right" size={14} weight="semibold" color="textTertiary" mirrorInRTL />
+        <RatingBadge level={place.rating.level} size="pill" />
       </Pressable>
     </Animated.View>
   );

@@ -18,7 +18,7 @@ import { mapFilterCount, useFilters } from '@/stores/filters';
 import { layout, radii, space, useTheme } from '@/theme';
 import { bodyFont } from '@/theme/fonts';
 import {
-  ActingForBar, ChipRow, EmptyState, ErrorState, GlassGroup, GlassSurface, Icon, IconButton, OfflinePill, PlaceRow, Pressable, Segmented, Skeleton, Text,
+  ActingForBar, Chip, ChipRow, EmptyState, ErrorState, Icon, IconButton, OfflinePill, PlaceRow, Pressable, Skeleton, Text,
   go, useMobilityFor, useTabBarInset, useTabNav,
 } from '@/ui';
 import { useCaregiver } from '@/stores/caregiver';
@@ -48,7 +48,12 @@ export default function MapScreen() {
   const [focus, setFocus] = useState<{ lat: number; lng: number; key: number } | null>(null);
   const [userShown, setUserShown] = useState(true);
 
-  const heights = useMemo(() => ({ small: 96 + tabInset, medium: Math.round(height * 0.45) + tabInset * 0.4, large: height - insets.top - 56 }), [height, insets.top, tabInset]);
+  const heights = useMemo(() => ({
+    small: 96 + tabInset,
+    // With a place selected the sheet hugs its card, so more map shows around the pin.
+    medium: selected ? 222 + tabInset : Math.round(height * 0.45) + tabInset * 0.4,
+    large: height - insets.top - 56,
+  }), [height, insets.top, tabInset, selected]);
   const sheetH = heights[detent];
 
   const places = useMemo(() => {
@@ -80,9 +85,10 @@ export default function MapScreen() {
     : [];
   const areas = [tr('area.hamra', 'Hamra'), tr('area.raouche', 'Raouché'), tr('area.downtown', 'Downtown Beirut'), tr('area.saida', 'Saida')].filter((a) => !query || a.toLowerCase().includes(query.toLowerCase()));
 
+  const fcount = mapFilterCount(filters);
   const header = (
     <View style={{ gap: space.xs, paddingBottom: space.xs }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: layout.margin, gap: space.sm }}>
+      {sel && !searching ? null : <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: layout.margin, gap: space.sm }}>
         <Pressable feedback="none" onPress={searching ? undefined : startSearch} accessibilityRole="search" style={{ flex: 1, height: 44, borderRadius: radii.cell, backgroundColor: t.colors.fill, flexDirection: 'row', alignItems: 'center', paddingHorizontal: space.sm, gap: space.xs }}>
           <Icon name="magnifyingglass" size={17} color="textSecondary" />
           {searching ? (
@@ -94,9 +100,11 @@ export default function MapScreen() {
         {searching ? (
           <Pressable onPress={cancelSearch} accessibilityRole="button" style={{ minHeight: 44, justifyContent: 'center' }}><Text variant="body" color="tint">{tr('common.cancel', 'Cancel')}</Text></Pressable>
         ) : null}
-      </View>
+      </View>}
       {!searching && detent !== 'small' && !sel ? (
-        <ChipRow options={CATS.map((c) => ({ value: c, label: placeCategoryLabel(tr, c) }))} value={filters.category} onChange={(v) => setMap({ category: v })} />
+        <ChipRow plain
+          leading={<Chip plain label={fcount ? tr('map.filtersN', 'Filters · {{n}}', { n: fcount }) : tr('map.filters', 'Filters')} selected={fcount > 0} onPress={() => go.push('/sheets/map-filters')} />}
+          options={CATS.map((c) => ({ value: c, label: placeCategoryLabel(tr, c) }))} value={filters.category} onChange={(v) => setMap({ category: v })} />
       ) : null}
     </View>
   );
@@ -150,9 +158,6 @@ export default function MapScreen() {
         <View style={{ flex: 1, display: sel ? 'none' : 'flex' }}>
           <ScrollView contentContainerStyle={{ paddingBottom: tabInset + 24 }}>
             {offline ? <OfflinePill /> : null}
-            <Text variant="footnote" color="textSecondary" style={{ marginHorizontal: layout.margin, marginTop: space.xs }}>
-              {mob && filters.fitsMe ? tr('map.nearbyFits', '{{n}} nearby · places that fit you first', { n: places.length }) : tr('map.nearby', '{{n}} places nearby', { n: places.length })}
-            </Text>
             {places.slice(0, 30).map((p, i) => <PlaceRow key={p.id} place={p} index={i} onPress={() => push(`/place/${p.id}`)} />)}
           </ScrollView>
         </View>
@@ -161,26 +166,19 @@ export default function MapScreen() {
     );
   }
 
-  const fcount = mapFilterCount(filters);
   return (
     <View style={{ flex: 1, backgroundColor: t.colors.mapLand }}>
       <MapAdapter places={places} selectedId={selected} onSelect={select} bottomPadding={Math.min(sheetH, heights.medium)} topPadding={insets.top + 56} focus={focus} showUser={userShown} />
 
       <View pointerEvents="box-none" style={{ position: 'absolute', top: insets.top + space.xs, start: layout.margin, end: layout.margin }}>
         <ActingForBar onSwitchBack={() => switchTo(null)} />
-        <View pointerEvents="box-none" style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <GlassSurface radius={radii.capsule} interactive style={{ width: 188 }}>
-            <Segmented glass glyphs={['fold', 'list']} values={[tr('map.mapMode', 'Map'), tr('map.listMode', 'List')]} index={detent === 'large' ? 1 : 0} onChange={(i) => sheet.current?.snapTo(i === 1 ? 'large' : 'medium')} />
-          </GlassSurface>
-          <GlassGroup style={{ gap: space.xs }}>
-            <IconButton glass icon="bell" label={tr('nav.notifications', 'Notifications')} badge={unread > 0} onPress={() => push('/notifications')} />
-            <IconButton glass icon="line.3.horizontal.decrease" label={fcount ? tr('map.filtersOn', 'Filters, {{n}} on', { n: fcount }) : tr('map.filters', 'Filters')} badge={fcount > 0} onPress={() => go.push('/sheets/map-filters')} />
-            <IconButton glass icon={userShown ? 'location.fill' : 'location'} label={tr('map.myLocation', 'Use my location')} onPress={() => { setUserShown(true); setFocus({ ...HERE, key: Date.now() }); }} />
-          </GlassGroup>
+        <View pointerEvents="box-none" style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+          <IconButton glass icon="bell" label={tr('nav.notifications', 'Notifications')} badge={unread > 0} onPress={() => push('/notifications')} />
         </View>
       </View>
 
-      <MapSheet ref={sheet} heights={heights} header={header} onDetent={(d) => setDetent(d)}>
+      <MapSheet ref={sheet} heights={heights} header={header} onDetent={(d) => setDetent(d)}
+        accessory={detent === 'large' ? null : <IconButton glass icon={userShown ? 'location.fill' : 'location'} label={tr('map.myLocation', 'Use my location')} onPress={() => { setUserShown(true); setFocus({ ...HERE, key: Date.now() }); }} />}>
         {detent === 'small' && !searching ? null : (
           <Animated.View key={sel ? 'card' : searching ? 'search' : 'list'} entering={FadeIn.duration(200)} exiting={FadeOut.duration(120)} style={{ flex: 1 }}>{body}</Animated.View>
         )}
