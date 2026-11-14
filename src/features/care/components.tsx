@@ -2,7 +2,6 @@ import { ScrollView, View, type StyleProp, type ViewStyle } from 'react-native';
 import { Image } from 'expo-image';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
-import { MovoObject } from '@/art/objects';
 import { serviceArt, serviceTint, TINT_ROTATION } from '@/art/colorPass';
 import { specialistPhoto } from '@/art/people';
 import { sync, type ServiceKind, type Specialist } from '@/data';
@@ -28,18 +27,18 @@ export function useOpenBooking() {
 }
 
 /** Thin segmented bar: one segment per session in the plan. */
-export function PlanBars({ done, total, onDark, on, off }: { done: number; total: number; onDark?: boolean; on?: string; off?: string }) {
+export function PlanBars({ done, total, onDark, on, off, height = 5 }: { done: number; total: number; onDark?: boolean; on?: string; off?: string; height?: number }) {
   const t = useTheme();
   return (
     <View style={{ flex: 1, flexDirection: 'row', gap: 4 }}>
       {Array.from({ length: total }, (_, i) => (
-        <View key={i} style={{ flex: 1, height: 5, borderRadius: 3, backgroundColor: i < done ? (on ?? t.colors.accent) : (off ?? (onDark ? 'rgba(255,255,255,0.22)' : t.colors.fill)) }} />
+        <View key={i} style={{ flex: 1, height, borderRadius: height / 2, backgroundColor: i < done ? (on ?? t.colors.accent) : (off ?? (onDark ? 'rgba(255,255,255,0.22)' : t.colors.fill)) }} />
       ))}
     </View>
   );
 }
 
-/** Compact lilac (Care's colour) card for the next session, with the plan progress inside it. */
+/** Lilac (Care's colour) card for the next session: countdown pill, date, who and where, plan progress. */
 export function NextSessionCard({ startsAt, specialistId, where, onPress }: { startsAt: string; specialistId: string; where: Where; onPress: () => void }) {
   const t = useTheme();
   const tr = useT();
@@ -53,24 +52,35 @@ export function NextSessionCard({ startsAt, specialistId, where, onPress }: { st
   const place = where === 'home' ? tr('care.atHome', 'At your home') : tr('care.atClinic', 'At the clinic');
   const session = tr('care.sessionOf', 'Session {{n}} of {{total}}', { n: PLAN.done + 1, total: PLAN.total });
   const c = t.tints.lilac;
+  const darkMode = t.scheme === 'dark';
   return (
-    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={`${tr('care.next', 'Your next session')}, ${date}, ${name}, ${place}. ${session}`}
-      style={{ marginHorizontal: layout.margin, borderRadius: radii.hero, ...continuous, backgroundColor: c.bg, padding: space.md, gap: space.sm, overflow: 'hidden' }}>
-      <View pointerEvents="none" style={{ position: 'absolute', top: -14, ...(t.rtl ? { left: -14 } : { right: -14 }), opacity: 0.16, transform: [{ rotate: '14deg' }] }}><MovoObject name="heart" size={76} ink={c.ink} /></View>
-      <Text variant="caption1" weight="700" style={{ color: c.ink, letterSpacing: 0.6 }}>{`${tr('care.nextShort', 'Next session')} · ${when}`.toUpperCase()}</Text>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm }}>
-        <View style={{ borderRadius: 26, borderWidth: 3, borderColor: t.colors.bgElevated }}><Avatar name={sp?.name ?? ''} size={42} photo={specialistPhoto(specialistId)} /></View>
-        <View style={{ flex: 1, gap: 2 }}>
-          <Text variant="title3" weight="700" tabular numberOfLines={1} adjustsFontSizeToFit>{date}</Text>
-          <Text variant="footnote" color="textSecondary" numberOfLines={1}>{name} · {place}</Text>
-        </View>
-        <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: t.colors.buttonPrimaryBg, alignItems: 'center', justifyContent: 'center' }}>
-          <Icon name="chevron.right" size={16} weight="bold" color={{ raw: t.colors.buttonPrimaryFg }} mirrorInRTL />
+    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={`${tr('care.next', 'Your next session')}, ${when}, ${date}, ${name}, ${place}. ${session}`}
+      style={{ marginHorizontal: layout.margin, borderRadius: radii.hero, ...continuous, backgroundColor: c.bg, paddingHorizontal: 14, paddingVertical: space.md, gap: space.sm }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.xs }}>
+        <Text variant="caption1" weight="800" style={{ letterSpacing: 0.6 }}>{tr('care.nextShort', 'Next session').toUpperCase()}</Text>
+        <View style={{ paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8, backgroundColor: darkMode ? 'rgba(195,177,255,0.18)' : 'rgba(85,52,192,0.12)' }}>
+          <Text variant="caption1" weight="800" style={{ color: c.ink, letterSpacing: 0.6 }}>{when.toUpperCase()}</Text>
         </View>
       </View>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm }}>
-        <Text variant="caption1" color="textSecondary" tabular>{session}</Text>
-        <PlanBars done={PLAN.done} total={PLAN.total} on={c.ink} off={t.scheme === 'dark' ? 'rgba(255,255,255,0.14)' : 'rgba(85,52,192,0.16)'} />
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+        <View style={{ borderRadius: 28, borderWidth: 2.5, borderColor: darkMode ? 'rgba(255,255,255,0.9)' : '#FFFFFF' }}><Avatar name={sp?.name ?? ''} size={44} photo={specialistPhoto(specialistId)} /></View>
+        <View style={{ flex: 1, gap: 3 }}>
+          <Text variant="title3" weight="800" tabular numberOfLines={1} adjustsFontSizeToFit>{date}</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+            <Icon name="stethoscope" size={14} color={{ raw: c.ink }} />
+            <Text variant="footnote" numberOfLines={1} style={{ flexShrink: 1 }}>{name}</Text>
+            <View style={{ width: 1, height: 12, marginHorizontal: 2, backgroundColor: darkMode ? 'rgba(255,255,255,0.25)' : 'rgba(85,52,192,0.3)' }} />
+            <Icon name={where === 'home' ? 'house' : 'cross.case'} size={14} color={{ raw: c.ink }} />
+            <Text variant="footnote" numberOfLines={1} style={{ flexShrink: 1 }}>{place}</Text>
+          </View>
+        </View>
+        <View style={{ width: 42, height: 42, borderRadius: 14, ...continuous, backgroundColor: t.colors.buttonPrimaryBg, alignItems: 'center', justifyContent: 'center' }}>
+          <Icon name="arrow.right" size={20} weight="semibold" color={{ raw: t.colors.buttonPrimaryFg }} mirrorInRTL />
+        </View>
+      </View>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm, marginTop: 2 }}>
+        <Text variant="subheadline" weight="600" tabular>{session}</Text>
+        <PlanBars done={PLAN.done} total={PLAN.total} height={7} on={c.ink} off={darkMode ? 'rgba(255,255,255,0.14)' : 'rgba(85,52,192,0.18)'} />
       </View>
     </Pressable>
   );
