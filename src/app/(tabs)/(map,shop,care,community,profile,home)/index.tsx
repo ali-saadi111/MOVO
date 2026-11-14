@@ -102,8 +102,8 @@ export default function MapScreen() {
         ) : null}
       </View>}
       {!searching && detent !== 'small' && !sel ? (
-        <ChipRow
-          leading={<Chip label={fcount ? tr('map.filtersN', 'Filters · {{n}}', { n: fcount }) : tr('map.filters', 'Filters')} selected={fcount > 0} icon={<Icon name="line.3.horizontal.decrease" size={15} weight="semibold" color="textPrimary" />} onPress={() => go.push('/sheets/map-filters')} />}
+        <ChipRow plain
+          leading={<Chip plain label={fcount ? tr('map.filtersN', 'Filters · {{n}}', { n: fcount }) : tr('map.filters', 'Filters')} selected={fcount > 0} onPress={() => go.push('/sheets/map-filters')} />}
           options={CATS.map((c) => ({ value: c, label: placeCategoryLabel(tr, c) }))} value={filters.category} onChange={(v) => setMap({ category: v })} />
       ) : null}
     </View>
@@ -158,15 +158,6 @@ export default function MapScreen() {
         <View style={{ flex: 1, display: sel ? 'none' : 'flex' }}>
           <ScrollView contentContainerStyle={{ paddingBottom: tabInset + 24 }}>
             {offline ? <OfflinePill /> : null}
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginHorizontal: layout.margin, marginTop: space.xs, minHeight: 32 }}>
-              <Text variant="headline" accessibilityRole="header">{tr('map.nearbyCount', '{{n}} nearby', { n: places.length })}</Text>
-              {mob ? (
-                <Pressable onPress={() => { haptic.selection(); setMap({ fitsMe: !filters.fitsMe }); }} accessibilityRole="button" accessibilityLabel={tr('map.sortBy', 'Sort: {{s}}', { s: filters.fitsMe ? tr('map.sortFits', 'Fits you first') : tr('map.sortNear', 'Nearest first') })} hitSlop={8} style={{ flexDirection: 'row', alignItems: 'center', gap: 4, minHeight: 32 }}>
-                  <Icon name="arrow.up.arrow.down" size={13} weight="semibold" color="accentText" />
-                  <Text variant="subheadline" weight="600" color="accentText">{filters.fitsMe ? tr('map.sortFits', 'Fits you first') : tr('map.sortNear', 'Nearest first')}</Text>
-                </Pressable>
-              ) : null}
-            </View>
             {places.slice(0, 30).map((p, i) => <PlaceRow key={p.id} place={p} index={i} onPress={() => push(`/place/${p.id}`)} />)}
           </ScrollView>
         </View>
