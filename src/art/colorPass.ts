@@ -19,6 +19,16 @@ export const serviceObject: Record<ServiceKind, ObjectName> = {
   physio: 'physio', nursing: 'nurse', ot: 'ot', prosthetics: 'leg', repair: 'wrench', transport: 'van',
 };
 
+/** Photos for the "Book a specialist" tiles, with each photo's own backdrop colour so the light tile blends into it. */
+export const serviceArt: Record<ServiceKind, { photo: number; bg: string }> = {
+  physio: { photo: require('../../assets/care/physio.jpg'), bg: '#E7DFF8' },
+  nursing: { photo: require('../../assets/care/nursing.jpg'), bg: '#F1DBDA' },
+  ot: { photo: require('../../assets/care/ot.jpg'), bg: '#FBF4EC' },
+  prosthetics: { photo: require('../../assets/care/prosthetics.jpg'), bg: '#FAEADC' },
+  repair: { photo: require('../../assets/care/repair.jpg'), bg: '#DBE7D6' },
+  transport: { photo: require('../../assets/care/transport.jpg'), bg: '#DFEAF0' },
+};
+
 /** Activities: sports sky, workshops peach, meetups butter, learning lilac. The marathon keeps its poster. */
 const EVENT_ART: Record<string, { object: ObjectName; tint: TintName }> = {
   ev_basket: { object: 'ball', tint: 'sky' },

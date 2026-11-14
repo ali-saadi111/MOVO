@@ -1,8 +1,9 @@
 import { ScrollView, View, type StyleProp, type ViewStyle } from 'react-native';
+import { Image } from 'expo-image';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
-import { HopObject, MovoObject } from '@/art/objects';
-import { serviceObject, serviceTint, TINT_ROTATION } from '@/art/colorPass';
+import { MovoObject } from '@/art/objects';
+import { serviceArt, serviceTint, TINT_ROTATION } from '@/art/colorPass';
 import { specialistPhoto } from '@/art/people';
 import { sync, type ServiceKind, type Specialist } from '@/data';
 import { requireAccount } from '@/features/shell/auth';
@@ -91,12 +92,15 @@ export function ServiceGrid({ kinds, onPress, style }: { kinds: ServiceKind[]; o
           {row.map((k, j) => {
             const i = r * 3 + j;
             const c = t.tints[serviceTint[k]];
+            const art = serviceArt[k];
             return (
               <Animated.View key={k} entering={t.reduceMotion ? undefined : FadeInDown.delay(i * 30).springify().damping(22).stiffness(200)} style={{ flex: 1 }}>
                 <Pressable feedback="scale" onPress={() => onPress(k)} accessibilityRole="button" accessibilityLabel={serviceLabel(tr, k)}
-                  style={{ flex: 1, borderRadius: 20, ...continuous, backgroundColor: c.bg, padding: 10, justifyContent: 'space-between', gap: 6 }}>
-                  <HopObject name={serviceObject[k]} size={42} ink={c.ink} cut={c.bg} delay={i * 60} />
-                  <Text variant="caption1" weight="700" numberOfLines={2} style={{ lineHeight: 15 }}>{shortServiceLabel(tr, k)}</Text>
+                  style={{ flex: 1, borderRadius: 20, ...continuous, overflow: 'hidden', backgroundColor: t.scheme === 'dark' ? c.bg : art.bg, padding: 6, paddingBottom: 9, gap: 5 }}>
+                  <View style={{ flex: 1, minHeight: 36, borderRadius: 14, overflow: 'hidden', backgroundColor: art.bg }}>
+                    <Image source={art.photo} contentFit="contain" transition={0} accessible={false} style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }} />
+                  </View>
+                  <Text variant="caption1" weight="700" numberOfLines={2} style={{ lineHeight: 15, paddingHorizontal: 4, color: t.scheme === 'dark' ? t.colors.textPrimary : '#15191B' }}>{shortServiceLabel(tr, k)}</Text>
                 </Pressable>
               </Animated.View>
             );
