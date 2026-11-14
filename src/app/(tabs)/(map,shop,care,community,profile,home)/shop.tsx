@@ -109,16 +109,17 @@ function ShopHome() {
             { key: 'ask', tone: 'navy' as const, top: tr('shop.promo.askTop', 'NOT SURE'), bottom: tr('shop.promo.askBottom', 'WHAT FITS?'), caption: tr('shop.promo.askCaption', 'ASK US ON WHATSAPP'), image: photoByKey('p:rollator-0'), label: tr('shop.ask', 'Not sure what fits? Ask us on WhatsApp'), onPress: ask },
             ...(fresh[0] ? [{ key: 'new', tone: 'cream' as const, top: tr('shop.promo.newTop', 'JUST'), bottom: tr('shop.promo.newBottom', 'ARRIVED'), caption: tr('shop.promo.newCaption', 'NEW IN THE MOVO SHOP'), image: fresh[0].images[0] ? photoFor(fresh[0].images[0]) : undefined, label: tr('shop.new', 'New arrivals'), onPress: () => pickSort(1) }] : []),
           ]} />
-          {mob && forYou.length ? (
-            <View style={{ marginBottom: space.lg }}>
-              <SectionHeader title={tr('shop.forYouShort', 'Picked for you')} actionLabel={tr('why.short', 'Why these?')} onAction={() => go.push('/sheets/why-this')} />
-              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: layout.margin, gap: space.sm }} accessibilityLabel={tr('shop.forYouTitle', 'Picked for {{m}} users', { m: mobilityLabel(tr, mob).toLowerCase() })}>
-                {forYou.map((p, i) => <ProductCard key={p.id} product={p} layout="rail" index={i} onPress={() => push(`/product/${p.id}`)} />)}
-              </ScrollView>
-            </View>
-          ) : null}
         </>
       ) : null}
+      {mob && forYou.length ? (
+        <View style={{ marginBottom: space.lg }}>
+          <SectionHeader title={tr('shop.forYouShort', 'Picked for you')} actionLabel={tr('why.short', 'Why these?')} onAction={() => go.push('/sheets/why-this')} />
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: layout.margin, gap: space.sm }} accessibilityLabel={tr('shop.forYouTitle', 'Picked for {{m}} users', { m: mobilityLabel(tr, mob).toLowerCase() })}>
+            {forYou.map((p, i) => <ProductCard key={p.id} product={p} layout="rail" index={i} onPress={() => push(`/product/${p.id}`)} />)}
+          </ScrollView>
+        </View>
+      ) : null}
+
 
       <SectionHeader
         title={cat ? productCategoryLabel(tr, cat) : tr('shop.all', 'Shop all')}
