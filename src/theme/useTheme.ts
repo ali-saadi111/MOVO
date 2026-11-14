@@ -4,11 +4,13 @@ import { useReducedMotion } from 'react-native-reanimated';
 
 import { useSettings } from '@/stores/settings';
 import { useLocaleDirection } from '@/i18n';
-import { dark, light, withHighContrast, type ColorTokens } from './colors';
+import { dark, darkTints, light, lightTints, withHighContrast, type ColorTokens, type Tints } from './colors';
 
 export type Theme = {
   scheme: 'light' | 'dark';
   colors: ColorTokens;
+  /** Content palette: soft tile colours with a matching ink. */
+  tints: Tints;
   highContrast: boolean;
   reduceMotion: boolean;
   rtl: boolean;
@@ -30,6 +32,7 @@ export function useTheme(): Theme {
     return {
       scheme,
       colors: highContrast ? withHighContrast(base, scheme) : base,
+      tints: scheme === 'dark' ? darkTints : lightTints,
       highContrast,
       reduceMotion: forceReduceMotion || systemReduced,
       rtl,

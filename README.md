@@ -25,7 +25,7 @@ The second pass follows ali's inspiration board, adapted to Movo's colours and s
 From ali's second set of references (ticket UIs, the Toters home screen, the marathon and donation key visuals):
 
 - **Tickets.** Booking confirmation, booking detail, order placed and event pass are ticket cards with a perforation, label-over-value fields, a QR pass (booking, event) or a barcode (order) and an Add to Apple Wallet button (`ui/ticket.tsx`, `app/covers/success.tsx`).
-- **Campaign look.** `ui/brandBanner.tsx` draws the marathon style: navy night with a mint swoosh or cream day with a mint track, a heavy slanted Lexend headline with the second line in mint. Used on the therapist header carousel, promo banners and getting started.
+- **Campaign look.** `ui/brandBanner.tsx` draws the marathon style: navy night with a mint swoosh or cream day with a mint track, a heavy slanted headline with the second line in mint (Shop's banners can also use the soft peach tone). Used on the therapist header carousel, promo banners and getting started.
 - **Key visuals.** The two Beirut Wheelchair Marathon banners are the sport activity art (`event-sports`), the two donation banners are the campaign art. Event and campaign pages show the banner whole below the status bar (`BannerHero`), and Community features the marathon (`PromoBanner`).
 - **Getting started.** Language and welcome are full navy campaign screens with photo slides; How you move, Who and the caregiver step use a cream banner header and bordered tiles (`features/onboarding/kit.tsx`).
 - **Toters-style layout.** White screens, hairline-bordered tiles with a coloured icon circle, outline chips that fill navy when chosen, section headers ending in an arrow circle, a swipeable promo banner carousel and round "Shop by type" photos (`ui/promo.tsx`).
@@ -89,9 +89,9 @@ Open it from **Profile › Developer menu**. Its switches drive every state the 
 | `qa/shots` | 48 screenshots from the web preview at iPhone 16 Pro size. |
 | `tools` | Screenshot scripts (`shoot.mjs`, `shoot-all.sh` with `qa/shotlist.txt`), string extraction, icon rendering and the product seeder. |
 
-## Photos, Mapbox, Lexend and the phone mockup
+## Photos, Mapbox, fonts and the phone mockup
 
-- **Font.** Lexend (Movo's brand font) for Latin text and IBM Plex Sans Arabic for Arabic, bundled through `@expo-google-fonts`. `theme/fonts.ts` maps each weight to its font file, because iOS treats every weight as its own family.
+- **Font.** Noto Sans for Latin text and its twin Noto Sans Arabic for Arabic (chosen 2026-11-14 to match the Toters reference), bundled through `@expo-google-fonts`. `theme/fonts.ts` maps each weight to its font file, because iOS treats every weight as its own family.
 - **Mapbox.** iOS uses `@rnmapbox/maps` and web uses `mapbox-gl`, both with Movo's style (`EXPO_PUBLIC_MAPBOX_STYLE` in `.env`). POI and transit labels are off so Movo's pins stand out, and dark mode switches the style to its night preset. **iOS now needs a development build** (`npx expo run:ios` or EAS), not Expo Go. The token in `.env` is a public `pk.` token: restrict it to Movo's bundle id and domains in the Mapbox dashboard before release.
 - **Photos.** Products use drawn art until studio product photos are ready (ali rejected the free-library product photos). Place types use 19 free-licence Wikimedia photos in `assets/photos/`, mapped in `art/photos.ts`. Credits are in `assets/photos/CREDITS.md` and on the in-app **Settings › Photo credits** screen, which CC BY/BY-SA licences require. The place photos are generic stand-ins, not the real Beirut places. Before release, swap in Movo's own product shots and photos the team takes on site.
 - **Phone mockup.** `EXPO_PUBLIC_MAP_STATIC=1 npx expo export -p web` builds the web app with a static Mapbox snapshot of Hamra, because the hosted mockup page can't load live map tiles. The mockup page wraps that build in an iPhone frame. `.npmrc` sets `legacy-peer-deps` because `@rnmapbox/maps` still declares an old `mapbox-gl` peer.
@@ -115,7 +115,7 @@ All of this respects Reduce Motion, whether it is set on the phone or in Setting
 2. **The map is Mapbox** on iOS and web. Only the hosted phone mockup uses a static snapshot.
 3. **The map sheet is hand-built** with Gesture Handler and Reanimated rather than `@gorhom/bottom-sheet`, which keeps the dependency list Expo Go-friendly.
 4. **Specialist filters are chips** on the list rather than a separate sheet. There are only four filters, so a sheet added a step.
-5. **Lexend is bundled** and used throughout.
+5. **Noto Sans is bundled** and used throughout (it replaced Lexend in the colour pass).
 6. **The Arabic is machine-drafted.** `ar.json` carries a note saying so, and a native speaker should review it before release. Digits stay Latin for now.
 7. **Tab roots redirect to their own tab.** Because tabs share one array group, a deep link like `/shop` could open inside the Map tab. Each tab root sends it to its own tab.
 
@@ -150,3 +150,7 @@ The repo has a `vercel.json`, so Vercel builds it with no extra setup.
 
 In the Mapbox account, add the Vercel domain (for example `https://movo.vercel.app/*`) to the token's allowed URLs if the token is URL-restricted.
 The site is the app itself, full screen, with no phone frame. On an iPhone, open it in Safari and use Share → Add to Home Screen to launch it like an app.
+
+## Colour pass (2026-11-14)
+
+Navy and mint stay the brand (buttons, links, tab bar). Content gets a soft palette from `theme/colors.ts` (`lightTints` / `darkTints`, read as `useTheme().tints`): Map sky, Shop peach, Care lilac, Community butter, donations and nursing rose, Profile mint. `art/objects.tsx` holds the chunky Movo drawings (one ink colour, one mint part); `art/colorPass.ts` says which item gets which drawing and tint. Rules: pastels never go on the map (rating colours stay unambiguous), product photos stay on white, no brown in dark mode (warm tints sit on deep navy), no icons next to titles or inside filter pills, and light-mode text is near-black.

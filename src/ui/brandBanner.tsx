@@ -10,13 +10,24 @@ import { Text } from './Text';
  * heavy slanted headline, second line in mint, small tracked caption, and
  * either a navy night with a glowing mint swoosh or a cream day with a mint track.
  */
-export type BrandTone = 'navy' | 'cream';
+/** `peach` is Shop's colour-pass tone: a soft tint with the headline in its ink. */
+export type BrandTone = 'navy' | 'cream' | 'peach';
 
 export function BannerBackdrop({ tone, width, height }: { tone: BrandTone; width: number; height: number }) {
   const w = width;
   const h = height;
   // Gradient ids are global on web; a shared id breaks when the first copy sits in a hidden tab.
   const uid = useId().replace(/[^a-zA-Z0-9]/g, '');
+  const th = useTheme();
+  if (tone === 'peach') {
+    const c = th.tints.peach;
+    return (
+      <Svg width={w} height={h} style={{ position: 'absolute', top: 0, left: 0 }}>
+        <Rect width={w} height={h} fill={c.bg} />
+        <Path d={`M ${w * 0.55} ${h} C ${w * 0.62} ${h * 0.55}, ${w * 0.85} ${h * 0.35}, ${w} ${h * 0.3} L ${w} ${h} Z`} fill={c.ink} opacity={0.08} />
+      </Svg>
+    );
+  }
   if (tone === 'navy') {
     return (
       <Svg width={w} height={h} style={{ position: 'absolute', top: 0, left: 0 }}>
@@ -56,15 +67,15 @@ export function BannerBackdrop({ tone, width, height }: { tone: BrandTone; width
   );
 }
 
-/** Headline in the campaign style. The slant is applied to Lexend, which has no italic. */
+/** Headline in the campaign style, slanted. */
 export function BannerHeadline({ top, bottom, caption, tone, size = 40, style }: { top: string; bottom: string; caption?: string; tone: BrandTone; size?: number; style?: StyleProp<ViewStyle> }) {
   const t = useTheme();
-  const ink = tone === 'navy' ? '#FFFFFF' : '#0B2A38';
+  const ink = tone === 'navy' ? '#FFFFFF' : tone === 'peach' ? t.colors.textPrimary : '#0B2A38';
   const slant = t.rtl ? undefined : { transform: [{ skewX: '-9deg' }] };
   return (
     <View style={[{ gap: 2 }, style]}>
-      <Text weight="800" style={[{ fontSize: size, lineHeight: size * 1.02, color: ink, letterSpacing: -0.5 }, slant]}>{top}</Text>
-      <Text weight="800" style={[{ fontSize: size, lineHeight: size * 1.02, color: tone === 'navy' ? '#3CF2B8' : '#1FCB8E', letterSpacing: -0.5 }, slant]}>{bottom}</Text>
+      <Text weight="800" style={[{ fontSize: size, lineHeight: size * 1.02, color: tone === 'peach' ? t.tints.peach.ink : ink, letterSpacing: -0.5 }, slant]}>{top}</Text>
+      <Text weight="800" style={[{ fontSize: size, lineHeight: size * 1.02, color: tone === 'navy' ? '#3CF2B8' : tone === 'peach' ? t.colors.textPrimary : '#1FCB8E', letterSpacing: -0.5 }, slant]}>{bottom}</Text>
       {caption ? <Text weight="600" style={{ fontSize: 11, letterSpacing: t.rtl ? 0 : 2.6, color: ink, marginTop: 8, opacity: 0.9 }}>{caption}</Text> : null}
     </View>
   );

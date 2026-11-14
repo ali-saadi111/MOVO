@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { ScrollView, View, useWindowDimensions, type NativeScrollEvent, type NativeSyntheticEvent, type ScrollViewInstance, type StyleProp, type ViewStyle } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
+import { eventArt } from '@/art/colorPass';
+import { MovoObject } from '@/art/objects';
 import { sync, type Campaign, type ImageRef, type MovoEvent } from '@/data';
 import { useLang, useLocalized, useT } from '@/i18n';
 import { fmtTime } from '@/lib/dates';
@@ -44,17 +46,18 @@ export function EventRow({ ev, onPress, onJoin, joined, first, index = 0 }: { ev
   const price = ev.priceCents ? ltr(formatMoney(ev.priceCents)) : tr('event.free', 'Free');
   const d = new Date(ev.startsAt);
   const dayFmt = new Intl.DateTimeFormat(lang === 'ar' ? 'ar-LB-u-nu-latn' : 'en-GB', { weekday: 'short' });
+  const art = eventArt(ev.id);
   return (
     <Animated.View entering={t.reduceMotion ? undefined : FadeInDown.delay(Math.min(index, 8) * 35).springify().damping(20).stiffness(190)}>
       <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: layout.margin }}>
       <Pressable onPress={onPress} feedback="highlight" accessibilityRole="button"
         accessibilityLabel={`${loc(ev.title)}, ${fmtLongDayShort(ev.startsAt, lang)} ${fmtTime(ev.startsAt, lang)}, ${loc(ev.area)}, ${price}, ${full ? tr('event.fullShort', 'Full') : tr('comm.left', '{{n}} left', { n: left })}`}
         style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: space.sm, paddingVertical: 10 }}>
-        <View style={{ width: 72, height: 72, borderRadius: 14, overflow: 'hidden' }}>
-          <ArtImage image={ev.image} aspect={1} radius={14} />
+        <View style={{ width: 72, height: 72, borderRadius: 16, overflow: 'hidden', backgroundColor: art ? t.tints[art.tint].bg : undefined, alignItems: 'center', justifyContent: 'center' }}>
+          {art ? <View style={{ marginTop: 12 }}><MovoObject name={art.object} size={44} ink={t.tints[art.tint].ink} cut={t.tints[art.tint].bg} /></View> : <ArtImage image={ev.image} aspect={1} radius={16} />}
           <View style={{ position: 'absolute', top: 5, start: 5, minWidth: 30, paddingHorizontal: 4, paddingVertical: 2, borderRadius: 8, backgroundColor: '#FFFFFF', alignItems: 'center', boxShadow: '0 2px 6px rgba(1,52,71,0.18)' }}>
             <Text tabular style={{ color: '#0E7A58', fontSize: 9, lineHeight: 11, fontWeight: '700' }} maxFontSizeMultiplier={1.2}>{dayFmt.format(d).toUpperCase()}</Text>
-            <Text tabular style={{ color: '#013447', fontSize: 15, lineHeight: 17, fontWeight: '800' }} maxFontSizeMultiplier={1.2}>{d.getDate()}</Text>
+            <Text tabular style={{ color: '#15191B', fontSize: 15, lineHeight: 17, fontWeight: '800' }} maxFontSizeMultiplier={1.2}>{d.getDate()}</Text>
           </View>
         </View>
         <View style={{ flex: 1, gap: 3, alignSelf: 'stretch', justifyContent: 'center', borderTopWidth: first ? 0 : 1, borderColor: t.colors.separator, marginTop: -10, paddingTop: 10, marginBottom: -10, paddingBottom: 10 }}>
@@ -64,7 +67,7 @@ export function EventRow({ ev, onPress, onJoin, joined, first, index = 0 }: { ev
             {venue ? <RatingBadge level={venue.rating.level} size="mini" /> : null}
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.xs, marginTop: 2 }}>
-            <ProgressBar value={ev.taken / ev.spots} height={6} label={tr('event.spotsTaken', 'Spots taken')} style={{ flex: 1 }} />
+            <ProgressBar value={ev.taken / ev.spots} height={6} color={art ? t.tints[art.tint].ink : undefined} label={tr('event.spotsTaken', 'Spots taken')} style={{ flex: 1 }} />
             <Text variant="caption1" weight="700" tabular style={{ color: full || warm ? t.colors.ratingPartly : t.colors.textSecondary }}>{full ? tr('event.fullShort', 'Full') : tr('comm.left', '{{n}} left', { n: left })}</Text>
           </View>
         </View>
@@ -163,12 +166,12 @@ export function BannerCarousel({ slides }: { slides: BannerSlide[] }) {
 }
 
 /** One filter pill in the pinned row. */
-export function FilterPill({ label, selected, onPress, icon }: { label: string; selected: boolean; onPress: () => void; icon?: IconName }) {
+/** Plain text pill (no icon or dot). `icon` is accepted for older callers and ignored. */
+export function FilterPill({ label, selected, onPress }: { label: string; selected: boolean; onPress: () => void; icon?: IconName }) {
   const t = useTheme();
   return (
     <Pressable onPress={onPress} feedback="scale" accessibilityRole="tab" accessibilityState={{ selected }} accessibilityLabel={label}
-      style={{ height: 36, borderRadius: 18, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, backgroundColor: selected ? t.colors.buttonPrimaryBg : t.colors.bgElevated, borderWidth: selected ? 0 : 1, borderColor: t.colors.separator }}>
-      {selected ? <Icon name={icon ?? 'checkmark'} size={12} weight="bold" color={{ raw: t.colors.buttonPrimaryFg }} /> : null}
+      style={{ height: 36, borderRadius: 18, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 15, backgroundColor: selected ? t.colors.buttonPrimaryBg : t.colors.fill }}>
       <Text variant="subheadline" weight="600" style={{ color: selected ? t.colors.buttonPrimaryFg : t.colors.textPrimary }}>{label}</Text>
     </Pressable>
   );
