@@ -168,7 +168,7 @@ export function OrderTimeline({ steps }: { steps: { title: string; at?: string; 
 }
 
 /** Full-width 1:1 pager with dots, a visible "1 of 4" and previous/next buttons. */
-export function ImagePager({ images, onOpen }: { images: ImageRef[]; onOpen?: (i: number) => void }) {
+export function ImagePager({ images, onOpen, aspect = 1, overlayDots }: { images: ImageRef[]; onOpen?: (i: number) => void; aspect?: number; /** Dots sit on the photo, this far from its bottom edge; no arrows row. */ overlayDots?: number }) {
   const { width } = useWindowDimensions();
   const tr = useT();
   const [index, setIndex] = useState(0);
@@ -191,18 +191,20 @@ export function ImagePager({ images, onOpen }: { images: ImageRef[]; onOpen?: (i
         getItemLayout={(_, i) => ({ length: width, offset: width * i, index: i })}
         renderItem={({ item, index: i }) => (
           <Pressable feedback="none" onPress={() => onOpen?.(i)} style={{ width }} accessibilityRole="imagebutton" accessibilityLabel={tr('pager.open', 'Open photo {{n}} of {{total}}', { n: i + 1, total: images.length })}>
-            <ArtImage image={item} aspect={1} tile radius={0} edge={false} />
+            <ArtImage image={item} aspect={aspect} tile radius={0} edge={false} />
           </Pressable>
         )}
       />
-      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: space.xs, marginTop: space.xs }}>
+      {overlayDots != null ? (
+        images.length > 1 ? <View pointerEvents="none" accessible accessibilityLabel={tr('pager.of', '{{n}} of {{total}}', { n: index + 1, total: images.length })} style={{ position: 'absolute', start: 0, end: 0, bottom: overlayDots, alignItems: 'center' }}><PageIndicator count={images.length} index={index} /></View> : null
+      ) : <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: space.xs, marginTop: space.xs }}>
         <IconButton icon="chevron.left" label={tr('pager.prev', 'Previous photo')} onPress={() => go(index - 1)} mirrorInRTL style={{ opacity: index === 0 ? 0.3 : 1 }} />
         <View style={{ alignItems: 'center', gap: 6 }}>
           <PageIndicator count={images.length} index={index} />
           <Text variant="caption1" color="textSecondary" tabular>{tr('pager.of', '{{n}} of {{total}}', { n: index + 1, total: images.length })}</Text>
         </View>
         <IconButton icon="chevron.right" label={tr('pager.next', 'Next photo')} onPress={() => go(index + 1)} mirrorInRTL style={{ opacity: index === images.length - 1 ? 0.3 : 1 }} />
-      </View>
+      </View>}
     </View>
   );
 }

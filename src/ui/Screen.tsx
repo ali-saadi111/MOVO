@@ -25,13 +25,17 @@ export type ScreenProps = {
   /** Extra content under the large title, before the scroll content (search on web). */
   belowTitle?: ReactNode;
   contentBottom?: number;
+  /** Every scroll frame (for pinned bars that appear on scroll, or load-more). */
+  onScrollEvent?: (e: NativeScrollEvent) => void;
+  /** Drawn above the scroll view, e.g. a pinned search bar. */
+  overlay?: ReactNode;
 };
 
 /**
  * Native: the real UINavigationBar (large titles that collapse natively, Liquid
  * Glass on iOS 26, system material before), with a scroll view that runs under it.
  */
-export function Screen({ title, variant = 'detail', headerRight, grouped, refreshing, onRefresh, footer, children, scrollRef, heroHeight = 240, belowTitle, contentBottom = 0, header }: ScreenProps) {
+export function Screen({ title, variant = 'detail', headerRight, grouped, refreshing, onRefresh, footer, children, scrollRef, heroHeight = 240, belowTitle, contentBottom = 0, header, onScrollEvent, overlay }: ScreenProps) {
   const t = useTheme();
   const insets = useSafeAreaInsets();
   const bottom = useScrollBottom();
@@ -42,7 +46,9 @@ export function Screen({ title, variant = 'detail', headerRight, grouped, refres
   useLayoutEffect(() => {
     nav.setOptions({ title: variant === 'hero' && !showTitle ? '' : title });
   }, [nav, title, showTitle, variant]);
-  const onScroll = variant === 'hero' ? (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+  const onScroll = variant === 'hero' || onScrollEvent ? (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    onScrollEvent?.(e.nativeEvent);
+    if (variant !== 'hero') return;
     const s = e.nativeEvent.contentOffset.y > heroHeight - 100;
     if (s !== last.current) { last.current = s; setShowTitle(s); }
   } : undefined;
@@ -73,6 +79,7 @@ export function Screen({ title, variant = 'detail', headerRight, grouped, refres
         {belowTitle}
         {children}
       </ScrollView>
+      {overlay}
       {footer}
     </View>
   );

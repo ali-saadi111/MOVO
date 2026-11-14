@@ -40,8 +40,8 @@ export function IconTile({ icon, tone = 'fill' }: { icon: IconName; tone?: 'fill
 
 type Trailing = { type: 'chevron' } | { type: 'value'; text: string } | { type: 'check'; on: boolean } | { type: 'node'; node: ReactNode } | { type: 'none' };
 
-export function ListRow({ icon, title, subtitle, trailing = { type: 'chevron' }, onPress, destructive, leading, accessibilityLabel, selected }: {
-  icon?: IconName; title: string; subtitle?: string; trailing?: Trailing; onPress?: () => void; destructive?: boolean; leading?: ReactNode; accessibilityLabel?: string; selected?: boolean;
+export function ListRow({ icon, title, subtitle, trailing = { type: 'chevron' }, onPress, destructive, leading, accessibilityLabel, selected, subtitleLines }: {
+  icon?: IconName; title: string; subtitle?: string; trailing?: Trailing; onPress?: () => void; destructive?: boolean; leading?: ReactNode; accessibilityLabel?: string; selected?: boolean; subtitleLines?: number;
 }) {
   const t = useTheme();
   const body = (
@@ -49,7 +49,7 @@ export function ListRow({ icon, title, subtitle, trailing = { type: 'chevron' },
       {leading ?? (icon ? <IconTile icon={icon} tone={destructive ? 'danger' : 'fill'} /> : null)}
       <View style={{ flex: 1, gap: 2 }}>
         <Text variant="body" color={destructive ? 'danger' : 'textPrimary'}>{title}</Text>
-        {subtitle ? <Text variant="subheadline" color="textSecondary">{subtitle}</Text> : null}
+        {subtitle ? <Text variant="subheadline" color="textSecondary" numberOfLines={subtitleLines}>{subtitle}</Text> : null}
       </View>
       {trailing.type === 'chevron' && onPress ? <Icon name="chevron.right" size={14} weight="semibold" color="textTertiary" mirrorInRTL /> : null}
       {trailing.type === 'value' ? (

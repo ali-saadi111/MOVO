@@ -47,6 +47,8 @@ export default function RootLayout() {
                   <Stack.Screen name="auth" options={Platform.OS === 'web' ? { presentation: 'transparentModal', animation: 'none', contentStyle: { backgroundColor: 'transparent' } } : { presentation: 'formSheet', sheetAllowedDetents: [1], sheetGrabberVisible: true }} />
                   <Stack.Screen name="sheets/map-filters" options={sheet([0.75, 1])} />
                   <Stack.Screen name="sheets/shop-filters" options={sheet([0.75, 1])} />
+                  <Stack.Screen name="sheets/product-info" options={sheet([0.6, 1])} />
+                  <Stack.Screen name="sheets/checkout-edit" options={sheet([0.6, 1])} />
                   <Stack.Screen name="sheets/choose-where" options={sheet([0.5, 1])} />
                   <Stack.Screen name="sheets/review" options={sheet([1])} />
                   <Stack.Screen name="sheets/report" options={sheet([1])} />

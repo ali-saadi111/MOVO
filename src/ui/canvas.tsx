@@ -51,12 +51,23 @@ export function RoundButton({ icon, label, onPress, dot, count, shake }: { icon:
 }
 
 /** Tab-root header: avatar and greeting, round actions, then a big display title. */
-export function CanvasHeader({ title, actions, below }: { title: string; actions?: ReactNode; below?: ReactNode }) {
+export function CanvasHeader({ title, actions, below, compact }: { title: string; actions?: ReactNode; below?: ReactNode; /** Title and actions on one row, no greeting (busy screens like the shop). */ compact?: boolean }) {
   const t = useTheme();
   const tr = useT();
   const lang = useLang();
   const user = useSession((s) => s.user);
   const today = new Date().toISOString();
+  if (compact) {
+    return (
+      <View style={{ paddingHorizontal: layout.margin, gap: space.sm, marginBottom: space.sm }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm, minHeight: 48 }}>
+          <Text variant="largeTitle" display accessibilityRole="header" numberOfLines={1} style={{ flex: 1, fontSize: 34, lineHeight: 41, letterSpacing: -0.6, fontWeight: '800' }}>{title}</Text>
+          <View style={{ flexDirection: 'row', gap: space.xs }}>{actions}</View>
+        </View>
+        {below}
+      </View>
+    );
+  }
   return (
     <View style={{ paddingHorizontal: layout.margin, gap: space.lg, marginBottom: space.lg }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm, minHeight: 48 }}>

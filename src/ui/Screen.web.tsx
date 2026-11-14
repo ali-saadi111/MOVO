@@ -19,7 +19,7 @@ const BAR = 44;
  * Web preview of the native navigation bar, used only for screenshots: large
  * title in content, a material bar that fades in on scroll, back chevron.
  */
-export function Screen({ title, variant = 'detail', headerRight, grouped, refreshing, onRefresh, footer, children, scrollRef, heroHeight = 240, belowTitle, contentBottom = 0, header }: ScreenProps) {
+export function Screen({ title, variant = 'detail', headerRight, grouped, refreshing, onRefresh, footer, children, scrollRef, heroHeight = 240, belowTitle, contentBottom = 0, header, onScrollEvent, overlay }: ScreenProps) {
   const t = useTheme();
   const tr = useT();
   const insets = useSafeAreaInsets();
@@ -28,7 +28,7 @@ export function Screen({ title, variant = 'detail', headerRight, grouped, refres
   const bottom = useScrollBottom();
   const canBack = variant !== 'root' && !canvas;
   const collapsed = variant === 'root' ? y > 44 : variant === 'hero' ? y > heroHeight - 100 : true;
-  const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => setY(e.nativeEvent.contentOffset.y);
+  const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => { setY(e.nativeEvent.contentOffset.y); onScrollEvent?.(e.nativeEvent); };
   const bg = canvas ? t.colors.canvas : grouped ? t.colors.bgGrouped : t.colors.bgPrimary;
   const showBar = variant !== 'hero' || collapsed;
 
@@ -77,6 +77,7 @@ export function Screen({ title, variant = 'detail', headerRight, grouped, refres
           </View>
         </View>
       </View>}
+      {overlay}
       {canvas && y > 8 ? <Animated.View entering={FadeIn.duration(160)} exiting={FadeOut.duration(120)} pointerEvents="none" style={{ position: 'absolute', top: 0, start: 0, end: 0, height: insets.top }}><GlassSurface style={StyleSheet.absoluteFill} /></Animated.View> : null}
       {footer}
     </View>
