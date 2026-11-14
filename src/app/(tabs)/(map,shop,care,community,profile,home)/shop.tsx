@@ -86,7 +86,7 @@ function ShopHome() {
 
   return (
     <Screen title={tr('tab.shop', 'Shop')} variant="canvas" refreshing={q.isRefetching} onRefresh={() => q.refetch()} onScrollEvent={onScroll}
-      header={<CanvasHeader compact title={tr('tab.shop', 'Shop')} actions={<CanvasActions cart />} below={<View style={{ flexDirection: 'row' }}>{search}</View>} />}
+      header={<CanvasHeader title={tr('tab.shop', 'Shop')} actions={<CanvasActions cart />} below={<View style={{ flexDirection: 'row' }}>{search}</View>} />}
       overlay={pinned ? (
         <Animated.View entering={FadeIn.duration(160)} exiting={FadeOut.duration(120)} style={{ position: 'absolute', top: 0, start: 0, end: 0 }}>
           <GlassSurface style={{ paddingTop: insets.top + 6, paddingBottom: 8, paddingHorizontal: layout.margin, flexDirection: 'row', alignItems: 'center', gap: space.xs }}>
