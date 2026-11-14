@@ -21,7 +21,7 @@ export default function DevMenu() {
   );
   const outcomes: PaymentOutcome[] = ['success', 'failed', 'slow'];
   return (
-    <Sheet title="Developer menu" dismissLabel="done" detent={0.75}>
+    <Sheet title="Developer menu" dismissLabel="done" detent={0.94}>
       <Section header="Data">
         {flip('latency', 'Simulated network delay')}
         {flip('forceError', 'Every request fails')}

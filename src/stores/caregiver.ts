@@ -11,6 +11,7 @@ type CaregiverState = {
   actingFor: string | null;
   add: (p: CaredPerson) => void;
   remove: (id: string) => void;
+  update: (id: string, patch: Partial<Omit<CaredPerson, 'id'>>) => void;
   switchTo: (id: string | null) => void;
 };
 
@@ -21,6 +22,7 @@ export const useCaregiver = create<CaregiverState>()(
       actingFor: null,
       add: (p) => set((s) => ({ people: [...s.people, p] })),
       remove: (id) => set((s) => ({ people: s.people.filter((x) => x.id !== id), actingFor: s.actingFor === id ? null : s.actingFor })),
+      update: (id, patch) => set((s) => ({ people: s.people.map((x) => (x.id === id ? { ...x, ...patch } : x)) })),
       switchTo: (actingFor) => set({ actingFor }),
     }),
     { name: 'movo.caregiver', storage: persistStorage },

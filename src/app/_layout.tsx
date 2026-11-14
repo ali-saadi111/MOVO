@@ -55,19 +55,22 @@ export default function RootLayout() {
                   <Stack.Screen name="sheets/report" options={sheet([1])} />
                   <Stack.Screen name="sheets/request-place" options={sheet([1])} />
                   <Stack.Screen name="sheets/why-this" options={sheet([0.55, 1])} />
-                  <Stack.Screen name="sheets/support" options={sheet([1])} />
+                  <Stack.Screen name="sheets/support" options={sheet([0.42, 1])} />
                   <Stack.Screen name="sheets/join" options={sheet([0.45, 0.7])} />
                   <Stack.Screen name="sheets/donate" options={sheet([0.62, 1])} />
                   <Stack.Screen name="sheets/community-info" options={sheet([0.55, 1])} />
                   <Stack.Screen name="sheets/confirm" options={sheet([0.35, 0.5])} />
                   <Stack.Screen name="sheets/return-request" options={sheet([1])} />
                   <Stack.Screen name="sheets/add-person" options={sheet([1])} />
+                  <Stack.Screen name="sheets/person" options={sheet([0.75, 1])} />
+                  <Stack.Screen name="sheets/language" options={sheet([0.35])} />
+                  <Stack.Screen name="sheets/place-actions" options={sheet([0.36])} />
                   <Stack.Screen name="sheets/delete-account" options={sheet([0.6, 1])} />
                   <Stack.Screen name="covers/payment" options={cover} />
                   <Stack.Screen name="covers/success" options={cover} />
                   <Stack.Screen name="covers/session-complete" options={cover} />
                   <Stack.Screen name="covers/photos" options={cover} />
-                  <Stack.Screen name="dev/menu" options={sheet([0.75, 1])} />
+                  <Stack.Screen name="dev/menu" options={sheet([1])} />
                   <Stack.Screen name="dev/gallery" options={{ headerShown: true, title: 'Gallery' }} />
                 </Stack>
                 <BannerHost />

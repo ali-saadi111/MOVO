@@ -63,11 +63,11 @@ export function ListRow({ icon, title, subtitle, trailing = { type: 'chevron' },
           <Icon name="checkmark" size={18} weight="bold" color={t.scheme === 'dark' ? 'accent' : 'tint'} />
         </Animated.View>
       ) : null}
-      {trailing.type === 'node' ? trailing.node : null}
+      {trailing.type === 'node' && !onPress ? trailing.node : null}
     </View>
   );
   if (!onPress) return <View accessible accessibilityLabel={accessibilityLabel}>{body}</View>;
-  return (
+  const row = (
     <Pressable
       feedback="highlight"
       onPress={() => {
@@ -81,6 +81,9 @@ export function ListRow({ icon, title, subtitle, trailing = { type: 'chevron' },
       {body}
     </Pressable>
   );
+  // A tappable row with its own control (a Switch button): keep the control outside the row's button, so buttons never nest.
+  if (trailing.type === 'node') return <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: selected ? t.colors.bgSelected : undefined }}><View style={{ flex: 1 }}>{row}</View><View style={{ paddingEnd: space.md }}>{trailing.node}</View></View>;
+  return row;
 }
 
 /** Onboarding choice row: 64 pt with a trailing ✓. */

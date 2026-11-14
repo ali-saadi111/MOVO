@@ -23,3 +23,4 @@ export * from './ticket';
 export * from './brandBanner';
 export * from './promo';
 export * from './size';
+export * from './SwipeRow';
