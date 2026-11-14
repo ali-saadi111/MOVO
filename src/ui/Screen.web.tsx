@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { router, useNavigation } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -19,14 +20,22 @@ const BAR = 44;
  * Web preview of the native navigation bar, used only for screenshots: large
  * title in content, a material bar that fades in on scroll, back chevron.
  */
-export function Screen({ title, variant = 'detail', headerRight, grouped, refreshing, onRefresh, footer, children, scrollRef, heroHeight = 240, belowTitle, contentBottom = 0, header, onScrollEvent, overlay }: ScreenProps) {
+export function Screen({ title, variant = 'detail', headerRight, grouped, refreshing, onRefresh, footer, children, scrollRef, heroHeight = 240, belowTitle, contentBottom = 0, header, onScrollEvent, overlay, fill }: ScreenProps) {
   const t = useTheme();
   const tr = useT();
   const insets = useSafeAreaInsets();
   const [y, setY] = useState(0);
   const canvas = variant === 'canvas';
   const bottom = useScrollBottom();
-  const canBack = variant !== 'root' && !canvas;
+  const nav = useNavigation();
+  // A pushed large-title page (a category, a service) gets Back like the native bar. Read after mount: the stack isn't settled on first render.
+  const [pushed, setPushed] = useState(false);
+  useEffect(() => {
+    const check = () => setPushed(nav.canGoBack() || router.canGoBack());
+    check();
+    return nav.addListener('state', check);
+  }, [nav]);
+  const canBack = !canvas && (variant !== 'root' || pushed);
   const collapsed = variant === 'root' ? y > 44 : variant === 'hero' ? y > heroHeight - 100 : true;
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => { setY(e.nativeEvent.contentOffset.y); onScrollEvent?.(e.nativeEvent); };
   const bg = canvas ? t.colors.canvas : grouped ? t.colors.bgGrouped : t.colors.bgPrimary;
@@ -39,7 +48,7 @@ export function Screen({ title, variant = 'detail', headerRight, grouped, refres
         onScroll={onScroll}
         scrollEventThrottle={16}
         refreshControl={onRefresh ? <RefreshControl refreshing={!!refreshing} onRefresh={onRefresh} /> : undefined}
-        contentContainerStyle={{ paddingTop: variant === 'hero' ? 0 : canvas ? insets.top + 8 : insets.top + BAR, paddingBottom: bottom + contentBottom }}
+        contentContainerStyle={{ paddingTop: variant === 'hero' ? 0 : canvas ? insets.top + 8 : insets.top + BAR, paddingBottom: bottom + contentBottom, flexGrow: fill ? 1 : undefined }}
       >
         {canvas ? header : null}
         {variant === 'root' ? (

@@ -40,6 +40,7 @@ export default function DevMenu() {
         <ListRow title="Fill the cart" onPress={() => { useCart.getState().add('prd_reacher-pro-82'); useCart.getState().add('prd_shower-chair-with-back-50'); }} />
         <ListRow title="Replay onboarding" onPress={() => { s.set({ onboarded: false }); go.dismissTo('/language'); }} />
         <ListRow title="Reset my activity" destructive trailing={{ type: 'none' }} onPress={() => { useActivity.persist.clearStorage(); useActivity.persist.rehydrate(); }} />
+        <ListRow title="See session complete (Maya)" onPress={() => go.push('/covers/session-complete?specialist=sp_maya')} />
         <ListRow title="Component gallery" onPress={() => go.push('/dev/gallery')} />
       </Section>
     </Sheet>

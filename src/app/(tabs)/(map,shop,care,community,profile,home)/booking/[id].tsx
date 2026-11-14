@@ -3,16 +3,35 @@ import { useLocalSearchParams } from 'expo-router';
 import { View } from 'react-native';
 
 import { sync } from '@/data';
+import { PLAN } from '@/features/care/booking';
+import { PlanBars } from '@/features/care/components';
 import { paymentLabel } from '@/features/labels';
 import { useLang, useLocalized, useT } from '@/i18n';
 import { fmtLongDay, fmtTime, useNow } from '@/lib/dates';
-import { call } from '@/lib/whatsapp';
+import { call, directions, openWhatsApp } from '@/lib/whatsapp';
 import { useActivity } from '@/stores/activity';
-import { layout, space } from '@/theme';
-import { Avatar, Button, EmptyState, PlanProgress, Screen, Section, Tag, Text, TicketCard, go, useTabNav } from '@/ui';
+import { continuous, layout, space, useTheme } from '@/theme';
+import { Avatar, EmptyState, Icon, Pressable, Screen, Tag, Text, TicketCard, go, useTabNav } from '@/ui';
+import type { IconName } from '@/ui/symbols';
+
+/** Round action under the ticket, like Wallet or a ride app. */
+function Action({ icon, label, onPress, disabledNote }: { icon: IconName; label: string; onPress: () => void; disabledNote?: string | null }) {
+  const t = useTheme();
+  const off = !!disabledNote;
+  return (
+    <Pressable feedback="scale" onPress={off ? undefined : onPress} disabled={off} accessibilityRole="button" accessibilityLabel={off ? `${label}. ${disabledNote}` : label} accessibilityState={{ disabled: off }}
+      style={{ flex: 1, alignItems: 'center', gap: 6, opacity: off ? 0.45 : 1 }}>
+      <View style={{ width: 54, height: 54, borderRadius: 27, backgroundColor: t.colors.bgSelected, alignItems: 'center', justifyContent: 'center' }}>
+        <Icon name={icon} size={22} color="accentText" fill />
+      </View>
+      <Text variant="caption1" weight="600" numberOfLines={1}>{label}</Text>
+    </Pressable>
+  );
+}
 
 export default function BookingDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const t = useTheme();
   const tr = useT();
   const lang = useLang();
   const loc = useLocalized();
@@ -24,6 +43,7 @@ export default function BookingDetail() {
   const svc = s.services.find((x) => x.id === b.serviceId) ?? s.services[0];
   const hoursAway = (new Date(b.startsAt).getTime() - now) / 3600e3;
   const cancelled = b.status === 'cancelled';
+  const clinic = b.where === 'clinic' && s.clinic ? sync.place(s.clinic.placeId) : null;
   return (
     <Screen title={tr('booking.title', 'Booking')} variant="detail" grouped>
       <View style={{ paddingTop: space.md, paddingBottom: space.lg }}>
@@ -46,16 +66,27 @@ export default function BookingDetail() {
           footer={{ icon: 'mappin', text: b.where === 'home' ? tr('care.homeSub', 'Hamra, Makdessi St, Bldg 14') : loc(sync.place(s.clinic?.placeId ?? '')?.street ?? { en: '', ar: '' }) }}
         />
       </View>
-      <Section header={tr('booking.plan', 'Your plan')}>
-        <View style={{ padding: space.md }}><PlanProgress done={5} total={8} /></View>
-      </Section>
       {!cancelled ? (
-        <View style={{ paddingHorizontal: layout.margin, gap: space.xs }}>
-          <Button label={tr('booking.call', 'Call {{name}}', { name: s.name.split(' ').slice(-1)[0] })} icon="phone" disabledReason={hoursAway > 24 ? tr('booking.callFrom', 'You can call from the day before') : null} onPress={() => call('+96170000001')} />
-          <Button label={tr('booking.reschedule', 'Reschedule')} variant="secondary" onPress={() => push(`/book/${s.id}?where=${b.where}`)} />
-          <Button label={tr('booking.cancel', 'Cancel booking')} variant="plain" onPress={() => go.push(`/sheets/confirm?kind=cancelBooking&id=${b.id}`)} />
-          <Button label={tr('booking.sessionDemo', 'See session complete')} variant="plain" onPress={() => go.push(`/covers/session-complete?specialist=${s.id}`)} />
-        </View>
+        <>
+          <View style={{ flexDirection: 'row', paddingHorizontal: layout.margin }}>
+            <Action icon="phone.fill" label={tr('booking.callShort', 'Call')} onPress={() => call('+96170000001')} disabledNote={hoursAway > 24 ? tr('booking.callFrom', 'You can call from the day before') : null} />
+            <Action icon="message.fill" label={tr('booking.message', 'Message')} onPress={() => openWhatsApp(`About my booking ${b.id.toUpperCase()} with ${s.name}`)} />
+            <Action icon="clock.arrow.circlepath" label={tr('booking.reschedule', 'Reschedule')} onPress={() => push(`/book/${s.id}?where=${b.where}&service=${svc.id}`)} />
+            {clinic ? <Action icon="arrow.triangle.turn.up.right.diamond.fill" label={tr('place.directions', 'Directions')} onPress={() => directions(clinic.lat, clinic.lng, loc(clinic.name))} /> : null}
+          </View>
+          {hoursAway > 24 ? <Text variant="caption1" color="textSecondary" align="center" style={{ marginTop: space.xs, marginHorizontal: layout.margin }}>{tr('booking.callFrom', 'You can call from the day before')}</Text> : null}
+        </>
+      ) : null}
+      <View accessibilityLabel={tr('plan.a11y', '{{done}} sessions done, {{left}} to go', { done: PLAN.done, left: PLAN.total - PLAN.done })}
+        style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm, marginHorizontal: layout.margin, marginTop: space.lg, padding: space.md, borderRadius: 16, ...continuous, backgroundColor: t.colors.bgElevated }}>
+        <Text variant="subheadline" weight="600" tabular>{tr('care.yourPlan', 'Your plan')}</Text>
+        <PlanBars done={PLAN.done} total={PLAN.total} />
+        <Text variant="footnote" color="textSecondary" tabular>{tr('care.planShort', '{{done}} of {{total}}', { done: PLAN.done, total: PLAN.total })}</Text>
+      </View>
+      {!cancelled ? (
+        <Pressable feedback="highlight" onPress={() => go.push(`/sheets/confirm?kind=cancelBooking&id=${b.id}`)} accessibilityRole="button" style={{ alignSelf: 'center', paddingVertical: space.md, paddingHorizontal: space.lg, marginTop: space.md, marginBottom: space.lg }}>
+          <Text variant="body" weight="600" color="danger">{tr('booking.cancel', 'Cancel booking')}</Text>
+        </Pressable>
       ) : null}
     </Screen>
   );
