@@ -146,19 +146,19 @@ export function ClusterPin({ count }: { count: number }) {
 
 /* ---------------------------------------------------------------- places */
 
-export function PlaceRow({ place, onPress, index = 0 }: { place: Place; onPress: () => void; index?: number }) {
+export function PlaceRow({ place, onPress, onLongPress, tag, index = 0 }: { place: Place; onPress: () => void; onLongPress?: () => void; tag?: ReactNode; index?: number }) {
   const tr = useT();
   const loc = useLocalized();
   const t = useTheme();
   const d = formatDistance(distanceKm(HERE, place));
   return (
     <Animated.View entering={t.reduceMotion ? undefined : FadeInDown.delay(Math.min(index, 8) * 40).springify().damping(26).stiffness(170)}>
-      <Pressable feedback="highlight" onPress={onPress} accessibilityRole="button" accessibilityLabel={`${loc(place.name)}, ${ratingLabel(tr, place.rating.level)}, ${d}`} style={{ flexDirection: 'row', gap: space.sm, paddingVertical: space.sm, paddingHorizontal: layout.margin, alignItems: 'center' }}>
+      <Pressable feedback="highlight" onPress={onPress} onLongPress={onLongPress} accessibilityRole="button" accessibilityLabel={`${loc(place.name)}, ${ratingLabel(tr, place.rating.level)}, ${d}`} style={{ flexDirection: 'row', gap: space.sm, paddingVertical: space.sm, paddingHorizontal: layout.margin, alignItems: 'center', backgroundColor: t.colors.bgPrimary }}>
         <View style={{ width: 64, borderRadius: radii.thumb, overflow: 'hidden' }}>
           <ArtImage image={place.hero} aspect={1} radius={radii.thumb} />
         </View>
         <View style={{ flex: 1, gap: 4 }}>
-          <Text variant="headline" numberOfLines={2}>{loc(place.name)}</Text>
+          {tag ? <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.xs, flexWrap: 'wrap' }}><Text variant="headline" numberOfLines={2}>{loc(place.name)}</Text>{tag}</View> : <Text variant="headline" numberOfLines={2}>{loc(place.name)}</Text>}
           <Text variant="footnote" color="textSecondary" numberOfLines={1}>{placeTypeLabel(tr, place.category)} · {ltr(d)}</Text>
           <RatingBadge level={place.rating.level} />
         </View>

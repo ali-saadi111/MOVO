@@ -10,7 +10,7 @@ const PHONE = '+96170000000';
 export default function Support() {
   const tr = useT();
   return (
-    <Sheet title={tr('profile.support', 'Get support')} detent={0.6}>
+    <Sheet title={tr('profile.support', 'Get support')} detent={0.4}>
       <View style={{ paddingHorizontal: layout.margin, marginBottom: space.lg }}>
         <Text variant="body" color="textSecondary">{tr('support.lead', 'A real person answers, every day from 8:00 to 20:00. In Arabic or English.')}</Text>
       </View>
