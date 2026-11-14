@@ -1,7 +1,7 @@
 # Launch animation
 
 `LaunchOverlay` (mounted in `src/app/_layout.tsx`) shows the MOVO drawing over the app at launch:
-stroke-by-stroke lettering, the mint head with blinking eyes, and "Move freely". It stays until the
+stroke-by-stroke lettering, and the green happy-face icon as its head. It stays until the
 app is ready and the drawing is finished (at most 6.5 s), then fades out. Once per launch.
 
 - `movo-animation.ts`: the self-contained animation page (offline, no network).

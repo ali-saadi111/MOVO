@@ -18,12 +18,12 @@ import { mapFilterCount, useFilters } from '@/stores/filters';
 import { layout, radii, space, useTheme } from '@/theme';
 import { bodyFont } from '@/theme/fonts';
 import {
-  ActingForBar, Chip, ChipRow, EmptyState, ErrorState, Icon, IconButton, OfflinePill, PlaceRow, Pressable, Skeleton, Text,
+  ActingForBar, ChipRow, EmptyState, ErrorState, Icon, IconButton, OfflinePill, PlaceRow, Pressable, Skeleton, Text,
   go, useMobilityFor, useTabBarInset, useTabNav,
 } from '@/ui';
 import { useCaregiver } from '@/stores/caregiver';
 
-const CATS: (PlaceCategory | 'all')[] = ['all', 'cafe', 'restaurant', 'pharmacy', 'clinic', 'bank', 'shop', 'supermarket'];
+const CATS: PlaceCategory[] = ['cafe','restaurant', 'pharmacy', 'clinic', 'bank', 'shop', 'supermarket'];
 
 export default function MapScreen() {
   const t = useTheme();
@@ -103,8 +103,17 @@ export default function MapScreen() {
       </View>}
       {!searching && detent !== 'small' && !sel ? (
         <ChipRow plain
-          leading={<Chip plain label={fcount ? tr('map.filtersN', 'Filters · {{n}}', { n: fcount }) : tr('map.filters', 'Filters')} selected={fcount > 0} onPress={() => go.push('/sheets/map-filters')} />}
-          options={CATS.map((c) => ({ value: c, label: placeCategoryLabel(tr, c) }))} value={filters.category} onChange={(v) => setMap({ category: v })} />
+          leading={
+            // Filters is an icon; a small count shows when any are on.
+            <Pressable feedback="scale" onPress={() => { haptic.selection(); go.push('/sheets/map-filters'); }} accessibilityRole="button" accessibilityState={{ selected: fcount > 0 }}
+              accessibilityLabel={fcount ? tr('map.filtersN', 'Filters · {{n}}', { n: fcount }) : tr('map.filters', 'Filters')}
+              style={{ minWidth: 40, height: 40, marginVertical: 4, paddingHorizontal: fcount ? 12 : 0, borderRadius: 20, flexDirection: 'row', gap: 5, alignItems: 'center', justifyContent: 'center', backgroundColor: fcount ? t.colors.buttonPrimaryBg : t.colors.bgElevated, borderWidth: 1, borderColor: fcount ? t.colors.buttonPrimaryBg : t.colors.separator }}>
+              <Icon name="line.3.horizontal.decrease" size={19} color={{ raw: fcount ? t.colors.buttonPrimaryFg : t.colors.textPrimary }} />
+              {fcount ? <Text variant="subheadline" weight="700" tabular style={{ color: t.colors.buttonPrimaryFg }}>{fcount}</Text> : null}
+            </Pressable>
+          }
+          // No "All" chip: every category shows until one is picked, and tapping the picked one clears it.
+          options={CATS.map((c) => ({ value: c, label: placeCategoryLabel(tr, c) }))} value={filters.category} onChange={(v) => setMap({ category: v === filters.category ? 'all' : v })} />
       ) : null}
     </View>
   );
@@ -172,13 +181,14 @@ export default function MapScreen() {
 
       <View pointerEvents="box-none" style={{ position: 'absolute', top: insets.top + space.xs, start: layout.margin, end: layout.margin }}>
         <ActingForBar onSwitchBack={() => switchTo(null)} />
-        <View pointerEvents="box-none" style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+        {/* Recentre on my location at the top left, notifications at the top right. */}
+        <View pointerEvents="box-none" style={{ flexDirection: 'row', justifyContent: 'space-between', direction: 'ltr' }}>
+          <IconButton glass icon={userShown ? 'location.fill' : 'location'} label={tr('map.myLocation', 'Use my location')} onPress={() => { setUserShown(true); setFocus({ ...HERE, key: Date.now() }); }} />
           <IconButton glass icon="bell" label={tr('nav.notifications', 'Notifications')} badge={unread > 0} onPress={() => push('/notifications')} />
         </View>
       </View>
 
-      <MapSheet ref={sheet} heights={heights} header={header} onDetent={(d) => setDetent(d)}
-        accessory={detent === 'large' ? null : <IconButton glass icon={userShown ? 'location.fill' : 'location'} label={tr('map.myLocation', 'Use my location')} onPress={() => { setUserShown(true); setFocus({ ...HERE, key: Date.now() }); }} />}>
+      <MapSheet ref={sheet} heights={heights} header={header} onDetent={(d) => setDetent(d)}>
         {detent === 'small' && !searching ? null : (
           <Animated.View key={sel ? 'card' : searching ? 'search' : 'list'} entering={FadeIn.duration(200)} exiting={FadeOut.duration(120)} style={{ flex: 1 }}>{body}</Animated.View>
         )}

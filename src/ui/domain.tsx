@@ -3,7 +3,6 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { specialistPhoto } from '@/art/people';
 import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import Animated, { FadeInDown, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
-
 import { sync, type MovoEvent, type Campaign, type Place, type Product, type RatingLevel, type Specialist } from '@/data';
 import { checklistIcon, checklistLabel, mobilityLabel, ratingIcon, ratingLabel, placeTypeLabel, type MobilityKey } from '@/features/labels';
 import { useLang, useLocalized, useT } from '@/i18n';
@@ -18,7 +17,7 @@ import { useCart } from '@/stores/cart';
 import { useSession } from '@/stores/session';
 import { primaryMobility, useSettings } from '@/stores/settings';
 import { continuous, isLargeText, layout, radii, space, springs, useTheme } from '@/theme';
-import { pinColors } from '@/theme/colors';
+import { navyCard, pinColors } from '@/theme/colors';
 import { ArtImage } from './Art';
 import { Divider, Tag } from './basics';
 import { ProgressBar } from './feedback';
@@ -44,8 +43,8 @@ export function RatingBadge({ level, size = 'small' }: { level: RatingLevel; siz
     const short = level === 'partly' && !big ? tr('rating.partlyShort', 'Partly') : label;
     const ink = level === 'accessible' ? t.colors.accentText : color;
     return (
-      <View accessible accessibilityRole="text" accessibilityLabel={label} style={{ flexDirection: 'row', alignItems: 'center', gap: 5, alignSelf: 'flex-start', height: big ? 32 : 26, borderRadius: 16, paddingStart: 4, paddingEnd: big ? 12 : 9, backgroundColor: `${color}${t.scheme === 'dark' ? '33' : '24'}` }}>
-        <Glyph level={level} size={big ? 22 : 18} />
+      <View accessible accessibilityRole="text" accessibilityLabel={label} style={{ flexDirection: 'row', alignItems: 'center', gap: 5, alignSelf: 'flex-start', height: big ? 32 : 26, borderRadius: 16, paddingStart: 3, paddingEnd: big ? 12 : 9, backgroundColor: `${color}${t.scheme === 'dark' ? '33' : '24'}` }}>
+        <RatingFace level={level} size={big ? 26 : 22} />
         <Text variant={big ? 'subheadline' : 'caption1'} weight="600" style={{ color: ink }} numberOfLines={1}>{short}</Text>
       </View>
     );
@@ -127,23 +126,43 @@ export function ChecklistRow({ item }: { item: Place['rating']['checklist'][numb
 
 /* ---------------------------------------------------------------- map pins */
 
+const PIN = 36;
+const PIN_SELECTED = 1.3;
+
+/** Mood artwork (assets/moods): glossy rounded faces, 256 pt with @2x and @3x. */
+const MOOD: Record<RatingLevel, number> = {
+  accessible: require('../../assets/moods/happy.png'),
+  partly: require('../../assets/moods/neutral.png'),
+  not: require('../../assets/moods/sad.png'),
+};
+
+/**
+ * A rating as a face: happy green, neutral yellow, sad red. Used for the map pins and for
+ * legends such as the map filters. `lifted` adds a soft shadow so it stands off the map.
+ */
+export function RatingFace({ level, size = 26, lifted }: { level: RatingLevel; size?: number; lifted?: boolean }) {
+  return (
+    <View style={{ width: size, height: size }}>
+      {/* The artwork has a transparent margin, so the shadow is cast by a shape matching the face itself. */}
+      {lifted ? <View style={{ position: 'absolute', top: size * 0.1, bottom: size * 0.08, left: size * 0.09, right: size * 0.09, borderRadius: size * 0.2, backgroundColor: pinColors[level], boxShadow: '0 2px 5px rgba(1,52,71,0.38)' }} /> : null}
+      <Image source={MOOD[level]} style={{ width: size, height: size }} contentFit="contain" />
+    </View>
+  );
+}
+
+/** Three faces, so the rating reads by expression as well as colour: smiling, poker, sad. */
 export function MapPin({ level, selected }: { level: RatingLevel; selected?: boolean }) {
   const t = useTheme();
-  const s = useSharedValue(selected ? 44 / 30 : 1);
+  const s = useSharedValue(selected ? PIN_SELECTED : 1);
   useEffect(() => {
-    s.value = t.reduceMotion ? (selected ? 44 / 30 : 1) : withSpring(selected ? 44 / 30 : 1, springs.bouncy);
+    s.value = t.reduceMotion ? (selected ? PIN_SELECTED : 1) : withSpring(selected ? PIN_SELECTED : 1, springs.bouncy);
   }, [selected, s, t.reduceMotion]);
   const st = useAnimatedStyle(() => ({ transform: [{ scale: s.value }] }));
-  const bg = pinColors[level];
-  const fg = level === 'accessible' ? pinColors.accessibleGlyph : pinColors.onColorGlyph;
-  const icon = { accessible: 'checkmark', partly: 'minus', not: 'xmark' } as const;
   return (
     <View style={{ width: 48, height: 64, alignItems: 'center', justifyContent: 'flex-end', paddingBottom: 10 }} pointerEvents="none">
-      <Animated.View style={[{ alignItems: 'center' }, st]}>
-        <View style={{ width: 30, height: 30, borderRadius: 15, backgroundColor: bg, borderWidth: 2, borderColor: pinColors.ring, alignItems: 'center', justifyContent: 'center', boxShadow: '0 1px 3px rgba(1,52,71,0.25)' }}>
-          <Icon name={icon[level]} size={15} weight="heavy" color={{ raw: fg }} />
-        </View>
-        {selected ? <View style={{ width: 0, height: 0, borderLeftWidth: 5, borderRightWidth: 5, borderTopWidth: 6, borderLeftColor: 'transparent', borderRightColor: 'transparent', borderTopColor: pinColors.ring, marginTop: -1 }} /> : null}
+      {/* Scales from its foot so the selected pin grows upward and stays on its spot. */}
+      <Animated.View style={[{ alignItems: 'center', transformOrigin: 'bottom' }, st]}>
+        <RatingFace level={level} size={PIN} lifted />
       </Animated.View>
     </View>
   );
@@ -178,7 +197,8 @@ export function PlaceRow({ place, onPress, onLongPress, tag, index = 0 }: { plac
           {tag ? <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.xs, flexWrap: 'wrap' }}><Text variant="headline" numberOfLines={1}>{loc(place.name)}</Text>{tag}</View> : <Text variant="headline" numberOfLines={1}>{loc(place.name)}</Text>}
           <Text variant="footnote" color="textSecondary" numberOfLines={1}>{placeTypeLabel(tr, place.category)} · {ltr(d)}</Text>
         </View>
-        <RatingBadge level={place.rating.level} size="pill" />
+        {/* Face only: the row's accessibility label already speaks the rating. */}
+        <RatingFace level={place.rating.level} size={34} />
       </Pressable>
     </Animated.View>
   );
@@ -186,22 +206,23 @@ export function PlaceRow({ place, onPress, onLongPress, tag, index = 0 }: { plac
 
 /* ---------------------------------------------------------------- products */
 
-export function PriceText({ cents, compareAt, variant = 'headline' }: { cents: number; compareAt?: number; variant?: 'headline' | 'title3' }) {
+/** `onNavy` is for text sitting on the navy card, which is the same colour in light and dark. */
+export function PriceText({ cents, compareAt, variant = 'headline', onNavy }: { cents: number; compareAt?: number; variant?: 'headline' | 'title3'; onNavy?: boolean }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 6 }}>
-      <Text variant={variant} tabular weight={variant === 'title3' ? '400' : '600'}>{ltr(formatMoney(cents))}</Text>
-      {compareAt ? <Text variant="footnote" color="textSecondary" tabular style={{ textDecorationLine: 'line-through' }}>{ltr(formatMoney(compareAt))}</Text> : null}
+      <Text variant={variant} tabular weight={variant === 'title3' ? '400' : '600'} style={onNavy ? { color: navyCard.text } : undefined}>{ltr(formatMoney(cents))}</Text>
+      {compareAt ? <Text variant="footnote" color="textSecondary" tabular style={[{ textDecorationLine: 'line-through' }, onNavy ? { color: navyCard.dim } : null]}>{ltr(formatMoney(compareAt))}</Text> : null}
     </View>
   );
 }
 
-export function StockLabel({ stock, always, small }: { stock: Product['stock']; always?: boolean; small?: boolean }) {
+export function StockLabel({ stock, always, small, onNavy }: { stock: Product['stock']; always?: boolean; small?: boolean; onNavy?: boolean }) {
   const tr = useT();
   const v = small ? 'caption1' : 'subheadline';
   if (stock.status === 'in' && !always) return null;
-  if (stock.status === 'in') return <Text variant={v} weight="600" color="accentText">{tr('stock.in', 'In stock')}</Text>;
-  if (stock.status === 'low') return <Text variant={v} weight="600" color="ratingPartly">{tr('stock.low', '{{n}} left', { n: stock.quantity })}</Text>;
-  return <Text variant={v} weight="600" color="textSecondary">{tr('stock.out', 'Out of stock')}</Text>;
+  if (stock.status === 'in') return <Text variant={v} weight="600" color="accentText" style={onNavy ? { color: navyCard.mint } : undefined}>{tr('stock.in', 'In stock')}</Text>;
+  if (stock.status === 'low') return <Text variant={v} weight="600" color="ratingPartly" style={onNavy ? { color: navyCard.warn } : undefined}>{tr('stock.low', '{{n}} left', { n: stock.quantity })}</Text>;
+  return <Text variant={v} weight="600" color="textSecondary" style={onNavy ? { color: navyCard.dim } : undefined}>{tr('stock.out', 'Out of stock')}</Text>;
 }
 
 export function specValue(s: Product['keySpecs'][number], tr: (k: string, e: string) => string) {
@@ -213,11 +234,14 @@ export function ProductCard({ product, layout: lay = 'grid', onPress, index = 0 
   const loc = useLocalized();
   const t = useTheme();
   const rail = lay === 'rail';
+  // The navy card Care uses for its tiles: photo on a white panel, white type underneath.
+  const pad = 6;
   return (
-    <Animated.View entering={t.reduceMotion ? undefined : FadeInDown.delay(Math.min(index, 6) * 40).springify().damping(26).stiffness(170)} style={rail ? { width: 140 } : { flex: 1 }}>
-      <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={`${loc(product.name)}, ${formatMoney(product.priceCents)}`} style={{ gap: 6 }}>
+    <Animated.View entering={t.reduceMotion ? undefined : FadeInDown.delay(Math.min(index, 6) * 40).springify().damping(26).stiffness(170)} style={rail ? { width: 150 } : { flex: 1 }}>
+      <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={`${loc(product.name)}, ${formatMoney(product.priceCents)}`}
+        style={{ flex: 1, gap: 6, padding: pad, paddingBottom: 10, borderRadius: 20, ...continuous, backgroundColor: navyCard.bg, borderWidth: 1, borderColor: navyCard.line }}>
         <View>
-          <ArtImage image={product.images[0]} aspect={rail ? 140 / 124 : 1} tile radius={radii.tile} />
+          <ArtImage image={product.images[0]} aspect={rail ? 140 / 124 : 1} tile radius={14} edge={false} />
           {product.compareAtCents && product.compareAtCents > product.priceCents ? (
             // Deals are peach (Shop's colour); the photo itself stays on white.
             <View style={{ position: 'absolute', top: 8, start: 8, paddingHorizontal: 8, height: 22, borderRadius: 11, justifyContent: 'center', backgroundColor: '#FFE6D5' }}>
@@ -225,14 +249,14 @@ export function ProductCard({ product, layout: lay = 'grid', onPress, index = 0 
             </View>
           ) : null}
         </View>
-        <View style={{ gap: 1, paddingHorizontal: 2 }}>
-          <Text variant={rail ? 'footnote' : 'subheadline'} numberOfLines={rail ? 1 : 2}>{loc(product.name)}</Text>
-          <PriceText cents={product.priceCents} compareAt={product.compareAtCents} />
-          <StockLabel stock={product.stock} small />
+        <View style={{ gap: 1, paddingHorizontal: 4 }}>
+          <Text variant={rail ? 'footnote' : 'subheadline'} numberOfLines={rail ? 1 : 2} style={{ color: navyCard.soft }}>{loc(product.name)}</Text>
+          <PriceText cents={product.priceCents} compareAt={product.compareAtCents} onNavy />
+          <StockLabel stock={product.stock} small onNavy />
         </View>
       </Pressable>
       {product.stock.status !== 'out' ? (
-        <View pointerEvents="box-none" style={{ position: 'absolute', top: 0, start: 0, end: 0, aspectRatio: rail ? 140 / 124 : 1 }}>
+        <View pointerEvents="box-none" style={{ position: 'absolute', top: pad + 1, start: pad + 1, end: pad + 1, aspectRatio: rail ? 140 / 124 : 1 }}>
           <QuickAdd product={product} />
         </View>
       ) : null}

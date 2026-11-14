@@ -70,8 +70,8 @@ function Community() {
 
   return (
     <Screen title={tr('tab.community', 'Community')} variant="canvas" refreshing={q.isRefetching} onRefresh={() => q.refetch()} onScrollEvent={onScroll}
-      header={<CanvasHeader title={tr('comm.title', 'Get together')} actions={<CanvasActions />}
-        below={<Segmented values={[tr('comm.activities', 'Activities'), tr('comm.donations', 'Donations')]} index={tab} onChange={(i) => { setTab(i); setPinned(false); }} style={{ height: 40, marginTop: -space.sm }} />} />}
+      header={<CanvasHeader compact title={tr('comm.title', 'Get together')} actions={<CanvasActions />}
+        below={<Segmented values={[tr('comm.activities', 'Activities'), tr('comm.donations', 'Donations')]} index={tab} onChange={(i) => { setTab(i); setPinned(false); }} style={{ height: 40 }} />} />}
       overlay={pinned ? (
         <Animated.View entering={FadeIn.duration(160)} exiting={FadeOut.duration(120)} style={{ position: 'absolute', top: 0, start: 0, end: 0 }}>
           <GlassSurface style={{ paddingTop: insets.top + 6, paddingBottom: 8 }}>{pills}</GlassSurface>

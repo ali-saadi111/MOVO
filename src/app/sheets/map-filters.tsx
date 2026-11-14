@@ -7,7 +7,7 @@ import { ratingLabel } from '@/features/labels';
 import { useT } from '@/i18n';
 import { useFilters, type MustHave } from '@/stores/filters';
 import { layout, space } from '@/theme';
-import { Button, ListRow, RatingBadge, Section, Sheet, Switch, go, useMobilityFor } from '@/ui';
+import { Button, ListRow, RatingFace, Section, Sheet, Switch, go, useMobilityFor } from '@/ui';
 
 export default function MapFilters() {
   const tr = useT();
@@ -25,7 +25,7 @@ export default function MapFilters() {
       <View style={{ height: space.sm }} />
       <Section header={tr('filter.rating', 'Rating')}>
         {(['accessible', 'partly', 'not'] as RatingLevel[]).map((l) => (
-          <ListRow key={l} leading={<RatingBadge level={l} size="mini" />} title={ratingLabel(tr, l)} trailing={{ type: 'check', on: f.ratings.includes(l) }} onPress={() => toggleR(l)} />
+          <ListRow key={l} leading={<RatingFace level={l} />} title={ratingLabel(tr, l)} trailing={{ type: 'check', on: f.ratings.includes(l) }} onPress={() => toggleR(l)} />
         ))}
       </Section>
       <Section footer={mob ? undefined : tr('filter.fitsHint', 'Set how you move in Profile to use this.')}>
