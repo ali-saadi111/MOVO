@@ -49,7 +49,8 @@ export default function RootLayout() {
                   <Stack.Screen name="sheets/shop-filters" options={sheet([0.75, 1])} />
                   <Stack.Screen name="sheets/product-info" options={sheet([0.6, 1])} />
                   <Stack.Screen name="sheets/checkout-edit" options={sheet([0.6, 1])} />
-                  <Stack.Screen name="sheets/choose-where" options={sheet([0.5, 1])} />
+                  <Stack.Screen name="sheets/care-edit" options={sheet([0.6, 1])} />
+                  <Stack.Screen name="sheets/specialist-info" options={sheet([0.6, 1])} />
                   <Stack.Screen name="sheets/review" options={sheet([1])} />
                   <Stack.Screen name="sheets/report" options={sheet([1])} />
                   <Stack.Screen name="sheets/request-place" options={sheet([1])} />

@@ -112,7 +112,7 @@ export function DayStrip({ value, onChange, days = 30 }: { value: string; onChan
   );
 }
 
-function SlotChip({ label, a11y, taken, sel, index, onPress }: { label: string; a11y: string; taken: boolean; sel: boolean; index: number; onPress: () => void }) {
+function SlotChip({ label, a11y, taken, sel, index, onPress, compact }: { label: string; a11y: string; taken: boolean; sel: boolean; index: number; onPress: () => void; compact?: boolean }) {
   const t = useTheme();
   const pop = useSharedValue(1);
   useEffect(() => {
@@ -120,10 +120,10 @@ function SlotChip({ label, a11y, taken, sel, index, onPress }: { label: string; 
   }, [sel, pop, t.reduceMotion]);
   const style = useAnimatedStyle(() => ({ transform: [{ scale: pop.value }] }));
   return (
-    <Animated.View entering={t.reduceMotion ? undefined : ZoomIn.delay(index * 35).springify().damping(14).stiffness(220)} style={[{ width: '31.5%' }, style]}>
+    <Animated.View entering={t.reduceMotion ? undefined : ZoomIn.delay(index * 35).springify().damping(14).stiffness(220)} style={[{ width: compact ? '23.2%' : '31.5%' }, style]}>
       <Pressable disabled={taken} onPress={onPress} accessibilityRole="button" accessibilityState={{ selected: sel, disabled: taken }} accessibilityLabel={a11y}
-        style={{ minHeight: 52, borderRadius: radii.capsule, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 6, backgroundColor: sel ? t.colors.accent : taken ? 'transparent' : t.colors.bgElevated, borderWidth: taken ? 1.5 : 0, borderStyle: 'dashed', borderColor: t.colors.separator }}>
-        {sel ? <Animated.View entering={t.reduceMotion ? undefined : ZoomIn.springify().damping(12)}><Icon name="checkmark" size={14} weight="bold" color={{ raw: '#013447' }} /></Animated.View> : null}
+        style={{ minHeight: compact ? 44 : 52, borderRadius: radii.capsule, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: compact ? 3 : 6, backgroundColor: sel ? t.colors.accent : taken ? 'transparent' : t.colors.bgElevated, borderWidth: taken ? 1.5 : 0, borderStyle: 'dashed', borderColor: t.colors.separator }}>
+        {sel && !compact ? <Animated.View entering={t.reduceMotion ? undefined : ZoomIn.springify().damping(12)}><Icon name="checkmark" size={14} weight="bold" color={{ raw: '#013447' }} /></Animated.View> : null}
         <Text variant="callout" tabular weight={sel ? '800' : '600'} style={{ color: sel ? '#013447' : taken ? t.colors.textTertiary : t.colors.textPrimary, textDecorationLine: taken ? 'line-through' : 'none' }}>{label}</Text>
       </Pressable>
     </Animated.View>
@@ -131,14 +131,14 @@ function SlotChip({ label, a11y, taken, sel, index, onPress }: { label: string; 
 }
 
 /** Times pop in one after another when the day changes; the chosen one bounces and turns mint. */
-export function TimeSlotGrid({ slots, value, onChange }: { slots: Slot[]; value: string | null; onChange: (iso: string) => void }) {
+export function TimeSlotGrid({ slots, value, onChange, compact }: { slots: Slot[]; value: string | null; onChange: (iso: string) => void; compact?: boolean }) {
   const tr = useT();
   const lang = useLang();
   return (
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.xs, paddingHorizontal: layout.margin }}>
       {slots.map((s, i) => {
         const label = fmtTime(s.startsAt, lang);
-        return <SlotChip key={s.startsAt} index={i} label={label} a11y={s.taken ? tr('slot.taken', '{{t}}, taken', { t: label }) : label} taken={s.taken} sel={value === s.startsAt} onPress={() => { haptic.selection(); onChange(s.startsAt); }} />;
+        return <SlotChip key={s.startsAt} index={i} label={label} a11y={s.taken ? tr('slot.taken', '{{t}}, taken', { t: label }) : label} taken={s.taken} sel={value === s.startsAt} compact={compact} onPress={() => { haptic.selection(); onChange(s.startsAt); }} />;
       })}
     </View>
   );
