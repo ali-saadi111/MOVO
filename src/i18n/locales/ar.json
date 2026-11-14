@@ -863,5 +863,11 @@
   "join.taxiShort": "تاكسي مجهّز",
   "join.taxiSub": "نحجز لك واحدًا إلى نقطة الانطلاق",
   "join.withCompanion": "أنا ومرافق",
-  "pay.changeA11y": "الدفع عبر {{m}}. تغيير"
+  "pay.changeA11y": "الدفع عبر {{m}}. تغيير",
+  "care.short.nursing": "تمريض منزلي",
+  "care.short.ot": "علاج وظيفي",
+  "care.short.physio": "علاج طبيعي",
+  "care.short.prosthetics": "أطراف صناعية",
+  "care.short.repair": "تصليح الكراسي",
+  "care.short.transport": "نقل"
 }

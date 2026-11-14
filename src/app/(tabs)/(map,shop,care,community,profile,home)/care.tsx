@@ -24,7 +24,7 @@ function CareHome() {
   const switchTo = useCaregiver((s) => s.switchTo);
   const seen = SEEN.map((id) => (q.data ?? []).find((s) => s.id === id)).filter((s) => !!s);
   return (
-    <Screen title={tr('tab.care', 'Care')} variant="canvas" refreshing={q.isRefetching} onRefresh={() => q.refetch()}
+    <Screen title={tr('tab.care', 'Care')} variant="canvas" fill refreshing={q.isRefetching} onRefresh={() => q.refetch()}
       header={<CanvasHeader title={tr('care.title', 'Your care')} actions={<CanvasActions />} />}>
       <ActingForBar onSwitchBack={() => switchTo(null)} />
       {next ? (
@@ -32,10 +32,11 @@ function CareHome() {
       ) : (
         <BlockCard tone="mint" minHeight={150} eyebrow={tr('care.noneEyebrow', 'Care that comes to you')} title={tr('care.noneTitle', 'Book a licensed specialist')} body={tr('care.noneBody', 'Physio, nursing and repairs at home.')} art={<HeroArt name="care" size={130} />} onPress={() => push('/specialists/physio')} />
       )}
-      <SectionHeader title={tr('care.services', 'Book a specialist')} style={{ marginTop: space.lg }} />
-      <ServiceGrid kinds={KINDS} onPress={(k) => push(`/specialists/${k}`)} />
+      <SectionHeader title={tr('care.services', 'Book a specialist')} style={{ marginTop: space.md }} />
+      {/* The grid takes the spare height, so the page ends at the tab bar instead of leaving a gap. */}
+      <ServiceGrid kinds={KINDS} onPress={(k) => push(`/specialists/${k}`)} style={{ flexGrow: 1 }} />
       {q.isLoading || seen.length ? (
-        <View style={{ marginTop: space.lg }}>
+        <View style={{ marginTop: space.md }}>
           <SectionHeader title={tr('care.past', 'Your specialists')} />
           <FacesRail people={seen} loading={q.isLoading} />
         </View>

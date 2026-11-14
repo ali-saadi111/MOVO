@@ -14,6 +14,8 @@ export type ScreenProps = {
   /** Custom header for the canvas variant (greeting, title, actions). */
   header?: ReactNode;
   headerRight?: () => ReactNode;
+  /** Let the content stretch to the screen height, so a short page can fill it instead of leaving a gap. */
+  fill?: boolean;
   grouped?: boolean;
   refreshing?: boolean;
   onRefresh?: () => void;
@@ -35,7 +37,7 @@ export type ScreenProps = {
  * Native: the real UINavigationBar (large titles that collapse natively, Liquid
  * Glass on iOS 26, system material before), with a scroll view that runs under it.
  */
-export function Screen({ title, variant = 'detail', headerRight, grouped, refreshing, onRefresh, footer, children, scrollRef, heroHeight = 240, belowTitle, contentBottom = 0, header, onScrollEvent, overlay }: ScreenProps) {
+export function Screen({ title, variant = 'detail', headerRight, grouped, refreshing, onRefresh, footer, children, scrollRef, heroHeight = 240, belowTitle, contentBottom = 0, header, onScrollEvent, overlay, fill }: ScreenProps) {
   const t = useTheme();
   const insets = useSafeAreaInsets();
   const bottom = useScrollBottom();
@@ -73,7 +75,7 @@ export function Screen({ title, variant = 'detail', headerRight, grouped, refres
         onScroll={onScroll}
         scrollEventThrottle={16}
         refreshControl={onRefresh ? <RefreshControl refreshing={!!refreshing} onRefresh={onRefresh} tintColor={t.colors.textSecondary} /> : undefined}
-        contentContainerStyle={{ paddingTop: canvas ? insets.top + 8 : 0, paddingBottom: bottom + contentBottom }}
+        contentContainerStyle={{ paddingTop: canvas ? insets.top + 8 : 0, paddingBottom: bottom + contentBottom, flexGrow: fill ? 1 : undefined }}
       >
         {canvas ? header : null}
         {belowTitle}
