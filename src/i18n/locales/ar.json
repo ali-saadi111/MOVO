@@ -816,5 +816,11 @@
   "care.whereTitle": "المكان",
   "care.yearsShort": "سنة",
   "care.yourPlan": "خطتك",
-  "common.change": "تغيير"
+  "common.change": "تغيير",
+  "care.short.nursing": "تمريض منزلي",
+  "care.short.ot": "علاج وظيفي",
+  "care.short.physio": "علاج طبيعي",
+  "care.short.prosthetics": "أطراف صناعية",
+  "care.short.repair": "تصليح الكراسي",
+  "care.short.transport": "نقل"
 }

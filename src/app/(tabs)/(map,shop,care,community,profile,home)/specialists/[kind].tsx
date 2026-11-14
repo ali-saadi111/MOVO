@@ -5,11 +5,11 @@ import { View } from 'react-native';
 import type { ServiceKind } from '@/data';
 import { useSpecialists } from '@/data/queries';
 import { careAddress, useCareDraft, type Where } from '@/features/care/booking';
-import { SpecialistSlotsRow } from '@/features/care/components';
+import { LocationPill, SpecialistSlotsRow } from '@/features/care/components';
 import { serviceLabel } from '@/features/labels';
 import { useT } from '@/i18n';
 import { layout, space } from '@/theme';
-import { ChipRow, Divider, EmptyState, ErrorState, Icon, Pressable, Screen, Segmented, Skeleton, Text, go, useTabNav } from '@/ui';
+import { ChipRow, Divider, EmptyState, ErrorState, Screen, Segmented, Skeleton, go, useTabNav } from '@/ui';
 
 /** Specialists for one service. Home or clinic is a switch here (no sheet first), and every row can book a time straight away. */
 export default function SpecialistList() {
@@ -31,20 +31,10 @@ export default function SpecialistList() {
   const rest = list.filter((s) => s !== sponsored).sort((a, b) => a.nextFreeInHours - b.nextFreeInHours || b.stars - a.stars);
   const ordered = sponsored ? [sponsored, ...rest] : rest;
   const toggle = (v: string) => setF((c) => (c.includes(v) ? c.filter((x) => x !== v) : [...c, v]));
-  const addr = careAddress(draft.addr);
+  const area = careAddress(draft.addr).sub.split(',')[0];
   return (
-    <Screen title={serviceLabel(tr, kind)} variant="root" refreshing={q.isRefetching} onRefresh={() => q.refetch()}>
-      <Segmented style={{ marginHorizontal: layout.margin, marginTop: space.xs }} values={[tr('care.homeVisit', 'Home visit'), tr('care.clinic', 'At the clinic')]} icons={['house.fill', 'building.2']} index={where === 'home' ? 0 : 1} onChange={(i) => pickWhere(i === 0 ? 'home' : 'clinic')} />
-      {where === 'home' ? (
-        <Pressable feedback="highlight" onPress={() => go.push('/sheets/care-edit?kind=address')} accessibilityRole="button" accessibilityLabel={`${tr('care.visitsTo', 'Visits to')} ${addr.sub}. ${tr('common.change', 'Change')}`}
-          style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: layout.margin, paddingTop: space.sm, minHeight: 32 }}>
-          <Icon name="mappin" size={14} color="textSecondary" />
-          <Text variant="footnote" color="textSecondary" numberOfLines={1} style={{ flex: 1 }}>{addr.sub}</Text>
-          <Text variant="footnote" weight="600" color="accentText">{tr('common.change', 'Change')}</Text>
-        </Pressable>
-      ) : (
-        <Text variant="footnote" color="textSecondary" style={{ paddingHorizontal: layout.margin, paddingTop: space.sm, minHeight: 32 }}>{tr('care.clinicSub', 'Clinics show their Map rating')}</Text>
-      )}
+    <Screen title={serviceLabel(tr, kind)} variant="root" headerRight={() => <LocationPill label={area} onPress={() => go.push('/sheets/care-edit?kind=address')} />} refreshing={q.isRefetching} onRefresh={() => q.refetch()}>
+      <Segmented style={{ marginHorizontal: layout.margin, marginTop: space.xs, marginBottom: space.xs }} values={[tr('care.homeVisit', 'Home visit'), tr('care.clinic', 'At the clinic')]} icons={['house.fill', 'building.2']} index={where === 'home' ? 0 : 1} onChange={(i) => pickWhere(i === 0 ? 'home' : 'clinic')} />
       <ChipRow multi options={[{ value: 'price', label: tr('care.f.price', 'Under $30') }, { value: 'en', label: tr('care.f.lang', 'Speaks English') }, { value: 'f', label: tr('care.f.gender', 'Woman specialist') }, { value: 'rating', label: tr('care.f.rating', 'Rating 4+') }]} value={f} onChange={toggle} style={{ marginBottom: space.xs }} />
       {q.isLoading ? (
         <View style={{ paddingHorizontal: layout.margin, gap: space.lg, marginTop: space.sm }}>{[0, 1, 2].map((i) => <View key={i} style={{ flexDirection: 'row', gap: 12 }}><Skeleton shape="circle" width={52} height={52} /><View style={{ flex: 1, gap: 8 }}><Skeleton shape="text" width="60%" /><Skeleton shape="text" width="40%" /></View></View>)}</View>

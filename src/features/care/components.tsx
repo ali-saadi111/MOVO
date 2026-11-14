@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, type StyleProp, type ViewStyle } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { specialistPhoto } from '@/art/people';
@@ -72,28 +71,36 @@ export function NextSessionCard({ startsAt, specialistId, where, onPress }: { st
   );
 }
 
-/** Six services in a tight 3×2 grid of small tiles. */
-export function ServiceGrid({ kinds, onPress }: { kinds: ServiceKind[]; onPress: (k: ServiceKind) => void }) {
+/** Labels that fit a third of a phone width without breaking a word. */
+const shortServiceLabel = (tr: ReturnType<typeof useT>, k: ServiceKind) =>
+  ({ physio: tr('care.short.physio', 'Physio'), nursing: tr('care.short.nursing', 'Home nursing'), ot: tr('care.short.ot', 'Occupational therapy'), prosthetics: tr('care.short.prosthetics', 'Prosthetics'), repair: tr('care.short.repair', 'Wheelchair repair'), transport: tr('care.short.transport', 'Transport') })[k];
+
+/** Six services in a 3×2 grid of small tiles. The rows stretch (up to a point) to fill a tall screen. */
+export function ServiceGrid({ kinds, onPress, style }: { kinds: ServiceKind[]; onPress: (k: ServiceKind) => void; style?: StyleProp<ViewStyle> }) {
   const t = useTheme();
   const tr = useT();
-  const [w, setW] = useState(0);
-  const tileW = Math.floor((w - layout.margin * 2 - space.xs * 2) / 3);
+  const rows = [kinds.slice(0, 3), kinds.slice(3, 6)];
   return (
-    <View onLayout={(e) => setW(e.nativeEvent.layout.width)} style={{ flexDirection: 'row', flexWrap: 'wrap', gap: space.xs, paddingHorizontal: layout.margin, minHeight: 176 }}>
-      {kinds.map((k, i) => {
-        const c = toneColors(t.colors, TONES[i % 4]);
-        return (
-          <Animated.View key={k} entering={t.reduceMotion ? undefined : FadeInDown.delay(i * 30).springify().damping(22).stiffness(200)} style={{ width: tileW, opacity: w ? 1 : 0 }}>
-            <Pressable feedback="scale" onPress={() => onPress(k)} accessibilityRole="button" accessibilityLabel={serviceLabel(tr, k)}
-              style={{ minHeight: 84, borderRadius: 18, ...continuous, backgroundColor: t.colors.bgElevated, borderWidth: 1, borderColor: t.colors.separator, padding: 10, gap: 8 }}>
-              <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: c.bg, alignItems: 'center', justifyContent: 'center' }}>
-                <Icon name={serviceIcon[k]} size={16} color={{ raw: c.ink }} fill />
-              </View>
-              <Text variant="caption1" weight="700" numberOfLines={2} style={{ lineHeight: 15 }}>{serviceLabel(tr, k)}</Text>
-            </Pressable>
-          </Animated.View>
-        );
-      })}
+    <View style={[{ gap: space.xs, paddingHorizontal: layout.margin }, style]}>
+      {rows.map((row, r) => (
+        <View key={r} style={{ flex: 1, flexDirection: 'row', gap: space.xs, minHeight: 76, maxHeight: 128 }}>
+          {row.map((k, j) => {
+            const i = r * 3 + j;
+            const c = toneColors(t.colors, TONES[i % 4]);
+            return (
+              <Animated.View key={k} entering={t.reduceMotion ? undefined : FadeInDown.delay(i * 30).springify().damping(22).stiffness(200)} style={{ flex: 1 }}>
+                <Pressable feedback="scale" onPress={() => onPress(k)} accessibilityRole="button" accessibilityLabel={serviceLabel(tr, k)}
+                  style={{ flex: 1, borderRadius: 18, ...continuous, backgroundColor: t.colors.bgElevated, borderWidth: 1, borderColor: t.colors.separator, padding: 8, justifyContent: 'space-between', gap: 6 }}>
+                  <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: c.bg, alignItems: 'center', justifyContent: 'center' }}>
+                    <Icon name={serviceIcon[k]} size={16} color={{ raw: c.ink }} fill />
+                  </View>
+                  <Text variant="caption1" weight="700" numberOfLines={2} style={{ lineHeight: 15 }}>{shortServiceLabel(tr, k)}</Text>
+                </Pressable>
+              </Animated.View>
+            );
+          })}
+        </View>
+      ))}
     </View>
   );
 }
@@ -105,7 +112,7 @@ export function FacesRail({ people, loading }: { people: Specialist[]; loading?:
   const t = useTheme();
   const { push } = useTabNav();
   const book = useOpenBooking();
-  if (loading) return <View style={{ flexDirection: 'row', gap: space.md, paddingHorizontal: layout.margin }}>{[0, 1, 2, 3].map((i) => <Skeleton key={i} shape="circle" width={64} height={64} />)}</View>;
+  if (loading) return <View style={{ flexDirection: 'row', gap: space.md, paddingHorizontal: layout.margin }}>{[0, 1, 2, 3].map((i) => <Skeleton key={i} shape="circle" width={56} height={56} />)}</View>;
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: layout.margin, gap: space.sm }}>
       {people.map((s) => {
@@ -114,7 +121,7 @@ export function FacesRail({ people, loading }: { people: Specialist[]; loading?:
         return (
           <View key={s.id} style={{ width: 88, alignItems: 'center', gap: 6 }}>
             <Pressable feedback="scale" onPress={() => push(`/specialist/${s.id}`)} accessibilityRole="button" accessibilityLabel={name} style={{ alignItems: 'center', gap: 4 }}>
-              <Avatar name={s.name} hue={s.avatarHue} size={64} photo={specialistPhoto(s.id)} />
+              <Avatar name={s.name} hue={s.avatarHue} size={56} photo={specialistPhoto(s.id)} />
               <Text variant="footnote" weight="600" numberOfLines={1}>{short}</Text>
             </Pressable>
             <Pressable feedback="scale" onPress={() => book(s.id)} accessibilityRole="button" accessibilityLabel={tr('care.bookAgainA11y', 'Book {{name}} again', { name })}
@@ -181,5 +188,19 @@ export function SpecialistSlotsRow({ s, where, onOpen, index = 0 }: { s: Special
         )}
       </View>
     </Animated.View>
+  );
+}
+
+/** Where visits go, top right of the list: tap to change the address. */
+export function LocationPill({ label, onPress }: { label: string; onPress: () => void }) {
+  const t = useTheme();
+  const tr = useT();
+  return (
+    <Pressable feedback="scale" onPress={onPress} accessibilityRole="button" accessibilityLabel={`${tr('care.visitsTo', 'Visits to')} ${label}. ${tr('common.change', 'Change')}`}
+      style={{ flexDirection: 'row', alignItems: 'center', gap: 4, height: 34, paddingHorizontal: 10, borderRadius: 17, backgroundColor: t.colors.fill, marginEnd: 4 }}>
+      <Icon name="mappin" size={14} color="accentText" fill />
+      <Text variant="subheadline" weight="600" numberOfLines={1} style={{ maxWidth: 110 }}>{label}</Text>
+      <Icon name="chevron.down" size={11} weight="bold" color="textSecondary" />
+    </Pressable>
   );
 }
