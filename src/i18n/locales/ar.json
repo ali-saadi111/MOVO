@@ -913,5 +913,12 @@
   "settings.seeing": "الرؤية والقراءة",
   "settings.tellMe": "أخبرني عن",
   "settings.theme": "المظهر",
-  "settings.versionLine": "Movo {{v}}"
+  "settings.versionLine": "Movo {{v}}",
+  "rating.partlyShort": "جزئيًا",
+  "map.filtersN": "الفلاتر · {{n}}",
+  "map.nearbyCount": "{{n}} بالقرب منك",
+  "map.sortBy": "الترتيب: {{s}}",
+  "map.sortFits": "ما يناسبك أولًا",
+  "map.sortNear": "الأقرب أولًا",
+  "map.more": "المزيد"
 }

@@ -45,10 +45,11 @@ export function Chip({ label, selected, onPress, icon }: { label: string; select
   );
 }
 
-export function ChipRow<T extends string>({ options, value, onChange, multi, style, inset = layout.margin }: { options: { value: T; label: string }[]; value: T | T[]; onChange: (v: T) => void; multi?: boolean; style?: StyleProp<ViewStyle>; inset?: number }) {
+export function ChipRow<T extends string>({ options, value, onChange, multi, style, inset = layout.margin, leading }: { options: { value: T; label: string }[]; value: T | T[]; onChange: (v: T) => void; multi?: boolean; style?: StyleProp<ViewStyle>; inset?: number; leading?: ReactNode }) {
   const isSel = (v: T) => (Array.isArray(value) ? value.includes(v) : value === v);
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: inset, gap: space.xs }} style={style} accessibilityRole={multi ? undefined : 'radiogroup'}>
+      {leading}
       {options.map((o) => <Chip key={o.value} label={o.label} selected={isSel(o.value)} onPress={() => onChange(o.value)} />)}
     </ScrollView>
   );
