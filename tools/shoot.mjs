@@ -18,7 +18,7 @@ await page.evaluate(({ fresh, ar, dark, signed, cart }) => {
   put('movo.settings', { lang: ar ? 'ar' : 'en', onboarded: !fresh, appearance: dark ? 'dark' : 'light', highContrast: false, reduceMotion: false, textScale: 1, mobility: fresh ? [] : ['manual'], mobilityOther: '', forWhom: 'me', checkIn: 'encouragement', quietHours: true, pausedUntil: null, notify: { bookings: true, orders: true, events: true, places: true, news: false } });
   put('movo.dev', { latency: false, forceError: false, forceEmpty: false, offline: false, homeTab: false, paymentOutcome: 'success', slotTaken: false });
   if (signed) put('movo.session', { user: { id: 'usr_karim', firstName: 'Karim', fullName: 'Karim Haddad', email: 'karim.haddad@example.com' } });
-  if (cart) put('movo.cart', { lines: [{ productId: 'prd_air-20-self-propelled', qty: 1 }, { productId: 'prd_reacher-pro-82', qty: 2 }] });
+  if (cart) localStorage.setItem('movo.cart', JSON.stringify({ state: { lines: [{ productId: 'prd_p64-3', qty: 1 }, { productId: 'prd_p40-1', qty: 2 }] }, version: 2 }));
 }, { fresh: has('--fresh'), ar: has('--ar'), dark: has('--dark'), signed: !has('--signedout'), cart: has('--cart') });
 await page.goto('http://localhost:8081' + path, { waitUntil: 'networkidle' });
 await page.waitForTimeout(waitMs);

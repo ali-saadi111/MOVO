@@ -1,0 +1,210 @@
+# Products picked from the supplier catalogue (Full Catalogue/prices.csv) for the Movo shop.
+# Only mobility, disability, rehab, home-care and daily-living items. Left out on purpose:
+# baby and maternity, cosmetic shapers, dental, nail and hair care, scrubs and lab wear,
+# training manikins, clinic-only tools (otoscopes, saws, scoop stretchers), batteries,
+# kitchen and luggage scales, and the walking stick with a concealed knife.
+#
+# One product per line: ID | subcategory | English name | Arabic name | description | fits | specs
+# fits: comma list of manual, power, walker-crutches, other (blank for none)
+# specs: semicolon list of key=Label=value (from the catalogue details only)
+
+## mobility
+P63-3 | wheelchairs | Portable electric wheelchair | كرسي متحرك كهربائي محمول | A lighter electric wheelchair that folds down for the car boot and for storing at home. | power | type=Type=Electric;folds=Folds=Yes
+P63-5 | wheelchairs | Electric wheelchair | كرسي متحرك كهربائي | Battery-powered wheelchair with joystick control for getting around the home and the neighbourhood on your own. | power | type=Type=Electric
+P64-3 | wheelchairs | Wheelchair with cushion | كرسي متحرك مع وسادة | Manual folding wheelchair that comes with a seat cushion for everyday comfort. | manual | type=Type=Manual;cushion=Cushion=Included
+P64-2 | scooters | Four-wheel electric mobility scooter | سكوتر كهربائي بأربع عجلات | Four-wheel scooter for longer trips outside, with a seat, handlebar steering and a front basket. | power,other | wheels=Wheels=4;type=Type=Electric
+P63-4 | stair-climbers | Electric stair stretcher | كرسي صعود الدرج الكهربائي | Powered tracked chair that carries a seated person up and down stairs safely. Useful in buildings without a lift or during power cuts. | manual,power,other | type=Type=Electric
+P63-6 | stair-climbers | Manual stair stretcher | كرسي صعود الدرج اليدوي | Tracked evacuation chair that lets one or two helpers bring a seated person down the stairs. | manual,power,other | type=Type=Manual
+P64-4 | stair-climbers | 2-wheel aluminium stair chair | كرسي درج ألومنيوم بعجلتين | Light aluminium carry chair with two wheels for moving a seated person through narrow stairwells. | manual,other | frame=Frame=Aluminium;wheels=Wheels=2
+P64-5 | stair-climbers | 4-wheel aluminium stair chair | كرسي درج ألومنيوم بأربع عجلات | Aluminium carry chair with four wheels, so it rolls on flat floors and is carried on the stairs. | manual,other | frame=Frame=Aluminium;wheels=Wheels=4
+P64-6 | stair-climbers | Dual-use aluminium stair chair | كرسي درج ألومنيوم متعدد الاستخدام | Converts between a stretcher and a carry chair for moving someone on stairs or flat ground. | manual,other | frame=Frame=Aluminium;use=Use=Chair or stretcher
+P65-4 | walkers | Walker with wheels | مشاية بعجلات | Folding walker with front wheels, so it glides forward without lifting it at every step. | walker-crutches | wheels=Wheels=2
+P65-5 | walkers | Aluminium walker | مشاية ألومنيوم | Light, stable aluminium walking frame with adjustable height. | walker-crutches | frame=Frame=Aluminium
+P65-6 | walkers | Children's walker | مشاية للأطفال | Walking frame sized for children who are learning to walk or recovering. | walker-crutches | size=Size=Children
+P66-4 | crutches | Aluminium elbow crutches, pair | عكازات كوع ألومنيوم، زوج | Forearm crutches with elbow cuffs and adjustable height. Sold as a pair. | walker-crutches | pack=Pack=Pair;frame=Frame=Aluminium
+P65-3 | crutches | Large aluminium underarm crutches, pair | عكازات إبط ألومنيوم كبيرة، زوج | Adjustable underarm crutches with padded tops. Sold as a pair. | walker-crutches | pack=Pack=Pair;size=Size=Large
+P65-2 | crutches | Small aluminium underarm crutches | عكازات إبط ألومنيوم صغيرة | Adjustable underarm crutches in the small size, for teens and shorter adults. | walker-crutches | size=Size=Small
+P66-3 | canes | 4-leg aluminium walking stick | عصا مشي ألومنيوم بأربع أرجل | Quad cane with a wide four-point base that stands on its own and gives more support than a single tip. | walker-crutches | base=Base=4 legs
+P66-5 | canes | 3-leg aluminium walking stick | عصا مشي ألومنيوم بثلاث أرجل | Tripod cane with a three-point base for steadier steps. | walker-crutches | base=Base=3 legs
+P67-5 | canes | 4-leg walking stick with light | عصا مشي بأربع أرجل مع ضوء | Black quad cane with a built-in light for walking at night or during power cuts. | walker-crutches | base=Base=4 legs;light=Light=Built in
+P66-2 | canes | Aluminium walking stick | عصا مشي ألومنيوم | Light single-tip cane with adjustable height. | walker-crutches | frame=Frame=Aluminium
+P67-4 | canes | Foldable walking stick | عصا مشي قابلة للطي | Folds into sections to fit in a bag. Black or silver. | walker-crutches | colours=Colours=Black, silver;folds=Folds=Yes
+P66-6 | canes | Wooden walking stick | عصا مشي خشبية | Classic wooden cane, available in several designs. | walker-crutches | frame=Frame=Wood
+P67-6 | canes | White cane | عصا بيضاء | White cane for people who are blind or have low vision. | other | use=Use=Blind and low vision
+P67-1 | accessories | Rubber walker and crutch tips | أطراف مطاطية للمشايات والعكازات | Replacement rubber tips for walkers, crutches and canes for better grip. | walker-crutches |
+P12-3 | accessories | Padded sports gloves | قفازات رياضية مبطّنة | Padded gloves that protect the palms, handy for pushing a manual wheelchair. Sizes small to XXL. | manual | sizes=Sizes=S to XXL
+
+## home-care
+P63-1 | commodes | Foldable commode chair with wheels | كرسي حمّام قابل للطي بعجلات | Wheeled commode chair that folds away, and rolls over the toilet or into the shower. | manual,power,walker-crutches | wheels=Wheels=Yes;folds=Folds=Yes
+P63-2 | commodes | Foldable aluminium commode chair | كرسي حمّام ألومنيوم قابل للطي | Light aluminium commode chair that folds flat when not in use. | walker-crutches,other | frame=Frame=Aluminium;folds=Folds=Yes
+P64-1 | toilet-seats | Raised toilet seat | مقعد مرحاض مرتفع | Raises the toilet seat height so sitting down and standing up take less effort. | walker-crutches,other |
+P60-3 | bed-care | Overbed table | طاولة سرير | Wheeled table that slides over the bed or a chair for meals, reading and medication. | |
+P68-5 | bed-care | Inflatable hair washing basin | حوض غسل الشعر القابل للنفخ | Inflatable basin for washing hair in bed, with a drain hose. | |
+P61-3 | bed-care | IV drip stand | حامل مصل | Stand for IV and feeding bags, for care at home. | |
+P60-5 | bed-care | Urine collection bag | كيس تجميع البول | Urine drainage bag for adults. | | for=For=Adults
+
+## cushions
+P69-2 | cushions | Memory foam cushion | وسادة إسفنج ذاكرة | Memory foam seat cushion that spreads pressure for long hours of sitting. | manual,power |
+P69-6 | cushions | Coccyx seat cushion | وسادة مقعد للعصعص | U-shaped cut-out takes pressure off the tailbone. | manual,power,other |
+P69-3 | cushions | Seat cushion | وسادة مقعد | Firm, comfortable seat cushion for a chair or wheelchair. | manual,power |
+P68-4 | cushions | Ring cushion | وسادة حلقية | Donut cushion that relieves pressure when sitting after surgery or with sores. | manual,power,other | shape=Shape=Donut
+P69-1 | cushions | Air ring cushion | وسادة حلقية هوائية | Inflatable ring cushion you can adjust to the firmness you need. | manual,power,other | colour=Colour=Red
+P70-2 | cushions | Anti-haemorrhoid cushion | وسادة البواسير | Shaped seat cushion that eases pressure for people who sit for long periods. | manual,power,other |
+P70-1 | cushions | Back cushion | وسادة ظهر | Lumbar cushion that supports the lower back on a chair or wheelchair. | manual,power,other | colours=Colours=Multicolour
+P70-3 | cushions | 2-in-1 back and seat cushion | وسادة ظهر ومقعد ٢ في ١ | One cushion that supports both the back and the seat. | manual,power,other |
+P69-5 | cushions | Comfort support cushion | وسادة دعم مريحة | Soft support cushion for the back or the seat. | |
+P68-3 | mattresses | Air mattress | فرشة هوائية | Air mattress that helps prevent pressure sores for people who spend long hours in bed. | |
+P68-1 | mattresses | Water mattress | فرشة مائية | Water-filled mattress that spreads body weight to protect the skin during bed rest. | |
+P70-4 | pillows | Turning position pillow | وسادة تغيير الوضعية | Wedge pillow that holds someone on their side in bed and makes turning easier for caregivers. | |
+P69-4 | pillows | Leg support pillow | وسادة دعم الساقين | Raises and supports the legs for better circulation and comfort. | |
+
+## braces
+P03-1 | ankle-foot | Open ankle support | دعامة كاحل مفتوحة | Elastic ankle support with an open heel for light support. | |
+P03-2 | ankle-foot | Ankle support brace | دعامة كاحل | Ankle brace for sprains and weak ankles. | |
+P03-3 | ankle-foot | Aircast ankle brace | دعامة كاحل هوائية | Air-cushioned stirrup brace that stabilises the ankle after a sprain. | |
+P10-4 | ankle-foot | Sibote ankle support | دعامة كاحل سيبوت | Adjustable ankle support with straps. | |
+P10-6 | ankle-foot | Ankle compression sleeve | كم ضغط للكاحل | Compression sleeve for ankle swelling and light support. Sizes S and M. | | sizes=Sizes=S, M
+P10-1 | ankle-foot | Ankle foot orthosis (AFO) | جبيرة الكاحل والقدم | Holds the foot at a right angle, for foot drop and weak ankle muscles. | walker-crutches,other |
+P10-2 | ankle-foot | Ankle splint | جبيرة كاحل | Fixed ankle splint that keeps the joint still while it heals. | |
+P11-3 | ankle-foot | Adjustable ankle splint | جبيرة كاحل قابلة للتعديل | Ankle splint with an adjustable angle for recovery. | |
+P10-5 | ankle-foot | Foot plate fixation device | جهاز تثبيت القدم | Night splint that holds the foot in position. | |
+P11-1 | ankle-foot | Sibote foam walker boot | حذاء طبي سيبوت طويل | Long walker boot that protects the foot and ankle after a fracture or surgery. | walker-crutches | length=Length=Long
+P11-2 | ankle-foot | Foam walker boot with pump | حذاء طبي طويل مع منفاخ | Long walker boot with an air pump to adjust the fit. | walker-crutches | length=Length=Long;pump=Pump=Yes
+P11-5 | ankle-foot | Sibote post-operative shoe | حذاء ما بعد العملية سيبوت | Barouk-style shoe that takes weight off the forefoot after surgery. | walker-crutches |
+P11-4 | ankle-foot | Barouk post-operative shoe | حذاء باروك لما بعد العملية | Post-operative shoe that keeps weight off the front of the foot. | walker-crutches |
+P03-4 | ankle-foot | Cast shoe | حذاء الجبس | Post-operative shoe worn over a plaster cast. | walker-crutches |
+P04-1 | knee | Open knee support | دعامة ركبة مفتوحة | Elastic knee support with an open kneecap. | |
+P04-2 | knee | Knee support brace | دعامة ركبة | Knee brace for everyday support. | |
+P04-3 | knee | Dynamic patella brace | دعامة الرضفة الديناميكية | Keeps the kneecap on track while you move. | |
+P04-4 | knee | Patella knee support | دعامة رضفة الركبة | Knee support with a kneecap ring. | |
+P16-1 | knee | Sports knee support | دعامة ركبة رياضية | Light knee support for activity. | |
+P16-2 | knee | Knee compression sleeve | كم ضغط للركبة | Compression sleeve for knee pain and swelling. Sizes S, M and L. | | sizes=Sizes=S, M, L
+P16-3 | knee | Knee compression sleeve, one size | كم ضغط للركبة مقاس واحد | Basic knee compression sleeve in one size. | | sizes=Size=One size
+P10-3 | knee | Knee joint compression sleeve | كم ضغط لمفصل الركبة | Firmer compression sleeve with joint support. | |
+P16-4 | knee | Knee immobiliser brace | دعامة تثبيت الركبة | Keeps the knee straight after injury or surgery. | walker-crutches |
+P16-5 | knee | ROM knee brace | دعامة ركبة بمدى حركة قابل للضبط | Hinged brace that limits how far the knee bends during recovery. | walker-crutches |
+P07-1 | hand-wrist | Wrist brace | دعامة معصم | Wrist brace for strain and carpal tunnel. Left or right. | | side=Side=Left, right
+P07-2 | hand-wrist | Wrist splint | جبيرة معصم | Firm wrist splint. One size. | | size=Size=One size
+P07-3 | hand-wrist | Hand and finger splint | جبيرة اليد والأصابع | Holds the hand and fingers in position. One size. | | size=Size=One size
+P07-4 | hand-wrist | Thumb splint | جبيرة إبهام | Supports the thumb joint. | |
+P07-5 | hand-wrist | Aluminium finger splint | جبيرة إصبع ألومنيوم | Padded aluminium splint for a finger. | |
+P07-6 | hand-wrist | Palm support | دعامة راحة اليد | Light support for the palm and wrist. | |
+P12-4 | hand-wrist | Wrist and finger support brace | دعامة المعصم والأصابع | Supports the wrist and fingers together. | |
+P12-2 | hand-wrist | Palm fixation sleeve | كم تثبيت راحة اليد | Holds the palm and wrist still while they heal. | |
+P12-1 | hand-wrist | Finger support | دعامة الإصبع | Protects and supports an injured finger. | |
+P05-1 | arm-shoulder | Shoulder immobiliser | مثبت الكتف | Keeps the shoulder and arm still. Free size. | | size=Size=Free size
+P05-2 | arm-shoulder | Arm sling | حمالة ذراع | Simple sling that supports the forearm. | |
+P05-3 | arm-shoulder | Tennis elbow support | دعامة كوع التنس | Strap that eases tennis elbow pain. | |
+P05-4 | arm-shoulder | Elbow support brace | دعامة كوع | Elastic elbow support. | |
+P13-1 | arm-shoulder | ROM elbow brace | دعامة كوع بمدى حركة قابل للضبط | Hinged brace that controls elbow movement during recovery. | |
+P13-2 | arm-shoulder | Shoulder abduction pillow | وسادة إبعاد الكتف | Holds the arm away from the body after shoulder surgery. | |
+P13-3 | arm-shoulder | Sibote shoulder support brace | دعامة كتف سيبوت | Shoulder brace with straps. | |
+P13-4 | arm-shoulder | Shoulder compression sleeve | كم ضغط للكتف | Compression support for the shoulder. Free size. | | size=Size=Free size
+P13-5 | arm-shoulder | Kids' shoulder immobiliser | مثبت كتف للأطفال | Shoulder immobiliser in children's sizes, girl and boy designs. | | for=For=Children
+P06-3 | back-neck | Waist support belt | حزام دعم الخصر | Lower back belt for men and women. | | for=For=Men, women
+P06-2 | back-neck | Waist belt | حزام خصر | Elastic back belt in 25 cm and 30 cm widths. | | widths=Widths=25, 30 cm
+P06-5 | back-neck | Dorso-lumbar support | دعامة ظهرية قطنية | Tall back brace for the mid and lower back. | |
+P06-1 | back-neck | High back support with metal stays | دعامة ظهر عالية بأضلاع معدنية | Tall back support with metal stays for firmer hold. | |
+P06-4 | back-neck | Chest corset support | مشد دعم الصدر | Supports the rib cage and chest. | |
+P06-6 | back-neck | Clavicle brace | دعامة الترقوة | Figure-eight brace for a broken collarbone and posture. | |
+P18-4 | back-neck | Posture corrector | مقوّم وضعية الجسم | Pulls the shoulders back to help you sit and stand straighter. | |
+P15-1 | back-neck | Hyperextension orthosis | جبيرة فرط البسط | Rigid brace that keeps the spine upright after a fracture. | |
+P15-4 | back-neck | Cervical thoracic orthosis | جبيرة الرقبة والصدر | Supports the neck and upper back together. | |
+P15-5 | back-neck | Spinal fixation strap | حزام تثبيت العمود الفقري | Keeps the spine still for recovery. | |
+P08-1 | back-neck | Philadelphia cervical collar | طوق رقبة فيلادلفيا | Two-piece rigid collar that limits neck movement. | |
+P08-2 | back-neck | Cervical spine support | دعامة الفقرات العنقية | Neck support for strain and recovery. | |
+P08-3 | back-neck | Hard cervical collar | طوق رقبة صلب | Firm neck collar. | |
+P08-4 | back-neck | Soft cervical collar | طوق رقبة طري | Soft foam neck collar for light support. | |
+P14-1 | hip | Hip joint fixation brace | دعامة تثبيت مفصل الورك | Holds the hip joint in position. | |
+P14-2 | hip | Hip stabiliser brace | دعامة تثبيت الورك | Hip abduction brace used after hip replacement. | walker-crutches |
+P14-3 | hip | Pelvic splint | جبيرة الحوض | Supports and stabilises the pelvis. | |
+
+## therapy
+P60-1 | exercise | Electric pedal exerciser | جهاز تمرين بالدواسات كهربائي | Motorised pedals that move the legs or arms for you, while you sit in a chair or wheelchair. | manual,power,other |
+P61-5 | exercise | Pedal exerciser | جهاز تمرين بالدواسات | Small pedal bike for leg and arm exercise from a chair. | manual,walker-crutches,other |
+P12-5 | exercise | Finger resistance band | شريط مقاومة للأصابع | Resistance bands for finger and hand strength. | |
+P09-2 | exercise | Silicone hand exercise ball | كرة تمرين اليد سيليكون | Squeeze ball for grip strength. Assorted colours. | | colours=Colours=Multicolour
+P09-1 | exercise | Foam stress ball | كرة إسفنجية للضغط | Soft squeeze ball for hand exercise. Assorted colours. | | colours=Colours=Multicolour
+P25-4 | tape | Kinesiology tape | شريط لاصق علاجي | Elastic therapy tape that supports muscles and joints. Assorted colours. | | size=Size=5 cm
+P39-1 | hot-cold | Hot and cold gel pack | كيس جل ساخن وبارد | Reusable gel pack. Heat it or chill it. | |
+P39-2 | hot-cold | Hot water bottle with cover | قربة ماء ساخن مع غطاء | Classic hot water bottle with a soft cover. | |
+P39-4 | hot-cold | Reusable ice bag | كيس ثلج قابل لإعادة الاستخدام | Fill with ice for swelling and pain. | |
+P39-5 | hot-cold | Instant cold pack | كمادة باردة فورية | Squeeze to activate. Single use, good for the first aid kit. | | use=Use=Single use
+P59-1 | massage | Folding heat and cold massager | جهاز تدليك بالحرارة والبرودة قابل للطي | Massager with heat and cold settings. | |
+P58-5 | massage | Neck and shoulder massager | جهاز تدليك الرقبة والكتفين | Massager for the shoulders, back and neck. | |
+P58-1 | massage | Massage gun | مسدس تدليك | Percussion massager for sore muscles. | |
+P58-3 | massage | Mini massage gun | مسدس تدليك صغير | Small, light massage gun. | |
+P15-2 | traction | Neck traction device | جهاز شد الرقبة | Inflatable neck traction for neck pain. One size. | | size=Size=One size
+P15-3 | traction | Air traction belt | حزام شد هوائي | Inflatable belt that stretches the lower back. | |
+P60-6 | traction | Traction frame | إطار شد طبي | Frame for traction at home. One size. | | size=Size=One size
+
+## health
+P45-1 | blood-pressure | Yuwell automatic blood pressure monitor | جهاز ضغط أوتوماتيكي يوويل | Upper-arm monitor that reads results aloud, with USB power. | other | voice=Voice=Yes;power=Power=USB
+P47-6 | blood-pressure | Alphamed automatic blood pressure monitor | جهاز ضغط أوتوماتيكي ألفاميد | Fully automatic upper-arm monitor. | |
+P47-4 | blood-pressure | BP-103 blood pressure monitor | جهاز ضغط BP-103 | Digital blood pressure monitor. | |
+P48-2 | blood-pressure | Electronic arm blood pressure monitor | جهاز ضغط إلكتروني للذراع | Electronic upper-arm monitor. | |
+P46-1 | oximeters | OxyWatch pulse oximeter | مقياس الأكسجين أوكسي ووتش | Fingertip oximeter for oxygen level and pulse. | |
+P46-3 | oximeters | Pulse oximeter | مقياس الأكسجين | Fingertip oximeter for oxygen level and pulse. | |
+P49-6 | thermometers | Infrared forehead thermometer | ميزان حرارة بالأشعة للجبين | No-touch forehead thermometer. | |
+P49-5 | thermometers | Kinlee infrared thermometer | ميزان حرارة بالأشعة كينلي | No-touch infrared thermometer. | |
+P50-4 | thermometers | Ear thermometer | ميزان حرارة للأذن | Quick reading from the ear. | |
+P42-3 | scales | Digital body scale | ميزان جسم رقمي | Bathroom scale up to 180 kg. Assorted colours. | | capacity=Capacity=180 kg
+P42-1 | scales | Bluetooth body scale | ميزان جسم بلوتوث | Bathroom scale that sends readings to your phone. | |
+
+## breathing
+P71-4 | nebulizers | Mesh nebuliser | جهاز بخار شبكي | Small, quiet handheld nebuliser. | |
+P71-1 | nebulizers | Nebuliser machine with mask | جهاز بخار مع قناع | Nebuliser machine with a mask. | |
+P71-5 | nebulizers | Inhaler spacer (aero chamber) | حجرة استنشاق | Spacer that helps the inhaler dose reach the lungs. | |
+P72-2 | cpap | Auto CPAP machine | جهاز CPAP أوتوماتيكي | Sleep apnoea machine that adjusts pressure automatically. | |
+P71-3 | cpap | CPAP nasal mask | قناع CPAP للأنف | Nasal mask for CPAP machines. | |
+P71-6 | cpap | CPAP full face mask | قناع CPAP للوجه كامل | Full face mask for CPAP machines. | |
+P72-3 | oxygen | Portable oxygen unit | جهاز أكسجين محمول | Portable oxygen supply for use at home and on the go. | |
+P73-4 | oxygen | 1 L oxygen cylinder with carry bag | أسطوانة أكسجين ١ لتر مع حقيبة | Small oxygen cylinder with a metal carry bag. | | size=Size=1 L
+P73-2 | oxygen | 4 L oxygen cylinder | أسطوانة أكسجين ٤ لتر | Medium oxygen cylinder. | | size=Size=4 L
+P73-5 | oxygen | 10 L oxygen cylinder | أسطوانة أكسجين ١٠ لتر | Large oxygen cylinder for home. | | size=Size=10 L
+P72-1 | oxygen | Oxygen cylinder trolley | عربة أسطوانة الأكسجين | Wheeled trolley for moving an oxygen cylinder. | |
+P72-4 | oxygen | Oxygen humidifier bottle | زجاجة ترطيب الأكسجين | Humidifier bottle for oxygen supply. | |
+P72-5 | spirometers | 3-ball incentive spirometer | جهاز تمرين التنفس بثلاث كرات | Breathing exercise device for lung recovery. | |
+P72-6 | spirometers | Single-ball spirometer | جهاز تمرين التنفس بكرة واحدة | Simple breathing exerciser. | |
+P73-1 | suction | Manual suction unit | جهاز شفط يدوي | Hand-operated suction for clearing the airway. | |
+P74-2 | suction | Vacuum suction unit with bottle | جهاز شفط مع زجاجة | Suction unit with a collection bottle. | |
+
+## daily
+P40-1 | medication | Pill organiser box | علبة تنظيم الأدوية | Weekly box with compartments to keep track of doses. | |
+P40-3 | medication | 3-in-1 pill cutter and crusher | قاطع وساحق الحبوب ٣ في ١ | Cuts, crushes and stores pills. Helpful for people who find swallowing hard. | |
+P40-2 | medication | Pill cutter | قاطع الحبوب | Splits tablets cleanly. | |
+P40-4 | medication | Insulin cooling bag | حقيبة تبريد الإنسولين | Keeps insulin cool on the go and during power cuts. | |
+P32-2 | hearing | Hearing amplifier, type 1 | مضخم سمع، النوع ١ | Behind-the-ear sound amplifier. | other |
+P33-4 | hearing | Hearing amplifier, type 3 | مضخم سمع، النوع ٣ | Personal sound amplifier. | other |
+P33-3 | hearing | Hearing amplifier, type 2 | مضخم سمع، النوع ٢ | Rechargeable sound amplifier. | other |
+P20-1 | compression | Full-length compression stockings | جوارب ضغط طبية كاملة الطول | Medical compression stockings for circulation, swelling and long hours of sitting. | manual,power |
+P20-2 | compression | Medical compression stockings | جوارب ضغط طبية | Knee-high compression stockings for circulation. | manual,power |
+P20-3 | compression | Compression stockings, light | جوارب ضغط خفيفة | Light compression stockings. | |
+P35-5 | foot-care | Memory foam insoles | نعال داخلية إسفنج ذاكرة | Cushioning insoles for all-day comfort. | |
+P34-1 | foot-care | Gel insoles, men | نعال جل داخلية للرجال | Gel insoles that soften each step. | | for=For=Men
+P34-2 | foot-care | Gel insoles, women | نعال جل داخلية للنساء | Gel insoles that soften each step. | | for=For=Women
+P36-3 | foot-care | Heel cushion | وسادة الكعب | Gel cushion for heel pain. | |
+P37-2 | foot-care | Foam heel lift | رافعة كعب إسفنجية | Raises the heel to even out a leg length difference. | |
+P36-2 | foot-care | Silicone socks | جوارب سيليكون | Moisturising socks for dry, cracked heels. | |
+P36-1 | foot-care | Silicone foot pad | وسادة قدم سيليكون | Cushions the ball of the foot. | |
+P35-6 | foot-care | Silicone ankle sleeve | كم كاحل سيليكون | Cushions the ankle bone against shoe rubbing and braces. | |
+P34-4 | foot-care | Bunion corrector | مقوّم إبهام القدم | Eases bunion pain. | |
+
+## first-aid
+P53-1 | kits | First aid box set | طقم صندوق إسعافات أولية | Stocked first aid box for up to 25 people. | | for=For=25 people
+P52-2 | kits | First aid backpack | حقيبة ظهر إسعافات أولية | Backpack, empty or fully equipped. | | options=Options=Empty or equipped
+P52-4 | kits | Wall-mounted first aid box | صندوق إسعافات أولية للحائط | Orange plastic box that mounts on the wall. Sold empty. | | contents=Contents=Empty
+P52-6 | kits | Small first aid box | صندوق إسعافات أولية صغير | Small plastic box. Sold empty. | | contents=Contents=Empty
+P24-5 | bandages | Cohesive bandage | ضماد ذاتي اللصق | Sticks to itself, not to skin. 5, 7.5 or 10 cm. | | widths=Widths=5, 7.5, 10 cm
+P25-2 | bandages | Elastic bandage | ضماد مطاطي | Elastic bandage by the dozen. 5 to 15 cm. | | pack=Pack=Dozen;widths=Widths=5–15 cm
+P25-1 | bandages | Crepe bandage | ضماد كريب | Crepe bandage by the dozen. 5 to 15 cm. | | pack=Pack=Dozen;widths=Widths=5–15 cm
+P24-2 | bandages | Triangular bandage | ضماد مثلث | For slings and holding dressings. | |
+P24-1 | dressings | Sterile gauze swabs | شاش معقم | Box of 100 sterile swabs, 5 × 5 to 10 × 10 cm. | | pack=Pack=100;sizes=Sizes=5–10 cm
+P24-4 | dressings | Adhesive wound dressing | ضمادة جروح لاصقة | Box of 25, 10 × 10 or 10 × 25 cm. | | pack=Pack=25
+P28-1 | dressings | Adhesive dressing | ضمادة لاصقة | Pack of 5, 5 × 7.5 cm. | | pack=Pack=5
+P26-2 | dressings | Adhesive bandages, mixed sizes | لاصقات جروح مقاسات مختلفة | Box of 30 plasters in mixed sizes. | | pack=Pack=30
+P27-4 | dressings | Adhesive bandages, 100 pack | لاصقات جروح ١٠٠ قطعة | Box of 100 plasters. | | pack=Pack=100
+P56-1 | emergency | Emergency thermal blanket | بطانية حرارية للطوارئ | Foil blanket that keeps body heat in. | |
+P56-2 | emergency | Anti-choking device | جهاز منع الاختناق | Suction device for clearing a blocked airway. | |
+P56-4 | emergency | CPR face mask | قناع الإنعاش القلبي | Barrier mask for giving CPR. | |
+P57-2 | emergency | EMT scissors | مقص طوارئ | Scissors that cut clothing and bandages. | |

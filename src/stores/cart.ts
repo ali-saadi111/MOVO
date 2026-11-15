@@ -33,7 +33,7 @@ export const useCart = create<CartState>()(
       remove: (productId) => set((s) => ({ lines: s.lines.filter((l) => l.productId !== productId) })),
       clear: () => set({ lines: [] }),
     }),
-    { name: 'movo.cart', storage: persistStorage, partialize: (s) => ({ lines: s.lines }) },
+    { name: 'movo.cart', version: 2, storage: persistStorage, partialize: (s) => ({ lines: s.lines }) },
   ),
 );
 

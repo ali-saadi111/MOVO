@@ -37,7 +37,7 @@ export default function DevMenu() {
         <ListRow title={`Language: ${s.lang === 'ar' ? 'Arabic' : 'English'}`} onPress={() => { const l = s.lang === 'ar' ? 'en' : 'ar'; s.set({ lang: l }); applyDirection(l === 'ar'); }} />
         <ListRow title={user ? 'Sign out' : 'Sign in as Karim'} onPress={() => (user ? useSession.getState().signOut() : useSession.getState().signIn(KARIM))} />
         <ListRow title={acting ? 'Stop acting for Sara' : 'Act for Sara'} onPress={() => useCaregiver.getState().switchTo(acting ? null : 'cp_sara')} />
-        <ListRow title="Fill the cart" onPress={() => { useCart.getState().add('prd_reacher-pro-82'); useCart.getState().add('prd_shower-chair-with-back-50'); }} />
+        <ListRow title="Fill the cart" onPress={() => { useCart.getState().add('prd_p40-1'); useCart.getState().add('prd_p63-1'); }} />
         <ListRow title="Replay onboarding" onPress={() => { s.set({ onboarded: false }); go.dismissTo('/language'); }} />
         <ListRow title="Reset my activity" destructive trailing={{ type: 'none' }} onPress={() => { useActivity.persist.clearStorage(); useActivity.persist.rehydrate(); }} />
         <ListRow title="See session complete (Maya)" onPress={() => go.push('/covers/session-complete?specialist=sp_maya')} />

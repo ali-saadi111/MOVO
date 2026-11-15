@@ -28,17 +28,29 @@ export const mobilityLabel = (tr: Tr, m: MobilityKey | 'none') =>
 export const mobilityIcon: Record<MobilityKey | 'none', IconName> = { manual: 'figure.roll', power: 'figure.roll.runningpace', 'walker-crutches': 'figure.walk.motion', other: 'face.smiling', none: 'eye.slash' };
 
 export const productCategoryLabel = (tr: Tr, c: ProductCategory) =>
-  ({ mobility: tr('shop.cat.mobility', 'Mobility'), 'bathroom-safety': tr('shop.cat.bathroom', 'Bathroom safety'), 'daily-living': tr('shop.cat.daily', 'Daily living'), 'medical-supplies': tr('shop.cat.medical', 'Medical supplies'), 'home-adaptations': tr('shop.cat.home', 'Home adaptations'), 'parts-accessories': tr('shop.cat.parts', 'Parts and accessories') })[c];
-export const productCategoryIcon: Record<ProductCategory, IconName> = { mobility: 'figure.roll', 'bathroom-safety': 'bathtub', 'daily-living': 'hand.raised', 'medical-supplies': 'cross.case', 'home-adaptations': 'house', 'parts-accessories': 'wrench.and.screwdriver' };
+  ({
+    mobility: tr('shop.cat.mobility', 'Mobility'), 'home-care': tr('shop.cat.homecare', 'Home care'), cushions: tr('shop.cat.cushions', 'Cushions and beds'),
+    braces: tr('shop.cat.braces', 'Braces and supports'), therapy: tr('shop.cat.therapy', 'Rehab and therapy'), health: tr('shop.cat.health', 'Health checks'),
+    breathing: tr('shop.cat.breathing', 'Breathing'), daily: tr('shop.cat.daily', 'Daily care'), 'first-aid': tr('shop.cat.firstaid', 'First aid'),
+  })[c];
+export const productCategoryIcon: Record<ProductCategory, IconName> = {
+  mobility: 'figure.roll', 'home-care': 'house', cushions: 'house.lodge', braces: 'figure.walk', therapy: 'figure.walk.motion', health: 'heart.fill',
+  breathing: 'drop', daily: 'hand.raised', 'first-aid': 'bandage',
+};
 
 export const subcategoryLabel = (tr: Tr, s: string) => {
   const m: Record<string, string> = {
-    wheelchairs: tr('sub.wheelchairs', 'Wheelchairs'), walkers: tr('sub.walkers', 'Walkers'), rollators: tr('sub.rollators', 'Rollators'), crutches: tr('sub.crutches', 'Crutches'), canes: tr('sub.canes', 'Canes'),
-    'shower-chairs': tr('sub.shower', 'Shower chairs'), 'transfer-benches': tr('sub.transfer', 'Transfer benches'), 'toilet-seats': tr('sub.toilet', 'Toilet seats'), 'grab-bars': tr('sub.grab', 'Grab bars'), commodes: tr('sub.commodes', 'Commodes'),
-    reachers: tr('sub.reachers', 'Reachers'), 'dressing-aids': tr('sub.dressing', 'Dressing aids'), utensils: tr('sub.utensils', 'Utensils'), 'pill-organisers': tr('sub.pills', 'Pill organisers'), 'bed-rails': tr('sub.bedrails', 'Bed rails'),
-    cushions: tr('sub.cushions', 'Cushions'), gloves: tr('sub.gloves', 'Gloves'), incontinence: tr('sub.incontinence', 'Incontinence'), compression: tr('sub.compression', 'Compression'), 'first-aid': tr('sub.firstaid', 'First aid'),
-    'portable-ramps': tr('sub.ramps', 'Portable ramps'), 'threshold-ramps': tr('sub.threshold', 'Threshold ramps'), 'door-hinges': tr('sub.hinges', 'Door hinges'), 'stair-rails': tr('sub.stair', 'Stair rails'),
-    tyres: tr('sub.tyres', 'Tyres'), tubes: tr('sub.tubes', 'Inner tubes'), armrests: tr('sub.armrests', 'Armrests'), bags: tr('sub.bags', 'Bags'), batteries: tr('sub.batteries', 'Batteries'),
+    wheelchairs: tr('sub.wheelchairs', 'Wheelchairs'), scooters: tr('sub.scooters', 'Scooters'), 'stair-climbers': tr('sub.stairChairs', 'Stair chairs'), walkers: tr('sub.walkers', 'Walkers'),
+    crutches: tr('sub.crutches', 'Crutches'), canes: tr('sub.canes', 'Canes'), accessories: tr('sub.accessories', 'Accessories'),
+    commodes: tr('sub.commodes', 'Commodes'), 'toilet-seats': tr('sub.toilet', 'Toilet seats'), 'bed-care': tr('sub.bedCare', 'Bedside care'),
+    cushions: tr('sub.cushions', 'Cushions'), mattresses: tr('sub.mattresses', 'Mattresses'), pillows: tr('sub.pillows', 'Positioning pillows'),
+    'ankle-foot': tr('sub.ankleFoot', 'Ankle and foot'), knee: tr('sub.knee', 'Knee'), 'hand-wrist': tr('sub.handWrist', 'Hand and wrist'), 'arm-shoulder': tr('sub.armShoulder', 'Arm and shoulder'),
+    'back-neck': tr('sub.backNeck', 'Back and neck'), hip: tr('sub.hip', 'Hip'),
+    exercise: tr('sub.exercise', 'Exercise'), tape: tr('sub.tape', 'Therapy tape'), 'hot-cold': tr('sub.hotCold', 'Hot and cold'), massage: tr('sub.massage', 'Massage'), traction: tr('sub.traction', 'Traction'),
+    'blood-pressure': tr('sub.bloodPressure', 'Blood pressure'), oximeters: tr('sub.oximeters', 'Oximeters'), thermometers: tr('sub.thermometers', 'Thermometers'), scales: tr('sub.scales', 'Scales'),
+    nebulizers: tr('sub.nebulizers', 'Nebulisers'), cpap: tr('sub.cpap', 'CPAP'), oxygen: tr('sub.oxygen', 'Oxygen'), spirometers: tr('sub.spirometers', 'Breathing trainers'), suction: tr('sub.suction', 'Suction'),
+    medication: tr('sub.medication', 'Medication'), hearing: tr('sub.hearing', 'Hearing'), compression: tr('sub.compression', 'Compression'), 'foot-care': tr('sub.footCare', 'Foot care'),
+    kits: tr('sub.kits', 'First aid kits'), bandages: tr('sub.bandages', 'Bandages'), dressings: tr('sub.dressings', 'Dressings'), emergency: tr('sub.emergency', 'Emergency'),
   };
   return m[s] ?? s;
 };

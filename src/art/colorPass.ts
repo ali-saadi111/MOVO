@@ -43,5 +43,5 @@ const EVENT_ART: Record<string, { object: ObjectName; tint: TintName }> = {
 export const eventArt = (id: string) => EVENT_ART[id];
 
 export const productCategoryTint: Record<ProductCategory, TintName> = {
-  mobility: 'sky', 'bathroom-safety': 'mint', 'daily-living': 'butter', 'medical-supplies': 'rose', 'home-adaptations': 'lilac', 'parts-accessories': 'peach',
+  mobility: 'sky', 'home-care': 'mint', cushions: 'lilac', braces: 'peach', therapy: 'butter', health: 'rose', breathing: 'sky', daily: 'mint', 'first-aid': 'rose',
 };

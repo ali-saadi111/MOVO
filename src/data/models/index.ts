@@ -60,7 +60,7 @@ export const Place = z.object({
 });
 export type Place = z.infer<typeof Place>;
 
-export const ProductCategory = z.enum(['mobility', 'bathroom-safety', 'daily-living', 'medical-supplies', 'home-adaptations', 'parts-accessories']);
+export const ProductCategory = z.enum(['mobility', 'home-care', 'cushions', 'braces', 'therapy', 'health', 'breathing', 'daily', 'first-aid']);
 export type ProductCategory = z.infer<typeof ProductCategory>;
 
 export const Product = z.object({
@@ -84,7 +84,7 @@ export const Product = z.object({
   returnable: z.boolean(),
   isBestSeller: z.boolean().optional(),
   createdAt: z.string(),
-  source: z.union([z.object({ url: z.string(), license: z.string(), retrievedAt: z.string() }), z.object({ type: z.literal('curated') })]),
+  source: z.union([z.object({ url: z.string(), license: z.string(), retrievedAt: z.string() }), z.object({ type: z.literal('curated') }), z.object({ type: z.literal('catalogue'), id: z.string(), page: z.number() })]),
 });
 export type Product = z.infer<typeof Product>;
 

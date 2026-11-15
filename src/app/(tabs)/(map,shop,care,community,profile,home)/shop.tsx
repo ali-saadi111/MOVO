@@ -24,8 +24,8 @@ import {
 
 /** Category pills: each filters the grid on this screen. */
 const CATS: [ProductCategory, string][] = [
-  ['mobility', 'p:wheelchair-light-0'], ['bathroom-safety', 'p:shower-chair-0'], ['daily-living', 'p:reacher-0'],
-  ['medical-supplies', 'p:first-aid-0'], ['home-adaptations', 'p:grab-bar-0'], ['parts-accessories', 'p:armrest-0'],
+  ['mobility', 'cat:p64-3'], ['braces', 'cat:p04-2'], ['cushions', 'cat:p69-2'], ['home-care', 'cat:p63-1'], ['therapy', 'cat:p60-1'],
+  ['health', 'cat:p45-1'], ['breathing', 'cat:p71-4'], ['daily', 'cat:p40-1'], ['first-aid', 'cat:p53-1'],
 ];
 
 const PAGE = 12;
@@ -52,6 +52,8 @@ function ShopHome() {
 
   const all = useMemo(() => q.data ?? [], [q.data]);
   const fresh = useMemo(() => [...all].sort((a, b) => b.createdAt.localeCompare(a.createdAt)), [all]);
+  // Deals only show once some product has a compare-at price.
+  const hasDeals = all.some((p) => p.compareAtCents);
   const forYou = mob ? all.filter((p) => p.fitsMobility.includes(mob) && p.category === 'mobility' && p.stock.status !== 'out').slice(0, 8) : [];
   const list = useMemo(() => {
     const base = cat ? all.filter((p) => p.category === cat) : all;
@@ -106,7 +108,7 @@ function ShopHome() {
       {q.isError && !q.data ? <ErrorState offline={offline} onRetry={() => q.refetch()} /> : null}
 
       <PromoCarousel compact slides={[
-        { key: 'ask', tone: 'navy' as const, top: tr('shop.promo.askTop', 'NOT SURE'), bottom: tr('shop.promo.askBottom', 'WHAT FITS?'), caption: tr('shop.promo.askCaption', 'ASK US ON WHATSAPP'), image: photoByKey('p:rollator-0'), label: tr('shop.ask', 'Not sure what fits? Ask us on WhatsApp'), onPress: ask },
+        { key: 'ask', tone: 'navy' as const, top: tr('shop.promo.askTop', 'NOT SURE'), bottom: tr('shop.promo.askBottom', 'WHAT FITS?'), caption: tr('shop.promo.askCaption', 'ASK US ON WHATSAPP'), image: photoByKey('cat:p65-4'), label: tr('shop.ask', 'Not sure what fits? Ask us on WhatsApp'), onPress: ask },
         ...(fresh[0] ? [{ key: 'new', tone: 'peach' as const, top: tr('shop.promo.newTop', 'JUST'), bottom: tr('shop.promo.newBottom', 'ARRIVED'), caption: tr('shop.promo.newCaption', 'NEW IN THE MOVO SHOP'), image: fresh[0].images[0] ? photoFor(fresh[0].images[0]) : undefined, label: tr('shop.new', 'New arrivals'), onPress: () => pickSort(1) }] : []),
       ]} />
       {mob && forYou.length ? (
@@ -121,7 +123,7 @@ function ShopHome() {
 
       {/* No "Shop all" title: the Popular / New / Deals switch leads straight into the grid. */}
       {cat ? <SectionHeader title={productCategoryLabel(tr, cat)} actionLabel={tr('shop.filtersSort', 'Filter and sort')} onAction={() => push(`/products/${cat}`)} /> : null}
-      <Segmented values={[tr('shop.popular', 'Popular'), tr('shop.newShort', 'New'), tr('shop.deals', 'Deals')]} index={sort} onChange={pickSort} style={{ marginHorizontal: layout.margin, marginBottom: space.md }} />
+      <Segmented values={[tr('shop.popular', 'Popular'), tr('shop.newShort', 'New'), ...(hasDeals ? [tr('shop.deals', 'Deals')] : [])]} index={sort} onChange={pickSort} style={{ marginHorizontal: layout.margin, marginBottom: space.md }} />
 
       {q.isLoading ? (
         <View style={{ flexDirection: 'row', gap: space.sm, paddingHorizontal: layout.margin }}>
