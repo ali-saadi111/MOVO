@@ -125,18 +125,19 @@ export const light: ColorTokens = {
   canvas: '#FFFFFF', // white, like the reference; tiles carry hairline borders
 };
 
+/** Dark mode sits on the launch screen's navy (#043345) instead of black; surfaces step up from it. */
 export const dark: ColorTokens = {
-  bgPrimary: '#000000',
-  bgGrouped: '#000000',
-  bgElevated: '#1C1C1E',
-  bgElevated2: '#2C2C2E',
-  bgBrand: '#0A2A36',
+  bgPrimary: '#043345',
+  bgGrouped: '#043345',
+  bgElevated: '#0B4257',
+  bgElevated2: '#15526A',
+  bgBrand: '#022733',
   bgSelected: 'rgba(34,211,156,0.16)',
   fill: 'rgba(255,255,255,0.10)',
   fillStrong: 'rgba(255,255,255,0.16)',
   textPrimary: '#FFFFFF',
-  textSecondary: '#8A9BA2',
-  textTertiary: '#6B7B81',
+  textSecondary: '#A6B8BF',
+  textTertiary: '#8399A2',
   textOnBrand: '#FFFFFF',
   tint: brand.mint,
   accent: brand.mint,
@@ -172,22 +173,29 @@ export const dark: ColorTokens = {
   blockMistInk: '#E3F8F0',
   blockSand: '#3A2816',
   blockSandInk: '#F9D9B0',
-  blockNavy: '#0B3A4C',
+  blockNavy: '#0E4A61',
   blockNavyInk: '#FFFFFF',
-  tabBar: '#1C2B31',
+  tabBar: '#0B4257',
   tabBarIcon: 'rgba(255,255,255,0.7)',
   tabBarActive: brand.mint,
   tabBarActiveIcon: brand.navy,
-  canvas: '#000000',
+  canvas: '#043345',
 };
 
-/** Pins use the light-mode rating colours in both modes (prompt §4 Map notes). */
+/**
+ * The navy card shared by Care's cards and Shop's product cards, after Shop's "Not sure what
+ * fits?" banner. Same in light and dark: navy ground, thin mint outline, white type, mint accents.
+ */
+export const navyCard = { bg: '#0A3F52', line: 'rgba(60,242,184,0.16)', text: '#FFFFFF', soft: 'rgba(255,255,255,0.82)', dim: 'rgba(255,255,255,0.62)', mint: '#3CF2B8', warn: '#FFC46B', ink: '#013447' } as const;
+
+/**
+ * Pins are the mood artwork in assets/moods, the same in both modes: happy green (accessible),
+ * neutral yellow (partly) and sad red (not). These are that artwork's base colours.
+ */
 export const pinColors = {
-  accessible: brand.mint,
-  partly: brand.amber,
-  not: brand.red,
-  accessibleGlyph: brand.navy,
-  onColorGlyph: '#FFFFFF',
+  accessible: '#15C99C',
+  partly: '#F7C531',
+  not: '#EF5350',
   ring: '#FFFFFF',
   cluster: brand.navy,
 } as const;

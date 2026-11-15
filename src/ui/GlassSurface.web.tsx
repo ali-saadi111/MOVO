@@ -35,7 +35,7 @@ export function GlassSurface({ children, style, material = 'chrome', radius = 0 
       </View>
     );
   }
-  const bg = dark ? (material === 'thick' ? 'rgba(28,28,30,0.92)' : 'rgba(30,30,32,0.72)') : material === 'thick' ? 'rgba(250,251,251,0.93)' : 'rgba(255,255,255,0.8)';
+  const bg = dark ? (material === 'thick' ? 'rgba(6,58,78,0.92)' : 'rgba(6,58,78,0.72)') : material === 'thick' ? 'rgba(250,251,251,0.93)' : 'rgba(255,255,255,0.8)';
   return (
     <View style={[shape, { overflow: 'hidden', backgroundColor: bg, borderWidth: StyleSheet.hairlineWidth, borderColor: t.colors.separator, backdropFilter: 'saturate(180%) blur(24px)' } as ViewStyle, style]}>
       {children}

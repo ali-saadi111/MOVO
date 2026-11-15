@@ -2,7 +2,7 @@ import { ScrollView, View, type StyleProp, type ViewStyle } from 'react-native';
 import { Image } from 'expo-image';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
-import { serviceArt, serviceTint, TINT_ROTATION } from '@/art/colorPass';
+import { serviceArt } from '@/art/colorPass';
 import { specialistPhoto } from '@/art/people';
 import { sync, type ServiceKind, type Specialist } from '@/data';
 import { requireAccount } from '@/features/shell/auth';
@@ -12,6 +12,7 @@ import { fmtDay, fmtTime, fmtWeekday, useNow } from '@/lib/dates';
 import { formatMoney } from '@/lib/money';
 import { ltr } from '@/lib/rtl';
 import { continuous, layout, radii, space, useTheme } from '@/theme';
+import { navyCard } from '@/theme/colors';
 import { Avatar, Icon, Pressable, Skeleton, Tag, Text, useTabNav } from '@/ui';
 
 import { PLAN, sameDay, serviceFor, useNextFree, type Where } from './booking';
@@ -37,6 +38,12 @@ export function PlanBars({ done, total, onDark, on, off, height = 5 }: { done: n
     </View>
   );
 }
+
+/**
+ * Care's cards share the navy campaign look of Shop's "Not sure what fits?" banner, the same in
+ * light and dark: navy ground, white type, mint for accents. No per-service tints.
+ */
+const NAVY = { ...navyCard, card: navyCard.bg };
 
 /** Lilac (Care's colour) card for the next session: countdown pill, date, who and where, plan progress. */
 export function NextSessionCard({ startsAt, specialistId, where, onPress }: { startsAt: string; specialistId: string; where: Where; onPress: () => void }) {
@@ -88,7 +95,7 @@ export function NextSessionCard({ startsAt, specialistId, where, onPress }: { st
 
 /** Labels that fit a third of a phone width without breaking a word. */
 const shortServiceLabel = (tr: ReturnType<typeof useT>, k: ServiceKind) =>
-  ({ physio: tr('care.short.physio', 'Physio'), nursing: tr('care.short.nursing', 'Home nursing'), ot: tr('care.short.ot', 'Occupational therapy'), prosthetics: tr('care.short.prosthetics', 'Prosthetics'), repair: tr('care.short.repair', 'Wheelchair repair'), transport: tr('care.short.transport', 'Transport') })[k];
+  ({ physio: tr('care.short.physio', 'Physiotherapy'), nursing: tr('care.short.nursing', 'Home nursing'), ot: tr('care.short.ot', 'Occupational therapy'), prosthetics: tr('care.short.prosthetics', 'Prosthetics'), repair: tr('care.short.repair', 'Wheelchair repair'), transport: tr('care.short.transport', 'Transport') })[k];
 
 /** Six services in a 3×2 grid of small tiles. The rows stretch (up to a point) to fill a tall screen. */
 export function ServiceGrid({ kinds, onPress, style }: { kinds: ServiceKind[]; onPress: (k: ServiceKind) => void; style?: StyleProp<ViewStyle> }) {
@@ -101,16 +108,16 @@ export function ServiceGrid({ kinds, onPress, style }: { kinds: ServiceKind[]; o
         <View key={r} style={{ flex: 1, flexDirection: 'row', gap: space.xs, minHeight: 76, maxHeight: 128 }}>
           {row.map((k, j) => {
             const i = r * 3 + j;
-            const c = t.tints[serviceTint[k]];
             const art = serviceArt[k];
             return (
               <Animated.View key={k} entering={t.reduceMotion ? undefined : FadeInDown.delay(i * 30).springify().damping(22).stiffness(200)} style={{ flex: 1 }}>
                 <Pressable feedback="scale" onPress={() => onPress(k)} accessibilityRole="button" accessibilityLabel={serviceLabel(tr, k)}
-                  style={{ flex: 1, borderRadius: 20, ...continuous, overflow: 'hidden', backgroundColor: t.scheme === 'dark' ? c.bg : art.bg, padding: 6, paddingBottom: 9, gap: 5 }}>
+                  style={{ flex: 1, borderRadius: 20, ...continuous, overflow: 'hidden', backgroundColor: NAVY.card, borderWidth: 1, borderColor: NAVY.line, padding: 6, paddingBottom: 9, gap: 5 }}>
+                  {/* The photo keeps its own soft backdrop: the only colour on the tile. */}
                   <View style={{ flex: 1, minHeight: 36, borderRadius: 14, overflow: 'hidden', backgroundColor: art.bg }}>
                     <Image source={art.photo} contentFit="contain" transition={0} accessible={false} style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }} />
                   </View>
-                  <Text variant="caption1" weight="700" numberOfLines={2} style={{ lineHeight: 15, paddingHorizontal: 4, color: t.scheme === 'dark' ? t.colors.textPrimary : '#15191B' }}>{shortServiceLabel(tr, k)}</Text>
+                  <Text variant="caption1" weight="700" numberOfLines={2} style={{ lineHeight: 15, paddingHorizontal: 4, color: NAVY.text }}>{shortServiceLabel(tr, k)}</Text>
                 </Pressable>
               </Animated.View>
             );
@@ -137,7 +144,7 @@ export function FacesRail({ people, loading }: { people: Specialist[]; loading?:
         return (
           <View key={s.id} style={{ width: 88, alignItems: 'center', gap: 6 }}>
             <Pressable feedback="scale" onPress={() => push(`/specialist/${s.id}`)} accessibilityRole="button" accessibilityLabel={name} style={{ alignItems: 'center', gap: 4 }}>
-              <View style={{ padding: 3, borderRadius: 34, borderWidth: 3, borderColor: t.tints[TINT_ROTATION[i % TINT_ROTATION.length]].soft }}><Avatar name={s.name} hue={s.avatarHue} size={52} photo={specialistPhoto(s.id)} /></View>
+              <View style={{ padding: 3, borderRadius: 34, borderWidth: 3, borderColor: NAVY.line }}><Avatar name={s.name} hue={s.avatarHue} size={52} photo={specialistPhoto(s.id)} /></View>
               <Text variant="footnote" weight="600" numberOfLines={1}>{short}</Text>
             </Pressable>
             <Pressable feedback="scale" onPress={() => book(s.id)} accessibilityRole="button" accessibilityLabel={tr('care.bookAgainA11y', 'Book {{name}} again', { name })}

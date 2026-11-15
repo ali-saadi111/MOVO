@@ -59,7 +59,7 @@ function Profile() {
   const art = <View pointerEvents="none" style={{ position: 'absolute', ...edges(t.rtl, { end: -36 }), bottom: -44, opacity: 0.35 }}><HeroArt name="chair" size={128} /></View>;
 
   return (
-    <Screen title={tr('tab.profile', 'Profile')} variant="canvas" header={<CanvasHeader title={tr('profile.title', 'Your Movo')} actions={<CanvasActions />} />}>
+    <Screen title={tr('tab.profile', 'Profile')} variant="canvas" header={<CanvasHeader compact title={tr('profile.title', 'Your Movo')} actions={<CanvasActions />} />}>
       <ActingForBar onSwitchBack={() => switchTo(null)} />
       {user ? (
         <>

@@ -37,7 +37,7 @@ function CareHome() {
       <ServiceGrid kinds={KINDS} onPress={(k) => push(`/specialists/${k}`)} style={{ flexGrow: 1 }} />
       {q.isLoading || seen.length ? (
         <View style={{ marginTop: space.md }}>
-          <SectionHeader title={tr('care.past', 'Your specialists')} />
+          <SectionHeader title={tr('care.past', 'Recently visited')} />
           <FacesRail people={seen} loading={q.isLoading} />
         </View>
       ) : null}
