@@ -35,7 +35,7 @@ export const useActivity = create<ActivityState>()(
         { id: 'bk_1001', specialistId: 'sp_maya', serviceId: 'svc_physio_home', startsAt: nextWeekday(2, 10), where: 'home', payment: 'cash', status: 'upcoming' },
       ],
       orders: [
-        { id: 'M-1038', lines: [{ productId: 'prd_reacher-pro-82', qty: 1 }], totalCents: 3400, payment: 'cash', placedAt: daysAgo(9), status: 'delivered' },
+        { id: 'M-1038', lines: [{ productId: 'prd_p40-1', qty: 1 }], totalCents: 0, payment: 'cash', placedAt: daysAgo(9), status: 'delivered' },
       ],
       events: [],
       donations: [],
