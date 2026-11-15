@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { ScrollView, View, type StyleProp, type ViewStyle } from 'react-native';
 import { Image } from 'expo-image';
 import Animated, { FadeInDown } from 'react-native-reanimated';
@@ -15,7 +14,6 @@ import { ltr } from '@/lib/rtl';
 import { continuous, layout, radii, space, useTheme } from '@/theme';
 import { navyCard } from '@/theme/colors';
 import { Avatar, Icon, Pressable, Skeleton, Tag, Text, useTabNav } from '@/ui';
-import { BannerBackdrop } from '@/ui/brandBanner';
 
 import { PLAN, sameDay, serviceFor, useNextFree, type Where } from './booking';
 
@@ -47,8 +45,9 @@ export function PlanBars({ done, total, onDark, on, off, height = 5 }: { done: n
  */
 const NAVY = { ...navyCard, card: navyCard.bg };
 
-/** Navy card for the next session: countdown pill, date, who and where, plan progress. */
+/** Lilac (Care's colour) card for the next session: countdown pill, date, who and where, plan progress. */
 export function NextSessionCard({ startsAt, specialistId, where, onPress }: { startsAt: string; specialistId: string; where: Where; onPress: () => void }) {
+  const t = useTheme();
   const tr = useT();
   const lang = useLang();
   const now = useNow();
@@ -59,37 +58,36 @@ export function NextSessionCard({ startsAt, specialistId, where, onPress }: { st
   const date = `${fmtDay(startsAt, lang)} · ${fmtTime(startsAt, lang)}`;
   const place = where === 'home' ? tr('care.atHome', 'At your home') : tr('care.atClinic', 'At the clinic');
   const session = tr('care.sessionOf', 'Session {{n}} of {{total}}', { n: PLAN.done + 1, total: PLAN.total });
-  const [size, setSize] = useState({ w: 0, h: 0 });
+  const c = t.tints.lilac;
+  const darkMode = t.scheme === 'dark';
   return (
     <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={`${tr('care.next', 'Your next session')}, ${when}, ${date}, ${name}, ${place}. ${session}`}
-      onLayout={(e) => setSize({ w: Math.round(e.nativeEvent.layout.width), h: Math.round(e.nativeEvent.layout.height) })}
-      style={{ marginHorizontal: layout.margin, borderRadius: radii.hero, ...continuous, overflow: 'hidden', backgroundColor: NAVY.card, paddingHorizontal: 14, paddingVertical: space.md, gap: space.sm }}>
-      {size.w ? <BannerBackdrop tone="navy" width={size.w} height={size.h} /> : null}
+      style={{ marginHorizontal: layout.margin, borderRadius: radii.hero, ...continuous, backgroundColor: c.bg, paddingHorizontal: 14, paddingVertical: space.md, gap: space.sm }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.xs }}>
-        <Text variant="caption1" weight="800" style={{ letterSpacing: 0.6, color: NAVY.text }}>{tr('care.nextShort', 'Next session').toUpperCase()}</Text>
-        <View style={{ paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8, backgroundColor: 'rgba(60,242,184,0.16)' }}>
-          <Text variant="caption1" weight="800" style={{ color: NAVY.mint, letterSpacing: 0.6 }}>{when.toUpperCase()}</Text>
+        <Text variant="caption1" weight="800" style={{ letterSpacing: 0.6 }}>{tr('care.nextShort', 'Next session').toUpperCase()}</Text>
+        <View style={{ paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8, backgroundColor: darkMode ? 'rgba(195,177,255,0.18)' : 'rgba(85,52,192,0.12)' }}>
+          <Text variant="caption1" weight="800" style={{ color: c.ink, letterSpacing: 0.6 }}>{when.toUpperCase()}</Text>
         </View>
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-        <View style={{ borderRadius: 28, borderWidth: 2.5, borderColor: '#FFFFFF' }}><Avatar name={sp?.name ?? ''} size={44} photo={specialistPhoto(specialistId)} /></View>
+        <View style={{ borderRadius: 28, borderWidth: 2.5, borderColor: darkMode ? 'rgba(255,255,255,0.9)' : '#FFFFFF' }}><Avatar name={sp?.name ?? ''} size={44} photo={specialistPhoto(specialistId)} /></View>
         <View style={{ flex: 1, gap: 3 }}>
-          <Text variant="title3" weight="800" tabular numberOfLines={1} adjustsFontSizeToFit style={{ color: NAVY.text }}>{date}</Text>
+          <Text variant="title3" weight="800" tabular numberOfLines={1} adjustsFontSizeToFit>{date}</Text>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-            <Icon name="stethoscope" size={14} color={{ raw: NAVY.mint }} />
-            <Text variant="footnote" numberOfLines={1} style={{ flexShrink: 1, color: NAVY.soft }}>{name}</Text>
-            <View style={{ width: 1, height: 12, marginHorizontal: 2, backgroundColor: 'rgba(255,255,255,0.25)' }} />
-            <Icon name={where === 'home' ? 'house' : 'cross.case'} size={14} color={{ raw: NAVY.mint }} />
-            <Text variant="footnote" numberOfLines={1} style={{ flexShrink: 1, color: NAVY.soft }}>{place}</Text>
+            <Icon name="stethoscope" size={14} color={{ raw: c.ink }} />
+            <Text variant="footnote" numberOfLines={1} style={{ flexShrink: 1 }}>{name}</Text>
+            <View style={{ width: 1, height: 12, marginHorizontal: 2, backgroundColor: darkMode ? 'rgba(255,255,255,0.25)' : 'rgba(85,52,192,0.3)' }} />
+            <Icon name={where === 'home' ? 'house' : 'cross.case'} size={14} color={{ raw: c.ink }} />
+            <Text variant="footnote" numberOfLines={1} style={{ flexShrink: 1 }}>{place}</Text>
           </View>
         </View>
-        <View style={{ width: 42, height: 42, borderRadius: 14, ...continuous, backgroundColor: NAVY.mint, alignItems: 'center', justifyContent: 'center' }}>
-          <Icon name="arrow.right" size={20} weight="semibold" color={{ raw: NAVY.ink }} mirrorInRTL />
+        <View style={{ width: 42, height: 42, borderRadius: 14, ...continuous, backgroundColor: t.colors.buttonPrimaryBg, alignItems: 'center', justifyContent: 'center' }}>
+          <Icon name="arrow.right" size={20} weight="semibold" color={{ raw: t.colors.buttonPrimaryFg }} mirrorInRTL />
         </View>
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm, marginTop: 2 }}>
-        <Text variant="subheadline" weight="600" tabular style={{ color: NAVY.text }}>{session}</Text>
-        <PlanBars done={PLAN.done} total={PLAN.total} height={7} on={NAVY.mint} off="rgba(255,255,255,0.18)" />
+        <Text variant="subheadline" weight="600" tabular>{session}</Text>
+        <PlanBars done={PLAN.done} total={PLAN.total} height={7} on={c.ink} off={darkMode ? 'rgba(255,255,255,0.14)' : 'rgba(85,52,192,0.18)'} />
       </View>
     </Pressable>
   );
